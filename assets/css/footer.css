@@ -2,14 +2,14 @@
    VFI — Footer
    =========================================== */
 
-.site-footer { padding: 60px 0 0; border-top: 1px solid var(--border); }
+.site-footer { padding: 56px 0 0; border-top: 1px solid var(--border); }
 .footer-grid {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
-    gap: 48px;
-    margin-bottom: 48px;
+    gap: 40px;
+    margin-bottom: 40px;
 }
-.footer-logo    { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; font-weight: 800; color: white; margin-bottom: 12px; }
+.footer-logo    { font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; font-weight: 800; color: white; margin-bottom: 12px; }
 .footer-brand p { font-size: 0.875rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px; }
 .footer-badges  { display: flex; flex-wrap: wrap; gap: 8px; }
 .footer-badge   {
@@ -18,15 +18,24 @@
     background: rgba(99,102,241,.1);
     border: 1px solid rgba(99,102,241,.2);
     border-radius: 100px;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 600;
     color: var(--brand-light);
 }
-.footer-col h4      { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-faint); margin-bottom: 16px; }
+.footer-col h4      { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-faint); margin-bottom: 14px; }
 .footer-col ul      { list-style: none; display: flex; flex-direction: column; gap: 8px; }
 .footer-col a       { font-size: 0.875rem; color: var(--text-muted); text-decoration: none; transition: color var(--fast); }
 .footer-col a:hover { color: var(--text); }
-.footer-bottom      { border-top: 1px solid var(--border); padding: 20px 0; font-size: 0.8rem; color: var(--text-faint); text-align: center; }
+.footer-bottom      { border-top: 1px solid var(--border); padding: 20px 0; font-size: 0.78rem; color: var(--text-faint); text-align: center; line-height: 1.5; }
 
-@media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } .footer-brand { grid-column: 1 / -1; } }
-@media (max-width: 640px) { .footer-grid { grid-template-columns: 1fr; } }
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .footer-brand { grid-column: 1 / -1; }
+}
+
+@media (max-width: 640px) {
+    .site-footer  { padding: 40px 0 0; }
+    .footer-grid  { grid-template-columns: 1fr; gap: 28px; margin-bottom: 28px; }
+    .footer-brand { grid-column: auto; }
+}

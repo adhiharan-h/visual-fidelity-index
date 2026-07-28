@@ -18,7 +18,7 @@
 import { calculate, setPreset, setScale, setUseCase, toggleMath, shareResult } from './calculator.js';
 import { calcComparatorB } from './comparator.js';
 import { renderDB, filterDB, sortDB, loadDevice } from './database.js';
-import { setupTooltips, setupNavbar } from './ui.js';
+import { setupTooltips, setupNavbar, setupHamburger } from './ui.js';
 import { RING_CIRCUMFERENCE } from './formula.js';
 
 // ---------------------------------------------------------------------------
@@ -76,6 +76,7 @@ function setupListeners() {
 function init() {
     // One-time UI setup
     setupNavbar();
+    setupHamburger();
     setupTooltips();
     setupListeners();
 

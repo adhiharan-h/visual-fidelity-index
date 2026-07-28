@@ -3,18 +3,18 @@
    Search · Filter · Sortable table
    =========================================== */
 
-.section-database { padding: 80px 0; }
+.section-database { padding: 64px 0; }
 
 .db-filter-bar {
     display: flex;
-    gap: 16px;
+    gap: 12px;
     flex-wrap: wrap;
     align-items: center;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
 }
 .db-search {
     flex: 1;
-    min-width: 200px;
+    min-width: 160px;
     padding: 10px 16px;
     background: var(--surface);
     border: 1px solid var(--border);
@@ -27,18 +27,19 @@
 .db-search::placeholder { color: var(--text-faint); }
 .db-search:focus { outline: none; border-color: var(--brand); }
 
-.db-filter-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.db-filter-btns { display: flex; gap: 6px; flex-wrap: wrap; }
 .db-filter {
-    padding: 8px 16px;
+    padding: 7px 14px;
     background: var(--surface);
     border: 1px solid var(--border);
     color: var(--text-muted);
     border-radius: 100px;
     cursor: pointer;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     font-weight: 600;
     font-family: inherit;
     transition: all var(--fast);
+    white-space: nowrap;
 }
 .db-filter:hover, .db-filter.active {
     background: rgba(99,102,241,.15);
@@ -46,17 +47,19 @@
     color: var(--brand-light);
 }
 
+/* Table wrapper — must scroll horizontally on mobile */
 .db-table-wrap {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--r-xl);
-    overflow: hidden;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
-.db-table { width: 100%; border-collapse: collapse; }
+.db-table { width: 100%; min-width: 480px; border-collapse: collapse; }
 .db-table th {
-    padding: 14px 16px;
+    padding: 13px 14px;
     text-align: left;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -64,31 +67,37 @@
     background: var(--surface-2);
     border-bottom: 1px solid var(--border);
     cursor: default;
+    white-space: nowrap;
 }
 .db-table th.sortable      { cursor: pointer; }
 .db-table th.sortable:hover { color: var(--text-muted); }
 .db-table th.active-sort   { color: var(--brand-light); }
 .db-table td {
-    padding: 14px 16px;
-    font-size: 0.875rem;
+    padding: 12px 14px;
+    font-size: 0.85rem;
     color: var(--text-muted);
     border-bottom: 1px solid var(--border);
     transition: background var(--fast);
+    white-space: nowrap;
 }
 .db-table tr:last-child td { border-bottom: none; }
 .db-table tr:hover td      { background: rgba(255,255,255,.03); cursor: pointer; }
-.db-table .device-name     { font-weight: 600; color: var(--text); }
+.db-table .device-name     { font-weight: 600; color: var(--text); white-space: normal; min-width: 140px; }
 .db-table .vfi-num         { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1rem; }
 
 /* Tier badge pills — shared with science table */
-.tier-badge     { display: inline-block; padding: 3px 10px; border-radius: 100px; font-size: 0.75rem; font-weight: 700; }
+.tier-badge     { display: inline-block; padding: 3px 10px; border-radius: 100px; font-size: 0.72rem; font-weight: 700; white-space: nowrap; }
 .tier-pixelated { background: rgba(239,68,68,.15);  color: #f87171; }
 .tier-low       { background: rgba(249,115,22,.15); color: #fb923c; }
 .tier-std       { background: rgba(34,197,94,.15);  color: #4ade80; }
 .tier-retina    { background: rgba(99,102,241,.15); color: var(--brand-light); }
 .tier-over      { background: rgba(168,85,247,.15); color: #c084fc; }
 
+/* ---- Responsive ---- */
 @media (max-width: 640px) {
-    .db-filter-bar { flex-direction: column; align-items: flex-start; }
-    .db-search     { min-width: unset; width: 100%; }
+    .section-database   { padding: 48px 0; }
+    .db-filter-bar      { flex-direction: column; align-items: stretch; }
+    .db-search          { min-width: unset; width: 100%; }
+    .db-filter-btns     { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
+    .db-filter          { flex-shrink: 0; }
 }

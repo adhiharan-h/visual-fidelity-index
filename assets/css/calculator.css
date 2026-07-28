@@ -4,44 +4,45 @@
    =========================================== */
 
 /* ---- Layout ---- */
-.section-calculator { padding: 80px 0; }
+.section-calculator { padding: 64px 0; }
 .calc-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
+    gap: 20px;
     align-items: start;
 }
 .calc-panel {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--r-2xl);
-    padding: 32px;
+    padding: 28px;
     box-shadow: var(--shadow-card);
 }
 .panel-title {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
     color: var(--text-faint);
-    margin-bottom: 24px;
+    margin-bottom: 22px;
 }
 
 /* ---- Presets ---- */
-.preset-group { margin-bottom: 28px; }
-.preset-label { font-size: 0.8rem; color: var(--text-faint); margin-bottom: 10px; font-weight: 600; }
-.presets { display: flex; flex-wrap: wrap; gap: 8px; }
+.preset-group { margin-bottom: 24px; }
+.preset-label { font-size: 0.78rem; color: var(--text-faint); margin-bottom: 10px; font-weight: 600; }
+.presets { display: flex; flex-wrap: wrap; gap: 6px; }
 .preset-btn {
-    padding: 6px 14px;
+    padding: 5px 12px;
     background: var(--surface-2);
     border: 1px solid var(--border);
     color: var(--text-muted);
     border-radius: 100px;
     cursor: pointer;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     font-weight: 600;
     font-family: inherit;
     transition: all var(--fast);
+    white-space: nowrap;
 }
 .preset-btn:hover,
 .preset-btn.active {
@@ -51,19 +52,20 @@
 }
 
 /* ---- Inputs ---- */
-.input-section   { display: flex; flex-direction: column; gap: 24px; }
-.input-group-row { display: flex; align-items: flex-end; gap: 12px; }
-.input-group     { flex: 1; }
+.input-section   { display: flex; flex-direction: column; gap: 20px; }
+.input-group-row { display: flex; align-items: flex-end; gap: 10px; }
+.input-group     { flex: 1; min-width: 0; }
 .input-sep       { font-size: 1.2rem; color: var(--text-faint); padding-bottom: 12px; flex-shrink: 0; }
 
 label {
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 0.85rem;
+    font-size: 0.83rem;
     font-weight: 600;
     color: var(--text-muted);
     margin-bottom: 8px;
+    flex-wrap: wrap;
 }
 .info-btn {
     display: inline-flex;
@@ -71,6 +73,7 @@ label {
     justify-content: center;
     width: 18px;
     height: 18px;
+    min-width: 18px;
     background: var(--surface-3);
     border: 1px solid var(--border);
     border-radius: 50%;
@@ -126,8 +129,8 @@ label {
 }
 .distance-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     background: var(--brand);
     border-radius: 50%;
     cursor: pointer;
@@ -136,21 +139,26 @@ label {
     transition: transform var(--fast);
 }
 .distance-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
-.slider-hint { font-size: 0.75rem; color: var(--text-faint); margin-top: 6px; text-align: center; }
+.slider-hint { font-size: 0.73rem; color: var(--text-faint); margin-top: 8px; text-align: center; }
 
 /* ---- Scale & UseCase toggles ---- */
-.scale-btns, .usecase-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.scale-btns, .usecase-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
 .scale-btn, .usecase-btn {
-    padding: 7px 14px;
+    padding: 7px 12px;
     background: var(--surface-2);
     border: 1px solid var(--border);
     color: var(--text-muted);
     border-radius: var(--r-sm);
     cursor: pointer;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     font-weight: 600;
     font-family: inherit;
     transition: all var(--fast);
+    white-space: nowrap;
 }
 .scale-btn:hover,  .scale-btn.active,
 .usecase-btn:hover, .usecase-btn.active {
@@ -160,9 +168,14 @@ label {
 }
 
 /* ---- SVG Score Ring ---- */
-.score-display-wrap { display: flex; align-items: center; gap: 28px; margin-bottom: 28px; }
-.score-ring-wrap    { position: relative; width: 160px; height: 160px; flex-shrink: 0; }
-.score-ring         { width: 160px; height: 160px; transform: rotate(-90deg); }
+.score-display-wrap {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+.score-ring-wrap { position: relative; width: 148px; height: 148px; flex-shrink: 0; }
+.score-ring      { width: 148px; height: 148px; transform: rotate(-90deg); }
 .ring-track { fill: none; stroke: var(--surface-3); stroke-width: 10; }
 .ring-fill  {
     fill: none;
@@ -184,17 +197,17 @@ label {
 }
 .score-num {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 3rem;
+    font-size: 2.8rem;
     font-weight: 700;
     color: white;
     line-height: 1;
     transition: color 0.4s var(--ease);
 }
-.score-label { font-size: 0.75rem; font-weight: 700; color: var(--text-faint); text-transform: uppercase; letter-spacing: 1px; }
+.score-label { font-size: 0.72rem; font-weight: 700; color: var(--text-faint); text-transform: uppercase; letter-spacing: 1px; }
 
 .score-verdict-wrap { flex: 1; min-width: 0; }
 .score-tier {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1.5px;
@@ -202,20 +215,21 @@ label {
     margin-bottom: 6px;
     transition: color 0.4s var(--ease);
 }
-.score-confidence { font-size: 0.8rem; color: var(--text-faint); margin-bottom: 10px; }
-.score-message    { font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; }
+.score-confidence { font-size: 0.78rem; color: var(--text-faint); margin-bottom: 10px; line-height: 1.5; }
+.score-message    { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
 
 /* ---- Spectrum Bar ---- */
-.spectrum-wrap { margin-bottom: 28px; }
+.spectrum-wrap { margin-bottom: 24px; }
 .spectrum-labels {
     display: flex;
     justify-content: space-between;
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     font-weight: 600;
     color: var(--text-faint);
     margin-bottom: 8px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    overflow: hidden;
 }
 .spectrum-bar { position: relative; height: 10px; border-radius: 5px; overflow: visible; }
 .spectrum-gradient {
@@ -253,7 +267,7 @@ label {
 .spectrum-ticks {
     display: flex;
     justify-content: space-between;
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     color: var(--text-faint);
     margin-top: 24px;
 }
@@ -262,18 +276,19 @@ label {
 .metrics-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 24px;
+    gap: 10px;
+    margin-bottom: 20px;
 }
-.metric-card { background: var(--bg-alt); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 16px; text-align: center; }
-.metric-value { font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; font-weight: 700; color: white; margin-bottom: 4px; }
-.metric-name  { font-size: 0.75rem; font-weight: 700; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
-.metric-sub   { font-size: 0.75rem; color: var(--text-faint); }
+.metric-card { background: var(--bg-alt); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 14px; text-align: center; }
+.metric-value { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: white; margin-bottom: 3px; }
+.metric-name  { font-size: 0.72rem; font-weight: 700; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+.metric-sub   { font-size: 0.72rem; color: var(--text-faint); }
 
 /* ---- Actions ---- */
-.result-actions { display: flex; gap: 12px; margin-bottom: 0; }
+.result-actions { display: flex; gap: 10px; margin-bottom: 0; flex-wrap: wrap; }
 .math-toggle-btn {
     flex: 1;
+    min-width: 120px;
     padding: 10px 16px;
     background: var(--surface-2);
     border: 1px solid var(--border);
@@ -291,7 +306,7 @@ label {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 18px;
+    padding: 10px 16px;
     background: var(--surface-2);
     border: 1px solid var(--border);
     color: var(--text-muted);
@@ -301,50 +316,55 @@ label {
     font-weight: 600;
     font-family: inherit;
     transition: all var(--fast);
+    white-space: nowrap;
 }
 .share-btn-new:hover { border-color: var(--brand); color: var(--text); }
 
 /* ---- Math Derivation Panel ---- */
 .math-panel {
-    margin-top: 16px;
+    margin-top: 14px;
     background: var(--bg-alt);
     border: 1px solid var(--border);
     border-radius: var(--r-lg);
-    padding: 20px;
+    padding: 18px;
     display: none;
 }
 .math-panel.open    { display: block; }
-.math-panel-title   { font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
-.math-steps         { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
-.math-step          { display: flex; align-items: flex-start; gap: 12px; }
+.math-panel-title   { font-size: 0.82rem; font-weight: 700; color: var(--text-muted); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+.math-steps         { display: flex; flex-direction: column; gap: 12px; margin-bottom: 14px; }
+.math-step          { display: flex; align-items: flex-start; gap: 10px; }
 .math-step-num      {
-    width: 24px; height: 24px;
+    width: 22px; height: 22px;
+    min-width: 22px;
     background: rgba(99,102,241,.2);
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 0.72rem; font-weight: 800; color: var(--brand-light);
+    font-size: 0.7rem; font-weight: 800; color: var(--brand-light);
     flex-shrink: 0; margin-top: 2px;
 }
-.math-step-title    { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; }
+.math-step-title    { font-size: 0.78rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; }
 .math-step code     {
     display: block;
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     color: #86efac;
     background: rgba(0,0,0,.3);
     padding: 6px 10px;
     border-radius: var(--r-sm);
     font-family: 'Courier New', monospace;
     overflow-x: auto;
-    white-space: nowrap;
+    white-space: pre;
+    word-break: break-all;
+    max-width: 100%;
 }
-.math-citation { font-size: 0.78rem; color: var(--text-faint); margin-bottom: 8px; }
+.math-citation { font-size: 0.76rem; color: var(--text-faint); margin-bottom: 8px; line-height: 1.5; }
 .math-caveat   {
-    font-size: 0.78rem;
+    font-size: 0.76rem;
     color: #f97316;
     background: rgba(249,115,22,.08);
     border: 1px solid rgba(249,115,22,.2);
     border-radius: var(--r-sm);
     padding: 8px 12px;
+    line-height: 1.5;
 }
 
 /* ---- Score Tier Color Themes (class applied by JS) ---- */
@@ -359,8 +379,46 @@ label {
 @media (max-width: 900px) {
     .calc-layout { grid-template-columns: 1fr; }
 }
+
 @media (max-width: 640px) {
-    .calc-panel         { padding: 20px; }
-    .score-display-wrap { flex-direction: column; align-items: flex-start; }
-    .metrics-grid       { grid-template-columns: 1fr 1fr; }
+    .section-calculator { padding: 48px 0; }
+    .calc-panel         { padding: 20px 16px; border-radius: var(--r-xl); }
+
+    /* Score ring: stack vertically, centered */
+    .score-display-wrap {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 16px;
+    }
+    .score-verdict-wrap { width: 100%; }
+
+    /* Spectrum labels: hide middle ones to prevent overlap */
+    .spectrum-labels span:nth-child(2),
+    .spectrum-labels span:nth-child(3) { display: none; }
+
+    /* Metric cards: keep 2-col but reduce padding */
+    .metrics-grid   { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .metric-card    { padding: 12px 8px; }
+    .metric-value   { font-size: 1.3rem; }
+
+    /* Action buttons full width */
+    .result-actions    { flex-direction: column; }
+    .math-toggle-btn,
+    .share-btn-new     { width: 100%; justify-content: center; text-align: center; }
+
+    /* Resolution row: keep side-by-side but tighter */
+    .input-group-row { gap: 6px; }
+
+    /* Scale + UseCase buttons: scrollable row on very narrow */
+    .scale-btns    { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
+    .usecase-btns  { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
+}
+
+@media (max-width: 380px) {
+    .calc-panel   { padding: 16px 12px; }
+    .score-ring-wrap { width: 130px; height: 130px; }
+    .score-ring   { width: 130px; height: 130px; }
+    .score-num    { font-size: 2.4rem; }
+    .preset-btn   { font-size: 0.72rem; padding: 4px 10px; }
 }

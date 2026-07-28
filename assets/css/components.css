@@ -13,7 +13,7 @@
     padding: 10px 14px;
     font-size: 0.82rem;
     color: var(--text-muted);
-    max-width: 260px;
+    max-width: 240px;
     line-height: 1.5;
     pointer-events: none;
     opacity: 0;
@@ -23,16 +23,22 @@
 }
 .tooltip.visible { opacity: 1; transform: translateY(0); }
 
+/* Hide tooltips on touch devices — they don't have hover */
+@media (hover: none) {
+    .tooltip { display: none !important; }
+}
+
 /* ---- Toast Notification ---- */
 .toast {
     position: fixed;
-    bottom: 24px;
-    right: 24px;
+    bottom: 20px;
+    right: 16px;
+    left: 16px;
     z-index: 1000;
     background: var(--surface-3);
     border: 1px solid var(--border-strong);
     border-radius: var(--r-lg);
-    padding: 14px 20px;
+    padding: 14px 18px;
     font-size: 0.875rem;
     font-weight: 600;
     color: var(--text);
@@ -41,5 +47,17 @@
     transform: translateY(12px);
     transition: opacity 0.2s, transform 0.2s;
     pointer-events: none;
+    text-align: center;
 }
 .toast.show { opacity: 1; transform: translateY(0); }
+
+/* On larger screens, keep toast pinned to bottom-right */
+@media (min-width: 640px) {
+    .toast {
+        left: auto;
+        right: 24px;
+        bottom: 24px;
+        max-width: 320px;
+        text-align: left;
+    }
+}

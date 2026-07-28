@@ -156,6 +156,26 @@
       navbar.classList.toggle("scrolled", window.scrollY > 20);
     }, { passive: true });
   }
+  function setupHamburger() {
+    const btn = document.getElementById("navHamburger");
+    const menu = document.getElementById("navMobileMenu");
+    if (!btn || !menu) return;
+    function toggle(forceClose = false) {
+      const willOpen = forceClose ? false : !menu.classList.contains("open");
+      menu.classList.toggle("open", willOpen);
+      btn.classList.toggle("open", willOpen);
+      btn.setAttribute("aria-expanded", willOpen);
+      btn.setAttribute("aria-label", willOpen ? "Close navigation menu" : "Open navigation menu");
+    }
+    btn.addEventListener("click", () => toggle());
+    menu.querySelectorAll(".nav-mobile-link").forEach((link) => {
+      link.addEventListener("click", () => toggle(true));
+    });
+    document.addEventListener("click", (e) => {
+      const navbar = document.getElementById("navbar");
+      if (navbar && !navbar.contains(e.target)) toggle(true);
+    }, { passive: true });
+  }
 
   // assets/js/comparator.js
   init_state();
@@ -465,6 +485,7 @@ ${window.location.href}`).then(() => showToast("Score copied to clipboard!")).ca
   }
   function init() {
     setupNavbar();
+    setupHamburger();
     setupTooltips();
     setupListeners();
     const ring = document.getElementById("ringFill");
