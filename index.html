@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO -->
+    <title>Visual Fidelity Index — Does Your Screen Pass the Sharpness Test?</title>
+    <meta name="description" content="VFI calculates real-world display sharpness based on your actual viewing distance, not just PPI. Free, open, vendor-neutral. Compare monitors, TVs, phones, and laptops.">
+    <meta name="keywords" content="pixels per degree, PPD calculator, monitor sharpness, retina display test, VFI score, viewing distance calculator, 4K TV distance, 1440p vs 1080p">
+    <link rel="canonical" href="https://visualfidelityindex.com/">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Visual Fidelity Index — Real-World Display Sharpness Calculator">
+    <meta property="og:description" content="Stop chasing PPI. Calculate how sharp your screen actually looks at your real viewing distance.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://visualfidelityindex.com/">
+    <meta property="og:image" content="https://visualfidelityindex.com/assets/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Visual Fidelity Index — Does Your Screen Pass the Sharpness Test?">
+    <meta name="twitter:description" content="Stop chasing PPI. Calculate how sharp your screen actually looks at your real viewing distance.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="alternate icon" href="assets/favicon.ico">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Single combined stylesheet (tokens → base → components) -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+    <div class="nav-inner">
+        <a href="#" class="nav-brand">
+            <div class="brand-icon" aria-hidden="true">◈</div>
+            <span>VFI</span>
+        </a>
+        <div class="nav-links">
+            <a href="#calculator" class="nav-link">Calculator</a>
+            <a href="#compare"    class="nav-link">Compare</a>
+            <a href="#science"    class="nav-link">Science</a>
+            <a href="#database"   class="nav-link">Devices</a>
+        </div>
+        <a href="https://github.com" target="_blank" rel="noopener" class="nav-cta" id="github-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            Open Source
+        </a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
+    <div class="hero-bg" aria-hidden="true">
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <div class="hero-orb hero-orb-3"></div>
+        <div class="hero-grid"></div>
+    </div>
+    <div class="hero-content">
+        <div class="hero-pill">Open Standard · Distance-Aware · Vendor-Neutral</div>
+        <h1>Does your screen pass<br>the sharpness test?</h1>
+        <p class="hero-sub">
+            PPI is a manufacturing spec. <strong>VFI</strong> measures what your eyes
+            actually perceive — pixels per degree of vision, normalised to the limit
+            of human acuity.
+        </p>
+        <a href="#calculator" class="hero-cta-btn">Calculate My Display →</a>
+        <div class="hero-stats" role="list">
+            <div class="hero-stat" role="listitem">
+                <span class="hero-stat-num">60 CPD</span>
+                <span class="hero-stat-label">Human acuity limit</span>
+            </div>
+            <div class="hero-stat" role="listitem">
+                <span class="hero-stat-num">1 Formula</span>
+                <span class="hero-stat-label">Open methodology</span>
+            </div>
+            <div class="hero-stat" role="listitem">
+                <span class="hero-stat-num">Free</span>
+                <span class="hero-stat-label">No account needed</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- CALCULATOR -->
+<section id="calculator" class="section-calculator">
+    <div class="container">
+        <div class="calc-layout">
+
+            <!-- LEFT: INPUTS -->
+            <div class="calc-panel calc-inputs-panel" aria-labelledby="calc-inputs-heading">
+                <h2 class="panel-title" id="calc-inputs-heading">Your Display Setup</h2>
+
+                <!-- Quick presets -->
+                <div class="preset-group">
+                    <p class="preset-label">Quick-load a device</p>
+                    <div class="presets" role="list">
+                        <button class="preset-btn active" role="listitem" aria-pressed="true"
+                            onclick="__vfi.setPreset(2560,1440,27,24,1,'27&quot; 1440p')">27" 1440p</button>
+                        <button class="preset-btn" role="listitem" aria-pressed="false"
+                            onclick="__vfi.setPreset(1920,1080,27,24,1,'27&quot; 1080p')">27" 1080p</button>
+                        <button class="preset-btn" role="listitem" aria-pressed="false"
+                            onclick="__vfi.setPreset(3840,2160,27,24,1,'27&quot; 4K')">27" 4K</button>
+                        <button class="preset-btn" role="listitem" aria-pressed="false"
+                            onclick="__vfi.setPreset(2796,1290,6.7,14,3,'iPhone 15 Pro Max')">iPhone 15 Pro</button>
+                        <button class="preset-btn" role="listitem" aria-pressed="false"
+                            onclick="__vfi.setPreset(3024,1964,14.2,18,2,'MacBook Pro 14&quot;')">MacBook Pro 14"</button>
+                        <button class="preset-btn" role="listitem" aria-pressed="false"
+                            onclick="__vfi.setPreset(3840,2160,65,84,1,'65&quot; 4K TV')">65" 4K TV</button>
+                        <button class="preset-btn" role="listitem" aria-pressed="false"
+                            onclick="__vfi.setPreset(1920,1080,55,84,1,'55&quot; 1080p TV')">55" 1080p TV</button>
+                        <button class="preset-btn" role="listitem" aria-pressed="false"
+                            onclick="__vfi.setPreset(2256,1504,13.5,18,1,'Surface Laptop 5')">Surface Laptop</button>
+                    </div>
+                </div>
+
+                <div class="input-section">
+                    <!-- Resolution -->
+                    <div class="input-group-row">
+                        <div class="input-group">
+                            <label for="width">
+                                Width
+                                <button class="info-btn" aria-label="Help: Resolution width"
+                                    data-tip="The horizontal resolution in pixels. Find it in System Settings → Display. E.g. 2560 for a 1440p monitor.">?</button>
+                            </label>
+                            <div class="input-wrap">
+                                <input type="number" id="width" value="2560" min="640" max="15360" aria-label="Resolution width in pixels">
+                                <span class="input-unit">px</span>
+                            </div>
+                        </div>
+                        <div class="input-sep" aria-hidden="true">×</div>
+                        <div class="input-group">
+                            <label for="height">
+                                Height
+                                <button class="info-btn" aria-label="Help: Resolution height"
+                                    data-tip="The vertical resolution in pixels. E.g. 1440 for QHD, 2160 for 4K.">?</button>
+                            </label>
+                            <div class="input-wrap">
+                                <input type="number" id="height" value="1440" min="480" max="8640" aria-label="Resolution height in pixels">
+                                <span class="input-unit">px</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Screen size -->
+                    <div class="input-group">
+                        <label for="size">
+                            Screen Size (diagonal)
+                            <button class="info-btn" aria-label="Help: Screen size"
+                                data-tip="The diagonal measurement of your screen in inches, printed on the box or listed in specs. This is the physical size, not the resolution.">?</button>
+                        </label>
+                        <div class="input-wrap">
+                            <input type="number" id="size" value="27" min="4" max="120" step="0.1" aria-label="Screen size in inches">
+                            <span class="input-unit">in</span>
+                        </div>
+                    </div>
+
+                    <!-- Viewing distance + slider -->
+                    <div class="input-group">
+                        <label for="dist">
+                            Viewing Distance
+                            <button class="info-btn" aria-label="Help: Viewing distance"
+                                data-tip="Sit in your normal position. Measure from your eyes to the screen surface. Desk monitors are typically 20–30 inches. TVs are typically 60–120 inches.">?</button>
+                        </label>
+                        <div class="input-wrap">
+                            <input type="number" id="dist" value="24" min="6" max="300" aria-label="Viewing distance in inches">
+                            <span class="input-unit">in</span>
+                        </div>
+                        <input type="range" id="dist-slider" class="distance-slider"
+                            min="6" max="300" value="24"
+                            aria-label="Viewing distance slider"
+                            aria-describedby="dist-slider-hint">
+                        <p id="dist-slider-hint" class="slider-hint">← Drag to simulate moving closer or farther →</p>
+                    </div>
+
+                    <!-- Display scaling -->
+                    <div class="input-group">
+                        <label>
+                            Display Scaling
+                            <button class="info-btn" aria-label="Help: Display scaling"
+                                data-tip="OS render scale. 1× = native resolution. macOS Retina uses 2×. Windows HiDPI often 1.5× or 2×. A 4K screen at 200% scaling renders as an effective 1080p resolution.">?</button>
+                        </label>
+                        <div class="scale-btns" role="group" aria-label="Display scale factor">
+                            <button class="scale-btn active" data-scale="1"    onclick="__vfi.setScale(1)">1× Native</button>
+                            <button class="scale-btn"        data-scale="1.25" onclick="__vfi.setScale(1.25)">1.25×</button>
+                            <button class="scale-btn"        data-scale="1.5"  onclick="__vfi.setScale(1.5)">1.5×</button>
+                            <button class="scale-btn"        data-scale="2"    onclick="__vfi.setScale(2)">2× HiDPI</button>
+                        </div>
+                    </div>
+
+                    <!-- Use case mode -->
+                    <div class="input-group">
+                        <label>
+                            Primary Use Case
+                            <button class="info-btn" aria-label="Help: Use case"
+                                data-tip="Adjusts sharpness context for your use case. Text work needs higher horizontal resolution. Design needs the worst axis to be sharp.">?</button>
+                        </label>
+                        <div class="usecase-btns" role="group" aria-label="Use case selection">
+                            <button class="usecase-btn active" data-case="balanced" onclick="__vfi.setUseCase('balanced')">⚖ Balanced</button>
+                            <button class="usecase-btn"        data-case="text"     onclick="__vfi.setUseCase('text')">📝 Text/Code</button>
+                            <button class="usecase-btn"        data-case="gaming"   onclick="__vfi.setUseCase('gaming')">🎮 Gaming</button>
+                            <button class="usecase-btn"        data-case="design"   onclick="__vfi.setUseCase('design')">🎨 Design</button>
+                            <button class="usecase-btn"        data-case="video"    onclick="__vfi.setUseCase('video')">📺 Video</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: RESULTS -->
+            <div class="calc-panel calc-results-panel" aria-labelledby="calc-results-heading">
+                <h2 class="panel-title" id="calc-results-heading">Your VFI Score</h2>
+
+                <!-- Score ring + verdict -->
+                <div class="score-display-wrap" aria-live="polite" aria-atomic="true">
+                    <div class="score-ring-wrap" aria-hidden="true">
+                        <svg class="score-ring" viewBox="0 0 200 200" aria-hidden="true">
+                            <circle class="ring-track" cx="100" cy="100" r="85"/>
+                            <circle class="ring-fill"  cx="100" cy="100" r="85" id="ringFill"/>
+                        </svg>
+                        <div class="score-inner">
+                            <div class="score-num"   id="vfiScore"  aria-label="VFI score">85</div>
+                            <div class="score-label">VFI</div>
+                        </div>
+                    </div>
+                    <div class="score-verdict-wrap">
+                        <div class="score-tier"       id="scoreTier">HIGH FIDELITY</div>
+                        <div class="score-confidence" id="scoreConfidence">79–91 (±6 at ±3" variation)</div>
+                        <div class="score-message"    id="scoreMessage">Pixels are very hard to see at this distance.</div>
+                    </div>
+                </div>
+
+                <!-- Spectrum bar -->
+                <div class="spectrum-wrap" aria-label="Sharpness spectrum">
+                    <div class="spectrum-labels" aria-hidden="true">
+                        <span>Pixelated</span>
+                        <span>Standard</span>
+                        <span>Sharp</span>
+                        <span>Retina</span>
+                        <span>Overkill</span>
+                    </div>
+                    <div class="spectrum-bar" aria-hidden="true">
+                        <div class="spectrum-gradient"></div>
+                        <div class="spectrum-needle" id="spectrumNeedle"></div>
+                        <div class="spectrum-needle-label" id="spectrumLabel" aria-hidden="true"></div>
+                    </div>
+                    <div class="spectrum-ticks" aria-hidden="true">
+                        <span>0</span><span>33</span><span>55</span><span>80</span><span>100</span><span>133+</span>
+                    </div>
+                </div>
+
+                <!-- Metric cards -->
+                <div class="metrics-grid" aria-label="Detailed metrics">
+                    <div class="metric-card">
+                        <div class="metric-value" id="ppdVal">87</div>
+                        <div class="metric-name">PPD (Horizontal)</div>
+                        <div class="metric-sub"  id="ppdVert">85 vertical</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="ppiVal">109</div>
+                        <div class="metric-name">PPI</div>
+                        <div class="metric-sub">Physical density</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="optimalDist">22"</div>
+                        <div class="metric-name">Retina Distance</div>
+                        <div class="metric-sub"  id="optimalHint">Min. for ≥95 VFI</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="effPpiVal">109</div>
+                        <div class="metric-name">Effective PPI</div>
+                        <div class="metric-sub"  id="effPpiSub">After scale factor</div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="result-actions">
+                    <button class="math-toggle-btn" id="mathToggleBtn"
+                        onclick="__vfi.toggleMath()"
+                        aria-expanded="false" aria-controls="mathPanel">
+                        Show the math ▾
+                    </button>
+                    <button class="share-btn-new" onclick="__vfi.shareResult()" aria-label="Share your VFI score">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                            <line x1="15.41" y1="6.51"  x2="8.59"  y2="10.49"/>
+                        </svg>
+                        Share
+                    </button>
+                </div>
+
+                <!-- Math derivation panel (collapsed by default) -->
+                <div class="math-panel" id="mathPanel" aria-hidden="true">
+                    <h3 class="math-panel-title">How VFI Is Calculated</h3>
+                    <div class="math-steps">
+                        <div class="math-step">
+                            <div class="math-step-num">1</div>
+                            <div>
+                                <div class="math-step-title">Physical Pixel Density (PPI)</div>
+                                <code id="mathPPI">PPI = √(W² + H²) / size</code>
+                            </div>
+                        </div>
+                        <div class="math-step">
+                            <div class="math-step-num">2</div>
+                            <div>
+                                <div class="math-step-title">Effective PPI (after display scaling)</div>
+                                <code id="mathEffPPI">Eff.PPI = PPI / scale</code>
+                            </div>
+                        </div>
+                        <div class="math-step">
+                            <div class="math-step-num">3</div>
+                            <div>
+                                <div class="math-step-title">Pixels Per Degree — Angular Resolution</div>
+                                <code id="mathPPD">PPD = 2 × dist × Eff.PPI × tan(0.5°)</code>
+                            </div>
+                        </div>
+                        <div class="math-step">
+                            <div class="math-step-num">4</div>
+                            <div>
+                                <div class="math-step-title">VFI Score (normalised to 60 CPD limit)</div>
+                                <code id="mathVFI">VFI = (PPD / 60) × 100</code>
+                            </div>
+                        </div>
+                        <div class="math-step">
+                            <div class="math-step-num">5</div>
+                            <div>
+                                <div class="math-step-title">Confidence Band (±3 inch distance uncertainty)</div>
+                                <code id="mathConf">σ_PPD = 2 × 3 × Eff.PPI × tan(0.5°)</code>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="math-citation">
+                        Reference: Human visual acuity ≈ 60 cycles/degree (optimal conditions).
+                        See: <a href="https://en.wikipedia.org/wiki/Visual_acuity" target="_blank" rel="noopener">Visual Acuity (Wikipedia)</a>,
+                        ISO 9241-303.
+                    </p>
+                    <p class="math-caveat">
+                        ⚠ Caveat: 60 CPD assumes 20/20 vision and optimal lighting.
+                        Real-world average is 20–45 CPD. The VFI 100 threshold is a theoretical ideal.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- COMPARATOR -->
+<section id="compare" class="section-compare">
+    <div class="container">
+        <div class="section-header">
+            <h2>Side-by-Side Comparator</h2>
+            <p class="section-sub">Compare two display setups head-to-head. See which is genuinely sharper at your viewing distance.</p>
+        </div>
+
+        <div class="comparator-wrap">
+            <!-- Panel A — synced from main calculator -->
+            <div class="comp-panel comp-a">
+                <div class="comp-panel-header">
+                    <div class="comp-label label-a">Display A</div>
+                    <div class="comp-device-name" id="compNameA">27" 1440p Monitor</div>
+                </div>
+                <div class="comp-score-row">
+                    <div class="comp-score" id="compScoreA">—</div>
+                    <div class="comp-tier"  id="compTierA">—</div>
+                </div>
+                <div class="comp-bar-wrap" aria-hidden="true">
+                    <div class="comp-bar" id="compBarA" style="width:0%"></div>
+                </div>
+                <div class="comp-metrics-mini">
+                    <span id="compPPDA">— PPD</span>
+                    <span id="compPPIA">— PPI</span>
+                </div>
+                <p class="comp-note">← Synced with calculator above</p>
+            </div>
+
+            <div class="comp-vs" aria-hidden="true">VS</div>
+
+            <!-- Panel B — independent inputs -->
+            <div class="comp-panel comp-b">
+                <div class="comp-panel-header">
+                    <div class="comp-label label-b">Display B</div>
+                    <input class="comp-device-name-input" id="compNameB" value="27&quot; 1080p Monitor" aria-label="Display B name">
+                </div>
+                <div class="comp-inputs-mini">
+                    <div class="comp-input-row">
+                        <label for="cw">W</label>
+                        <input type="number" id="cw" value="1920" class="comp-input" aria-label="Display B width">
+                        <label for="ch">H</label>
+                        <input type="number" id="ch" value="1080" class="comp-input" aria-label="Display B height">
+                    </div>
+                    <div class="comp-input-row">
+                        <label for="cs">Size</label>
+                        <input type="number" id="cs" value="27" class="comp-input" aria-label="Display B screen size">
+                        <label for="cd">Dist</label>
+                        <input type="number" id="cd" value="24" class="comp-input" aria-label="Display B viewing distance">
+                    </div>
+                </div>
+                <div class="comp-score-row">
+                    <div class="comp-score" id="compScoreB">—</div>
+                    <div class="comp-tier"  id="compTierB">—</div>
+                </div>
+                <div class="comp-bar-wrap" aria-hidden="true">
+                    <div class="comp-bar comp-bar-b" id="compBarB" style="width:0%"></div>
+                </div>
+                <div class="comp-metrics-mini">
+                    <span id="compPPDB">— PPD</span>
+                    <span id="compPPIB">— PPI</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="comp-verdict" id="compVerdict" aria-live="polite">
+            Compare two displays above to see which gives you more sharpness for your money.
+        </div>
+    </div>
+</section>
+
+<!-- DEVICE DATABASE -->
+<section id="database" class="section-database">
+    <div class="container">
+        <div class="section-header">
+            <h2>Real Device Database</h2>
+            <p class="section-sub">
+                Scored at your current viewing distance (<span id="dbDistLabel">24"</span>).
+                Click any row to load it into the calculator.
+            </p>
+        </div>
+        <div class="db-filter-bar">
+            <input type="search" id="dbSearch" class="db-search"
+                placeholder="Search devices… e.g. '27 inch' or 'iPhone'"
+                aria-label="Search device database">
+            <div class="db-filter-btns" role="group" aria-label="Filter by category">
+                <button class="db-filter active" data-cat="all"     onclick="__vfi.filterDB('all')">All</button>
+                <button class="db-filter"        data-cat="monitor" onclick="__vfi.filterDB('monitor')">Monitors</button>
+                <button class="db-filter"        data-cat="laptop"  onclick="__vfi.filterDB('laptop')">Laptops</button>
+                <button class="db-filter"        data-cat="phone"   onclick="__vfi.filterDB('phone')">Phones</button>
+                <button class="db-filter"        data-cat="tv"      onclick="__vfi.filterDB('tv')">TVs</button>
+            </div>
+        </div>
+        <div class="db-table-wrap" role="region" aria-label="Device database table">
+            <table class="db-table" id="dbTable" aria-label="Display devices sorted by VFI score">
+                <thead>
+                    <tr>
+                        <th scope="col">Device</th>
+                        <th scope="col">Resolution</th>
+                        <th scope="col">Size</th>
+                        <th scope="col">PPI</th>
+                        <th scope="col" class="sortable active-sort"
+                            onclick="__vfi.sortDB('vfi')"
+                            aria-sort="descending" tabindex="0">VFI ↓</th>
+                        <th scope="col">Tier</th>
+                    </tr>
+                </thead>
+                <tbody id="dbBody">
+                    <!-- Populated by database.js -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- SCIENCE -->
+<section id="science" class="section-science">
+    <div class="container">
+        <div class="section-header">
+            <h2>The Science Behind VFI</h2>
+            <p class="section-sub">Why PPI alone is misleading — and what you should measure instead.</p>
+        </div>
+
+        <div class="science-grid">
+            <div class="science-card">
+                <div class="science-icon" aria-hidden="true">👁</div>
+                <h3>The Problem With PPI</h3>
+                <p>PPI (Pixels Per Inch) is a manufacturing spec. It ignores the most important variable: <strong>how far away you are.</strong></p>
+                <p>A billboard has 2–3 PPI and looks perfectly sharp at 100 feet. A phone screen has 460 PPI and looks blurry at 2 feet if your eyes can resolve that detail.</p>
+                <p>PPI is a vendor metric. PPD is a perceptual reality.</p>
+            </div>
+
+            <div class="science-card science-card-formula">
+                <div class="science-icon" aria-hidden="true">📐</div>
+                <h3>The Angular Resolution Formula</h3>
+                <div class="formula-display">
+                    <div class="formula-line">PPD = 2 · D · PPI · tan(0.5°)</div>
+                    <div class="formula-line muted">VFI = (PPD / 60) × 100</div>
+                </div>
+                <p class="formula-note">
+                    <strong>D</strong> = viewing distance (inches) ·
+                    <strong>PPI</strong> = effective pixel density ·
+                    <strong>0.5°</strong> = half the minimum angular resolution of human vision ·
+                    <strong>60</strong> = cycles per degree acuity limit.
+                </p>
+            </div>
+
+            <div class="science-card">
+                <div class="science-icon" aria-hidden="true">🧠</div>
+                <h3>The Human Vision Reference</h3>
+                <p>Under optimal conditions, human visual acuity resolves approximately <strong>60 cycles per degree</strong> (CPD) — roughly 1/60th of a degree of arc.</p>
+                <p>When PPD ≥ 60, individual pixels subtend less than 1/60° of visual angle and become invisible regardless of magnification.</p>
+                <p class="science-caveat">⚠ Real-world average acuity is 20–45 CPD depending on age, lighting, and eye health. VFI 100 is the theoretical limit; VFI 75+ is excellent for most people.</p>
+            </div>
+
+            <div class="science-card">
+                <div class="science-icon" aria-hidden="true">📊</div>
+                <h3>Why a 0–100 Scale?</h3>
+                <p>PPD is technically unbounded and hard to reason about. Normalising to 100 (the human acuity limit) creates an intuitive scale analogous to SPF ratings or fuel economy MPG.</p>
+                <ul class="science-list">
+                    <li>VFI 100 = matches acuity limit exactly</li>
+                    <li>VFI &gt; 100 = exceeds average human acuity</li>
+                    <li>VFI 75 = perceptually excellent for most</li>
+                    <li>VFI &lt; 50 = visible pixel structure</li>
+                </ul>
+            </div>
+
+            <div class="science-card">
+                <div class="science-icon" aria-hidden="true">⚠</div>
+                <h3>Limitations of This Model</h3>
+                <ul class="science-list">
+                    <li><strong>Static geometry only</strong> — ignores subpixel rendering, anti-aliasing</li>
+                    <li><strong>Single acuity threshold</strong> — varies significantly by individual</li>
+                    <li><strong>No refresh rate</strong> — 240Hz vs 60Hz affects motion clarity</li>
+                    <li><strong>No colour accuracy</strong> — sRGB, P3, Rec.2020 not modelled</li>
+                </ul>
+                <p class="science-caveat">VFI intentionally answers one question precisely: "Can I see pixels?" It does not attempt to be a holistic display quality metric.</p>
+            </div>
+
+            <div class="science-card">
+                <div class="science-icon" aria-hidden="true">🔬</div>
+                <h3>Open Methodology</h3>
+                <p>VFI is an open standard. The formula, thresholds, and rationale are fully published. We invite peer review, criticism, and improvement.</p>
+                <p>If you find an error in our methodology or have research supporting different thresholds, open an issue on GitHub.</p>
+                <a href="https://github.com" target="_blank" rel="noopener" class="science-link">Read the full methodology →</a>
+            </div>
+        </div>
+
+        <!-- Reference table -->
+        <div class="sci-table-wrap">
+            <h3 class="sci-table-title">Real-World VFI Examples (at typical viewing distance)</h3>
+            <table class="sci-table" aria-label="VFI scores for common display setups">
+                <thead>
+                    <tr>
+                        <th scope="col">Device Setup</th>
+                        <th scope="col">Viewing Distance</th>
+                        <th scope="col">PPD</th>
+                        <th scope="col">VFI</th>
+                        <th scope="col">Experience</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>27" 1080p Monitor</strong></td><td>24 in</td><td>34</td><td><span class="tier-badge tier-low">56 — Low</span></td><td>Visible pixel grid in text</td></tr>
+                    <tr><td><strong>27" 1440p Monitor</strong></td><td>24 in</td><td>51</td><td><span class="tier-badge tier-std">85 — High Fidelity</span></td><td>Sharp. Pixels rarely visible.</td></tr>
+                    <tr><td><strong>27" 4K Monitor</strong></td><td>24 in</td><td>68</td><td><span class="tier-badge tier-retina">113 — Retina</span></td><td>Zero visible pixels at this distance.</td></tr>
+                    <tr><td><strong>MacBook Pro 14" M3</strong></td><td>18 in</td><td>89</td><td><span class="tier-badge tier-retina">148 — Retina</span></td><td>Far exceeds acuity limit.</td></tr>
+                    <tr><td><strong>iPhone 15 Pro Max</strong></td><td>14 in</td><td>101</td><td><span class="tier-badge tier-over">168 — Overkill</span></td><td>Beyond human discrimination.</td></tr>
+                    <tr><td><strong>65" 4K TV</strong></td><td>84 in (7 ft)</td><td>81</td><td><span class="tier-badge tier-retina">135 — Retina</span></td><td>Perfectly sharp for living room.</td></tr>
+                    <tr><td><strong>65" 1080p TV</strong></td><td>84 in (7 ft)</td><td>20</td><td><span class="tier-badge tier-pixelated">34 — Pixelated</span></td><td>Noticeably soft at 7 feet.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="footer-logo">◈ VFI</div>
+                <p>An open, vendor-neutral standard for measuring display sharpness as humans actually experience it.</p>
+                <div class="footer-badges">
+                    <span class="footer-badge">No Affiliate Links</span>
+                    <span class="footer-badge">Open Source</span>
+                    <span class="footer-badge">No Account Required</span>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#science">The Science</a></li>
+                    <li><a href="#calculator">Calculator</a></li>
+                    <li><a href="#database">Device Database</a></li>
+                    <li><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Methodology</h4>
+                <ul>
+                    <li><a href="#science">Formula Derivation</a></li>
+                    <li><a href="#science">Limitations</a></li>
+                    <li><a href="docs/METHODOLOGY.md" target="_blank">Full Docs</a></li>
+                    <li><a href="https://github.com" target="_blank" rel="noopener">Contribute</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Visual Fidelity Index · Open methodology · No ads · No affiliates · No tracking.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- UI overlays -->
+<div class="tooltip" id="tooltip" role="tooltip" aria-hidden="true"></div>
+<div class="toast"   id="toast"   role="status"  aria-live="polite"></div>
+
+<!-- Compiled bundle — no server required, works via file:// directly -->
+<script src="assets/js/bundle.js"></script>
+
+</body>
+</html>

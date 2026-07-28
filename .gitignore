@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# OS noise
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor noise
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment files (if ever added)
+.env
+.env.local

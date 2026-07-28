@@ -1,0 +1,26 @@
+{
+  "name": "visual-fidelity-index",
+  "version": "2.0.0",
+  "description": "Open, vendor-neutral display sharpness standard. Measures pixels per degree of visual angle normalised to the human acuity limit.",
+  "homepage": "https://visualfidelityindex.com",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "cat assets/css/tokens.css assets/css/base.css assets/css/navbar.css assets/css/hero.css assets/css/calculator.css assets/css/comparator.css assets/css/database.css assets/css/science.css assets/css/footer.css assets/css/components.css > assets/css/styles.css && npx esbuild assets/js/main.js --bundle --outfile=assets/js/bundle.js --format=iife",
+    "watch": "npx esbuild assets/js/main.js --bundle --outfile=assets/js/bundle.js --format=iife --watch",
+    "dev": "npx --yes serve . -p 8765 --no-clipboard",
+    "dev:py": "python3 -m http.server 8765"
+  },
+  "keywords": [
+    "display",
+    "pixels-per-degree",
+    "PPD",
+    "visual-acuity",
+    "retina",
+    "monitor",
+    "open-standard"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}

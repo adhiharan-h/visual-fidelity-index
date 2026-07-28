@@ -1,0 +1,68 @@
+/* ===========================================
+   VFI — Science / Methodology Section
+   =========================================== */
+
+.section-science {
+    padding: 80px 0;
+    background: linear-gradient(180deg, transparent, var(--bg-alt) 40%, transparent);
+}
+
+.science-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 60px;
+}
+.science-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-xl);
+    padding: 28px;
+    transition: border-color var(--fast), transform var(--fast);
+}
+.science-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+.science-card.science-card-formula {
+    border-color: rgba(99,102,241,.3);
+    background: linear-gradient(135deg, var(--surface), rgba(99,102,241,.05));
+}
+.science-icon    { font-size: 1.8rem; margin-bottom: 16px; display: block; }
+.science-card h3 { font-size: 1rem; font-weight: 700; color: white; margin-bottom: 12px; }
+.science-card p  { font-size: 0.875rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 10px; }
+.science-card p:last-child { margin-bottom: 0; }
+
+.formula-display {
+    background: var(--bg-alt);
+    border-radius: var(--r-md);
+    padding: 16px;
+    margin: 16px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.formula-line       { font-family: 'Courier New', monospace; font-size: 0.95rem; color: #86efac; font-weight: 600; }
+.formula-line.muted { color: #60a5fa; opacity: 0.7; }
+.formula-note       { font-size: 0.8rem !important; color: var(--text-faint) !important; }
+
+.science-list       { font-size: 0.875rem; color: var(--text-muted); padding-left: 20px; margin-bottom: 10px; }
+.science-list li    { margin-bottom: 6px; }
+.science-list strong { color: var(--text); }
+.science-caveat {
+    font-size: 0.8rem !important;
+    color: #f97316 !important;
+    background: rgba(249,115,22,.08) !important;
+    border: 1px solid rgba(249,115,22,.2) !important;
+    border-radius: var(--r-sm) !important;
+    padding: 8px 12px !important;
+}
+.science-link { display: inline-block; font-size: 0.875rem; font-weight: 600; color: var(--brand-light); margin-top: 12px; }
+
+/* Reference comparison table */
+.sci-table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-xl); overflow: hidden; }
+.sci-table-title { font-size: 1rem; font-weight: 700; color: white; padding: 24px 24px 0; }
+.sci-table       { width: 100%; border-collapse: collapse; }
+.sci-table th    { padding: 14px 20px; text-align: left; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-faint); border-bottom: 1px solid var(--border); }
+.sci-table td    { padding: 14px 20px; font-size: 0.875rem; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+.sci-table tr:last-child td { border-bottom: none; }
+.sci-table td strong { color: var(--text); }
+
+@media (max-width: 640px) { .science-grid { grid-template-columns: 1fr; } }

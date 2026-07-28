@@ -1,0 +1,6 @@
+# Redirect www to apex domain (Cloudflare Pages handles this via dashboard,
+# but listing here for clarity)
+# https://www.visualfidelityindex.com/*  https://visualfidelityindex.com/:splat  301
+
+# SPA fallback — not strictly needed for a single-page app, but good practice
+/*  /index.html  200

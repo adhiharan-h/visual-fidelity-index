@@ -1,0 +1,56 @@
+/* ===========================================
+   VFI — Base Styles
+   Reset · Body · Container · Typography
+   =========================================== */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+a { color: var(--brand-light); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Shared section header used across all major sections */
+.section-header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+.section-header h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -1px;
+    color: white;
+    margin-bottom: 12px;
+}
+.section-sub {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 560px;
+    margin: 0 auto;
+}
+
+/* Accessible keyboard focus ring — applies to all interactive elements */
+*:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+}

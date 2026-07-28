@@ -1,0 +1,94 @@
+/* ===========================================
+   VFI — Device Database Section
+   Search · Filter · Sortable table
+   =========================================== */
+
+.section-database { padding: 80px 0; }
+
+.db-filter-bar {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 24px;
+}
+.db-search {
+    flex: 1;
+    min-width: 200px;
+    padding: 10px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: var(--r-lg);
+    font-size: 0.9rem;
+    font-family: inherit;
+    transition: border-color var(--fast);
+}
+.db-search::placeholder { color: var(--text-faint); }
+.db-search:focus { outline: none; border-color: var(--brand); }
+
+.db-filter-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.db-filter {
+    padding: 8px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: 100px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: inherit;
+    transition: all var(--fast);
+}
+.db-filter:hover, .db-filter.active {
+    background: rgba(99,102,241,.15);
+    border-color: var(--brand);
+    color: var(--brand-light);
+}
+
+.db-table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-xl);
+    overflow: hidden;
+}
+.db-table { width: 100%; border-collapse: collapse; }
+.db-table th {
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-faint);
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+    cursor: default;
+}
+.db-table th.sortable      { cursor: pointer; }
+.db-table th.sortable:hover { color: var(--text-muted); }
+.db-table th.active-sort   { color: var(--brand-light); }
+.db-table td {
+    padding: 14px 16px;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+    transition: background var(--fast);
+}
+.db-table tr:last-child td { border-bottom: none; }
+.db-table tr:hover td      { background: rgba(255,255,255,.03); cursor: pointer; }
+.db-table .device-name     { font-weight: 600; color: var(--text); }
+.db-table .vfi-num         { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1rem; }
+
+/* Tier badge pills — shared with science table */
+.tier-badge     { display: inline-block; padding: 3px 10px; border-radius: 100px; font-size: 0.75rem; font-weight: 700; }
+.tier-pixelated { background: rgba(239,68,68,.15);  color: #f87171; }
+.tier-low       { background: rgba(249,115,22,.15); color: #fb923c; }
+.tier-std       { background: rgba(34,197,94,.15);  color: #4ade80; }
+.tier-retina    { background: rgba(99,102,241,.15); color: var(--brand-light); }
+.tier-over      { background: rgba(168,85,247,.15); color: #c084fc; }
+
+@media (max-width: 640px) {
+    .db-filter-bar { flex-direction: column; align-items: flex-start; }
+    .db-search     { min-width: unset; width: 100%; }
+}

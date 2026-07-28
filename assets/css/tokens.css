@@ -1,0 +1,50 @@
+/* ===========================================
+   VFI — Design Tokens
+   Single source of truth for all CSS values.
+   Import this first in every stylesheet.
+   =========================================== */
+
+:root {
+    /* Brand */
+    --brand:       #6366f1;
+    --brand-light: #818cf8;
+    --brand-dark:  #4f46e5;
+
+    /* Tier Colors — match VFI score bands */
+    --tier-pixelated: #ef4444;
+    --tier-low:       #f97316;
+    --tier-standard:  #eab308;
+    --tier-high:      #22c55e;
+    --tier-retina:    #6366f1;
+    --tier-overkill:  #a855f7;
+
+    /* Dark Palette */
+    --bg:        #060b18;
+    --bg-alt:    #0d1422;
+    --surface:   #111827;
+    --surface-2: #1a2234;
+    --surface-3: #1e293b;
+    --border:        rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.14);
+
+    /* Text */
+    --text:       #f1f5f9;
+    --text-muted: #94a3b8;
+    --text-faint: #475569;
+
+    /* Border Radii */
+    --r-sm:  8px;
+    --r-md:  12px;
+    --r-lg:  16px;
+    --r-xl:  24px;
+    --r-2xl: 32px;
+
+    /* Shadows */
+    --shadow-card: 0 1px 2px rgba(0,0,0,.4), 0 8px 32px rgba(0,0,0,.3);
+    --shadow-glow: 0 0 40px rgba(99,102,241,.15);
+
+    /* Easing & Timing */
+    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --fast: 0.15s;
+    --slow: 0.4s;
+}
