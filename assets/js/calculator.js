@@ -7,7 +7,7 @@
 
 import { state } from './state.js';
 import {
-    computePPI, computePPD, computeVFI,
+    computePPI, computePPD, computeEffectivePPD, computeVFI,
     computeConfidence, computeOptimalDist, computePPIHV,
     getTier, getTierColor, RING_CIRCUMFERENCE,
 } from './formula.js';
@@ -35,15 +35,16 @@ export function calculate() {
     // --- Formula ---
     const ppi     = computePPI(w, h, size);
     const effPPI  = ppi / sc;
-    const ppd     = computePPD(dist, effPPI);
-    const vfi     = computeVFI(ppd);
-    const conf    = computeConfidence(effPPI);
-    const optDist = computeOptimalDist(effPPI);
 
     // Horizontal / vertical PPD split
     const { ppiH, ppiV } = computePPIHV(w, h, size);
     const ppdH = computePPD(dist, ppiH / sc);
     const ppdV = computePPD(dist, ppiV / sc);
+
+    const activePPD = computeEffectivePPD(dist, effPPI, ppiH / sc, ppiV / sc, state.useCase);
+    const vfi       = computeVFI(activePPD);
+    const conf      = computeConfidence(effPPI);
+    const optDist   = computeOptimalDist(effPPI);
 
     const tier = getTier(vfi);
 
@@ -72,7 +73,7 @@ export function calculate() {
         : `Sit ≤${Math.round(optDist)}" for Retina grade`;
 
     // --- Update math derivation panel ---
-    _updateMathPanel(w, h, size, dist, ppi, effPPI, sc, ppd, vfi, conf);
+    _updateMathPanel(w, h, size, dist, ppi, effPPI, sc, activePPD, vfi, conf);
 
     // --- Apply score tier theme ---
     _updateTheme(tier.cls);
@@ -82,10 +83,11 @@ export function calculate() {
 
     // --- Sync distance slider without triggering a feedback loop ---
     const slider = document.getElementById('dist-slider');
-    if (Math.abs(parseFloat(slider.value) - dist) > 0.5) slider.value = dist;
+    if (slider && Math.abs(parseFloat(slider.value) - dist) > 0.5) slider.value = dist;
 
     // --- Update device database distance label ---
-    document.getElementById('dbDistLabel').textContent = `${dist}"`;
+    const dbDistLabel = document.getElementById('dbDistLabel');
+    if (dbDistLabel) dbDistLabel.textContent = `${dist}"`;
     renderDB();
 }
 
@@ -97,6 +99,7 @@ function _updateRing(vfi, tier) {
     const pct    = Math.min(vfi / 150, 1);
     const offset = RING_CIRCUMFERENCE * (1 - pct);
     const ring   = document.getElementById('ringFill');
+    if (!ring) return;
     ring.style.strokeDashoffset = offset;
     ring.style.stroke           = getTierColor(tier.cls);
 }
@@ -105,9 +108,11 @@ function _updateSpectrum(vfi) {
     const pct    = Math.min(Math.max(vfi / 150, 0), 1) * 100;
     const needle = document.getElementById('spectrumNeedle');
     const label  = document.getElementById('spectrumLabel');
-    needle.style.left = `${pct}%`;
-    label.style.left  = `${pct}%`;
-    label.textContent = Math.round(vfi);
+    if (needle) needle.style.left = `${pct}%`;
+    if (label) {
+        label.style.left  = `${pct}%`;
+        label.textContent = Math.round(vfi);
+    }
 }
 
 function _updateTheme(cls) {
@@ -116,19 +121,20 @@ function _updateTheme(cls) {
     panel.className = `calc-panel calc-results-panel ${cls}`;
 }
 
-function _updateMathPanel(w, h, size, dist, ppi, effPPI, sc, ppd, vfi, conf) {
-    document.getElementById('mathPPI').textContent =
-        `PPI = √(${w}² + ${h}²) / ${size} = ${ppi.toFixed(1)} px/in`;
-    document.getElementById('mathEffPPI').textContent =
-        `Eff.PPI = ${ppi.toFixed(1)} / ${sc} = ${effPPI.toFixed(1)} px/in`;
-    document.getElementById('mathPPD').textContent =
-        `PPD = 2 × ${dist} × ${effPPI.toFixed(1)} × tan(0.5°) = ${ppd.toFixed(1)}`;
-    document.getElementById('mathVFI').textContent =
-        `VFI = (${ppd.toFixed(1)} / 60) × 100 = ${vfi.toFixed(1)}`;
+function _updateMathPanel(w, h, size, dist, ppi, effPPI, sc, activePPD, vfi, conf) {
+    const mathPPI    = document.getElementById('mathPPI');
+    const mathEffPPI = document.getElementById('mathEffPPI');
+    const mathPPD    = document.getElementById('mathPPD');
+    const mathVFI    = document.getElementById('mathVFI');
+    const mathConf   = document.getElementById('mathConf');
+
+    if (mathPPI)    mathPPI.textContent    = `PPI = √(${w}² + ${h}²) / ${size} = ${ppi.toFixed(1)} px/in`;
+    if (mathEffPPI) mathEffPPI.textContent = `Eff.PPI = ${ppi.toFixed(1)} / ${sc} = ${effPPI.toFixed(1)} px/in`;
+    if (mathPPD)    mathPPD.textContent    = `PPD (${state.useCase}) = ${activePPD.toFixed(1)}`;
+    if (mathVFI)    mathVFI.textContent    = `VFI = (${activePPD.toFixed(1)} / 60) × 100 = ${vfi.toFixed(1)}`;
 
     const sigPPD = 2 * 3 * effPPI * Math.tan(0.5 * Math.PI / 180);
-    document.getElementById('mathConf').textContent =
-        `σ_PPD = 2 × 3 × ${effPPI.toFixed(1)} × tan(0.5°) = ${sigPPD.toFixed(1)} → ±${conf.toFixed(0)} VFI`;
+    if (mathConf)   mathConf.textContent   = `σ_PPD = 2 × 3 × ${effPPI.toFixed(1)} × tan(0.5°) = ${sigPPD.toFixed(1)} → ±${conf.toFixed(0)} VFI`;
 }
 
 // ---------------------------------------------------------------------------
@@ -154,12 +160,17 @@ export function setPreset(w, h, s, d, sc = 1, name = '') {
 
     // Highlight the matching preset button
     document.querySelectorAll('.preset-btn').forEach(btn => {
-        const active = btn.textContent.trim() === name;
+        const presetAttr = btn.dataset.preset || btn.textContent.trim();
+        const active = presetAttr === name || btn.textContent.trim() === name;
         btn.classList.toggle('active', active);
-        btn.setAttribute('aria-pressed', active);
+        btn.setAttribute('aria-pressed', active ? 'true' : 'false');
     });
 
-    setScale(sc);
+    state.scale = sc;
+    document.querySelectorAll('.scale-btn').forEach(btn => {
+        btn.classList.toggle('active', parseFloat(btn.dataset.scale) === sc);
+    });
+
     calculate();
 }
 
@@ -184,6 +195,19 @@ export function setUseCase(uc) {
     document.querySelectorAll('.usecase-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.case === uc);
     });
+
+    const hintEl = document.getElementById('useCaseHint');
+    if (hintEl) {
+        const hints = {
+            balanced: '⚖ Balanced mode: Evaluated on standard diagonal PPD',
+            text:     '📝 Text/Code mode: Evaluated on horizontal PPD (critical for text clarity & subpixel rendering)',
+            gaming:   '🎮 Gaming mode: Evaluated on diagonal PPD for dynamic motion & immersion',
+            design:   '🎨 Design mode: Evaluated on worst-axis PPD (ensures precision for fine lines & vectors)',
+            video:    '📺 Video mode: Evaluated on vertical PPD (16:9 vertical frame resolution)',
+        };
+        hintEl.textContent = hints[uc] || hints.balanced;
+    }
+
     calculate();
 }
 

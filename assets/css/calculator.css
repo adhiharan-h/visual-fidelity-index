@@ -202,6 +202,15 @@ label {
     color: var(--brand-light);
 }
 
+.usecase-hint {
+    font-size: 0.72rem;
+    color: var(--brand-light);
+    margin-top: 6px;
+    font-weight: 500;
+    line-height: 1.4;
+    transition: color var(--fast);
+}
+
 /* ---- SVG Score Ring — compact on mobile ---- */
 .score-display-wrap {
     display: flex;

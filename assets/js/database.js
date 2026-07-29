@@ -28,8 +28,10 @@ let _sortAsc  = false;
 /** Re-render the device table. Called after any state change. */
 export function renderDB() {
     const dist  = state.dist;
-    const query = document.getElementById('dbSearch').value.toLowerCase();
+    const searchInput = document.getElementById('dbSearch');
+    const query = searchInput ? searchInput.value.toLowerCase() : '';
     const tbody = document.getElementById('dbBody');
+    if (!tbody) return;
 
     const rows = DEVICES
         .filter(d => _category === 'all' || d.cat === _category)
@@ -43,15 +45,23 @@ export function renderDB() {
         })
         .sort((a, b) => {
             const mult = _sortAsc ? 1 : -1;
-            const av = a[_sortCol], bv = b[_sortCol];
+            let av = a[_sortCol];
+            let bv = b[_sortCol];
+            if (_sortCol === 'res') {
+                av = a.w * a.h;
+                bv = b.w * b.h;
+            }
             if (typeof av === 'string') return av.localeCompare(bv) * mult;
             return (av - bv) * mult;
         });
 
     tbody.innerHTML = rows.map(d => `
         <tr
-            onclick="window.__vfi.loadDevice(${d.w},${d.h},${d.size},${d.typicalDist},'${_esc(d.name)}')"
-            onkeydown="if(event.key==='Enter'||event.key===' ')window.__vfi.loadDevice(${d.w},${d.h},${d.size},${d.typicalDist},'${_esc(d.name)}')"
+            data-w="${d.w}"
+            data-h="${d.h}"
+            data-size="${d.size}"
+            data-dist="${d.typicalDist}"
+            data-name="${_esc(d.name)}"
             role="button"
             tabindex="0"
             aria-label="Load ${_esc(d.name)} into calculator">
@@ -63,6 +73,8 @@ export function renderDB() {
             <td><span class="tier-badge ${d.tier.badge}">${d.tier.name}</span></td>
         </tr>
     `).join('');
+
+    _updateHeaderSortIcons();
 }
 
 /**
@@ -80,7 +92,7 @@ export function filterDB(cat) {
 /**
  * Sort the table by a column.
  * Clicking the same column toggles ascending/descending.
- * @param {string} col — Column key: 'vfi' | 'ppi' | 'size'
+ * @param {string} col — Column key: 'name' | 'res' | 'size' | 'ppi' | 'vfi'
  */
 export function sortDB(col) {
     _sortAsc = _sortCol === col ? !_sortAsc : false;
@@ -105,6 +117,20 @@ export function loadDevice(w, h, size, dist, name) {
 // ---------------------------------------------------------------------------
 // Private helpers
 // ---------------------------------------------------------------------------
+
+function _updateHeaderSortIcons() {
+    const headers = document.querySelectorAll('#dbTable th[data-sort]');
+    headers.forEach(th => {
+        const col = th.dataset.sort;
+        const isCurrent = col === _sortCol;
+        th.classList.toggle('active-sort', isCurrent);
+        const arrow = isCurrent ? (_sortAsc ? ' ↑' : ' ↓') : '';
+        th.setAttribute('aria-sort', isCurrent ? (_sortAsc ? 'ascending' : 'descending') : 'none');
+        const baseName = th.dataset.label || th.textContent.replace(/[↑↓]/g, '').trim();
+        th.dataset.label = baseName;
+        th.textContent = baseName + arrow;
+    });
+}
 
 /** HTML-escape a string for safe inline use. */
 function _esc(str) {

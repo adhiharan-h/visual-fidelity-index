@@ -60,6 +60,34 @@ export function computePPD(dist, ppi) {
 }
 
 /**
+ * Calculate effective PPD based on primary use case weighting.
+ * @param {number} dist    — Viewing distance (inches)
+ * @param {number} ppi     — Diagonal effective PPI
+ * @param {number} ppiH    — Horizontal effective PPI
+ * @param {number} ppiV    — Vertical effective PPI
+ * @param {string} useCase — 'balanced' | 'text' | 'gaming' | 'design' | 'video'
+ * @returns {number} Effective PPD for VFI scoring
+ */
+export function computeEffectivePPD(dist, ppi, ppiH, ppiV, useCase = 'balanced') {
+    const ppd  = computePPD(dist, ppi);
+    const ppdH = computePPD(dist, ppiH);
+    const ppdV = computePPD(dist, ppiV);
+
+    switch (useCase) {
+        case 'text':
+            return ppdH;
+        case 'design':
+            return Math.min(ppdH, ppdV);
+        case 'video':
+            return ppdV;
+        case 'gaming':
+        case 'balanced':
+        default:
+            return ppd;
+    }
+}
+
+/**
  * Normalise PPD to the VFI score (0–100 maps to 0–60 PPD; >100 is possible).
  * @param {number} ppd
  * @returns {number} VFI score

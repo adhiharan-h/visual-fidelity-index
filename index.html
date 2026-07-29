@@ -134,22 +134,22 @@
                 <!-- Quick presets -->
                 <div class="preset-group">
                     <p class="preset-label">Quick-load a device</p>
-                    <div class="presets" role="list">
-                        <button class="preset-btn active" role="listitem" aria-pressed="true"
+                    <div class="presets" role="group" aria-label="Quick load presets">
+                        <button class="preset-btn active" data-preset="27&quot; 1440p" aria-pressed="true"
                             onclick="__vfi.setPreset(2560,1440,27,24,1,'27&quot; 1440p')">27" 1440p</button>
-                        <button class="preset-btn" role="listitem" aria-pressed="false"
+                        <button class="preset-btn" data-preset="27&quot; 1080p" aria-pressed="false"
                             onclick="__vfi.setPreset(1920,1080,27,24,1,'27&quot; 1080p')">27" 1080p</button>
-                        <button class="preset-btn" role="listitem" aria-pressed="false"
+                        <button class="preset-btn" data-preset="27&quot; 4K" aria-pressed="false"
                             onclick="__vfi.setPreset(3840,2160,27,24,1,'27&quot; 4K')">27" 4K</button>
-                        <button class="preset-btn" role="listitem" aria-pressed="false"
+                        <button class="preset-btn" data-preset="iPhone 15 Pro Max" aria-pressed="false"
                             onclick="__vfi.setPreset(2796,1290,6.7,14,3,'iPhone 15 Pro Max')">iPhone 15 Pro</button>
-                        <button class="preset-btn" role="listitem" aria-pressed="false"
+                        <button class="preset-btn" data-preset="MacBook Pro 14&quot;" aria-pressed="false"
                             onclick="__vfi.setPreset(3024,1964,14.2,18,2,'MacBook Pro 14&quot;')">MacBook Pro 14"</button>
-                        <button class="preset-btn" role="listitem" aria-pressed="false"
+                        <button class="preset-btn" data-preset="65&quot; 4K TV" aria-pressed="false"
                             onclick="__vfi.setPreset(3840,2160,65,84,1,'65&quot; 4K TV')">65" 4K TV</button>
-                        <button class="preset-btn" role="listitem" aria-pressed="false"
+                        <button class="preset-btn" data-preset="55&quot; 1080p TV" aria-pressed="false"
                             onclick="__vfi.setPreset(1920,1080,55,84,1,'55&quot; 1080p TV')">55" 1080p TV</button>
-                        <button class="preset-btn" role="listitem" aria-pressed="false"
+                        <button class="preset-btn" data-preset="Surface Laptop 5" aria-pressed="false"
                             onclick="__vfi.setPreset(2256,1504,13.5,18,1,'Surface Laptop 5')">Surface Laptop</button>
                     </div>
                 </div>
@@ -242,6 +242,7 @@
                             <button class="usecase-btn"        data-case="design"   onclick="__vfi.setUseCase('design')">🎨 Design</button>
                             <button class="usecase-btn"        data-case="video"    onclick="__vfi.setUseCase('video')">📺 Video</button>
                         </div>
+                        <p id="useCaseHint" class="usecase-hint">⚖ Balanced mode: Evaluated on standard diagonal PPD</p>
                     </div>
                 </div>
             </div>
@@ -481,13 +482,11 @@
             <table class="db-table" id="dbTable" aria-label="Display devices sorted by VFI score">
                 <thead>
                     <tr>
-                        <th scope="col">Device</th>
-                        <th scope="col">Resolution</th>
-                        <th scope="col">Size</th>
-                        <th scope="col">PPI</th>
-                        <th scope="col" class="sortable active-sort"
-                            onclick="__vfi.sortDB('vfi')"
-                            aria-sort="descending" tabindex="0">VFI ↓</th>
+                        <th scope="col" class="sortable" data-sort="name" onclick="__vfi.sortDB('name')" tabindex="0">Device</th>
+                        <th scope="col" class="sortable" data-sort="res" onclick="__vfi.sortDB('res')" tabindex="0">Resolution</th>
+                        <th scope="col" class="sortable" data-sort="size" onclick="__vfi.sortDB('size')" tabindex="0">Size</th>
+                        <th scope="col" class="sortable" data-sort="ppi" onclick="__vfi.sortDB('ppi')" tabindex="0">PPI</th>
+                        <th scope="col" class="sortable active-sort" data-sort="vfi" onclick="__vfi.sortDB('vfi')" aria-sort="descending" tabindex="0">VFI ↓</th>
                         <th scope="col">Tier</th>
                     </tr>
                 </thead>

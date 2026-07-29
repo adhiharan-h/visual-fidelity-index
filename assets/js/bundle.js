@@ -1,47 +1,20 @@
 (() => {
-  var __defProp = Object.defineProperty;
-  var __getOwnPropNames = Object.getOwnPropertyNames;
-  var __esm = (fn, res, err) => function __init() {
-    if (err) throw err[0];
-    try {
-      return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
-    } catch (e) {
-      throw err = [e], e;
-    }
-  };
-  var __export = (target, all) => {
-    for (var name in all)
-      __defProp(target, name, { get: all[name], enumerable: true });
-  };
-
   // assets/js/state.js
-  var state_exports = {};
-  __export(state_exports, {
-    state: () => state
-  });
-  var state;
-  var init_state = __esm({
-    "assets/js/state.js"() {
-      state = {
-        /** Current display resolution (pixels) */
-        w: 2560,
-        h: 1440,
-        /** Physical screen size (inches, diagonal) */
-        size: 27,
-        /** Viewing distance (inches) */
-        dist: 24,
-        /** OS display scaling factor (1 = native, 2 = HiDPI/Retina) */
-        scale: 1,
-        /** Active use-case mode — affects future weighting extensions */
-        useCase: "balanced",
-        /** Human-readable name of the currently loaded preset */
-        presetName: '27" 1440p Monitor'
-      };
-    }
-  });
-
-  // assets/js/calculator.js
-  init_state();
+  var state = {
+    /** Current display resolution (pixels) */
+    w: 2560,
+    h: 1440,
+    /** Physical screen size (inches, diagonal) */
+    size: 27,
+    /** Viewing distance (inches) */
+    dist: 24,
+    /** OS display scaling factor (1 = native, 2 = HiDPI/Retina) */
+    scale: 1,
+    /** Active use-case mode — affects future weighting extensions */
+    useCase: "balanced",
+    /** Human-readable name of the currently loaded preset */
+    presetName: '27" 1440p Monitor'
+  };
 
   // assets/js/formula.js
   var TAN_HALF_DEG = Math.tan(0.5 * Math.PI / 180);
@@ -53,6 +26,23 @@
   }
   function computePPD(dist, ppi) {
     return 2 * dist * ppi * TAN_HALF_DEG;
+  }
+  function computeEffectivePPD(dist, ppi, ppiH, ppiV, useCase = "balanced") {
+    const ppd = computePPD(dist, ppi);
+    const ppdH = computePPD(dist, ppiH);
+    const ppdV = computePPD(dist, ppiV);
+    switch (useCase) {
+      case "text":
+        return ppdH;
+      case "design":
+        return Math.min(ppdH, ppdV);
+      case "video":
+        return ppdV;
+      case "gaming":
+      case "balanced":
+      default:
+        return ppd;
+    }
   }
   function computeVFI(ppd) {
     return ppd / RETINA_PPD * 100;
@@ -178,7 +168,6 @@
   }
 
   // assets/js/comparator.js
-  init_state();
   var _scores = { A: NaN, B: NaN };
   function updateComparatorA(vfi, tier, ppdH, ppi) {
     _scores.A = vfi;
@@ -275,14 +264,15 @@
   ];
 
   // assets/js/database.js
-  init_state();
   var _category = "all";
   var _sortCol = "vfi";
   var _sortAsc = false;
   function renderDB() {
     const dist = state.dist;
-    const query = document.getElementById("dbSearch").value.toLowerCase();
+    const searchInput = document.getElementById("dbSearch");
+    const query = searchInput ? searchInput.value.toLowerCase() : "";
     const tbody = document.getElementById("dbBody");
+    if (!tbody) return;
     const rows = DEVICES.filter((d) => _category === "all" || d.cat === _category).filter((d) => !query || d.name.toLowerCase().includes(query)).map((d) => {
       const ppi = computePPI(d.w, d.h, d.size);
       const ppd = computePPD(dist, ppi);
@@ -291,14 +281,22 @@
       return { ...d, ppi, ppd, vfi, tier };
     }).sort((a, b) => {
       const mult = _sortAsc ? 1 : -1;
-      const av = a[_sortCol], bv = b[_sortCol];
+      let av = a[_sortCol];
+      let bv = b[_sortCol];
+      if (_sortCol === "res") {
+        av = a.w * a.h;
+        bv = b.w * b.h;
+      }
       if (typeof av === "string") return av.localeCompare(bv) * mult;
       return (av - bv) * mult;
     });
     tbody.innerHTML = rows.map((d) => `
         <tr
-            onclick="window.__vfi.loadDevice(${d.w},${d.h},${d.size},${d.typicalDist},'${_esc(d.name)}')"
-            onkeydown="if(event.key==='Enter'||event.key===' ')window.__vfi.loadDevice(${d.w},${d.h},${d.size},${d.typicalDist},'${_esc(d.name)}')"
+            data-w="${d.w}"
+            data-h="${d.h}"
+            data-size="${d.size}"
+            data-dist="${d.typicalDist}"
+            data-name="${_esc(d.name)}"
             role="button"
             tabindex="0"
             aria-label="Load ${_esc(d.name)} into calculator">
@@ -310,6 +308,7 @@
             <td><span class="tier-badge ${d.tier.badge}">${d.tier.name}</span></td>
         </tr>
     `).join("");
+    _updateHeaderSortIcons();
   }
   function filterDB(cat) {
     _category = cat;
@@ -328,6 +327,19 @@
     document.getElementById("calculator").scrollIntoView({ behavior: "smooth" });
     showToast(`Loaded: ${name}`);
   }
+  function _updateHeaderSortIcons() {
+    const headers = document.querySelectorAll("#dbTable th[data-sort]");
+    headers.forEach((th) => {
+      const col = th.dataset.sort;
+      const isCurrent = col === _sortCol;
+      th.classList.toggle("active-sort", isCurrent);
+      const arrow = isCurrent ? _sortAsc ? " \u2191" : " \u2193" : "";
+      th.setAttribute("aria-sort", isCurrent ? _sortAsc ? "ascending" : "descending" : "none");
+      const baseName = th.dataset.label || th.textContent.replace(/[↑↓]/g, "").trim();
+      th.dataset.label = baseName;
+      th.textContent = baseName + arrow;
+    });
+  }
   function _esc(str) {
     return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
   }
@@ -343,13 +355,13 @@
     Object.assign(state, { w, h, size, dist });
     const ppi = computePPI(w, h, size);
     const effPPI = ppi / sc;
-    const ppd = computePPD(dist, effPPI);
-    const vfi = computeVFI(ppd);
-    const conf = computeConfidence(effPPI);
-    const optDist = computeOptimalDist(effPPI);
     const { ppiH, ppiV } = computePPIHV(w, h, size);
     const ppdH = computePPD(dist, ppiH / sc);
     const ppdV = computePPD(dist, ppiV / sc);
+    const activePPD = computeEffectivePPD(dist, effPPI, ppiH / sc, ppiV / sc, state.useCase);
+    const vfi = computeVFI(activePPD);
+    const conf = computeConfidence(effPPI);
+    const optDist = computeOptimalDist(effPPI);
     const tier = getTier(vfi);
     animateNum("vfiScore", Math.round(vfi));
     document.getElementById("scoreTier").textContent = tier.name;
@@ -364,18 +376,20 @@
     document.getElementById("effPpiSub").textContent = sc !== 1 ? `After ${sc}\xD7 scaling` : "Native (no scaling)";
     document.getElementById("optimalDist").textContent = `${Math.round(optDist)}"`;
     document.getElementById("optimalHint").textContent = optDist <= dist ? "You're past Retina threshold!" : `Sit \u2264${Math.round(optDist)}" for Retina grade`;
-    _updateMathPanel(w, h, size, dist, ppi, effPPI, sc, ppd, vfi, conf);
+    _updateMathPanel(w, h, size, dist, ppi, effPPI, sc, activePPD, vfi, conf);
     _updateTheme(tier.cls);
     updateComparatorA(vfi, tier, ppdH, ppi);
     const slider = document.getElementById("dist-slider");
-    if (Math.abs(parseFloat(slider.value) - dist) > 0.5) slider.value = dist;
-    document.getElementById("dbDistLabel").textContent = `${dist}"`;
+    if (slider && Math.abs(parseFloat(slider.value) - dist) > 0.5) slider.value = dist;
+    const dbDistLabel = document.getElementById("dbDistLabel");
+    if (dbDistLabel) dbDistLabel.textContent = `${dist}"`;
     renderDB();
   }
   function _updateRing(vfi, tier) {
     const pct = Math.min(vfi / 150, 1);
     const offset = RING_CIRCUMFERENCE * (1 - pct);
     const ring = document.getElementById("ringFill");
+    if (!ring) return;
     ring.style.strokeDashoffset = offset;
     ring.style.stroke = getTierColor(tier.cls);
   }
@@ -383,22 +397,29 @@
     const pct = Math.min(Math.max(vfi / 150, 0), 1) * 100;
     const needle = document.getElementById("spectrumNeedle");
     const label = document.getElementById("spectrumLabel");
-    needle.style.left = `${pct}%`;
-    label.style.left = `${pct}%`;
-    label.textContent = Math.round(vfi);
+    if (needle) needle.style.left = `${pct}%`;
+    if (label) {
+      label.style.left = `${pct}%`;
+      label.textContent = Math.round(vfi);
+    }
   }
   function _updateTheme(cls) {
     const panel = document.querySelector(".calc-results-panel");
     if (!panel) return;
     panel.className = `calc-panel calc-results-panel ${cls}`;
   }
-  function _updateMathPanel(w, h, size, dist, ppi, effPPI, sc, ppd, vfi, conf) {
-    document.getElementById("mathPPI").textContent = `PPI = \u221A(${w}\xB2 + ${h}\xB2) / ${size} = ${ppi.toFixed(1)} px/in`;
-    document.getElementById("mathEffPPI").textContent = `Eff.PPI = ${ppi.toFixed(1)} / ${sc} = ${effPPI.toFixed(1)} px/in`;
-    document.getElementById("mathPPD").textContent = `PPD = 2 \xD7 ${dist} \xD7 ${effPPI.toFixed(1)} \xD7 tan(0.5\xB0) = ${ppd.toFixed(1)}`;
-    document.getElementById("mathVFI").textContent = `VFI = (${ppd.toFixed(1)} / 60) \xD7 100 = ${vfi.toFixed(1)}`;
+  function _updateMathPanel(w, h, size, dist, ppi, effPPI, sc, activePPD, vfi, conf) {
+    const mathPPI = document.getElementById("mathPPI");
+    const mathEffPPI = document.getElementById("mathEffPPI");
+    const mathPPD = document.getElementById("mathPPD");
+    const mathVFI = document.getElementById("mathVFI");
+    const mathConf = document.getElementById("mathConf");
+    if (mathPPI) mathPPI.textContent = `PPI = \u221A(${w}\xB2 + ${h}\xB2) / ${size} = ${ppi.toFixed(1)} px/in`;
+    if (mathEffPPI) mathEffPPI.textContent = `Eff.PPI = ${ppi.toFixed(1)} / ${sc} = ${effPPI.toFixed(1)} px/in`;
+    if (mathPPD) mathPPD.textContent = `PPD (${state.useCase}) = ${activePPD.toFixed(1)}`;
+    if (mathVFI) mathVFI.textContent = `VFI = (${activePPD.toFixed(1)} / 60) \xD7 100 = ${vfi.toFixed(1)}`;
     const sigPPD = 2 * 3 * effPPI * Math.tan(0.5 * Math.PI / 180);
-    document.getElementById("mathConf").textContent = `\u03C3_PPD = 2 \xD7 3 \xD7 ${effPPI.toFixed(1)} \xD7 tan(0.5\xB0) = ${sigPPD.toFixed(1)} \u2192 \xB1${conf.toFixed(0)} VFI`;
+    if (mathConf) mathConf.textContent = `\u03C3_PPD = 2 \xD7 3 \xD7 ${effPPI.toFixed(1)} \xD7 tan(0.5\xB0) = ${sigPPD.toFixed(1)} \u2192 \xB1${conf.toFixed(0)} VFI`;
   }
   function setPreset(w, h, s, d, sc = 1, name = "") {
     document.getElementById("width").value = w;
@@ -408,11 +429,15 @@
     document.getElementById("dist-slider").value = d;
     state.presetName = name || `${w}\xD7${h} / ${s}"`;
     document.querySelectorAll(".preset-btn").forEach((btn) => {
-      const active = btn.textContent.trim() === name;
+      const presetAttr = btn.dataset.preset || btn.textContent.trim();
+      const active = presetAttr === name || btn.textContent.trim() === name;
       btn.classList.toggle("active", active);
-      btn.setAttribute("aria-pressed", active);
+      btn.setAttribute("aria-pressed", active ? "true" : "false");
     });
-    setScale(sc);
+    state.scale = sc;
+    document.querySelectorAll(".scale-btn").forEach((btn) => {
+      btn.classList.toggle("active", parseFloat(btn.dataset.scale) === sc);
+    });
     calculate();
   }
   function setScale(sc) {
@@ -427,6 +452,17 @@
     document.querySelectorAll(".usecase-btn").forEach((btn) => {
       btn.classList.toggle("active", btn.dataset.case === uc);
     });
+    const hintEl = document.getElementById("useCaseHint");
+    if (hintEl) {
+      const hints = {
+        balanced: "\u2696 Balanced mode: Evaluated on standard diagonal PPD",
+        text: "\u{1F4DD} Text/Code mode: Evaluated on horizontal PPD (critical for text clarity & subpixel rendering)",
+        gaming: "\u{1F3AE} Gaming mode: Evaluated on diagonal PPD for dynamic motion & immersion",
+        design: "\u{1F3A8} Design mode: Evaluated on worst-axis PPD (ensures precision for fine lines & vectors)",
+        video: "\u{1F4FA} Video mode: Evaluated on vertical PPD (16:9 vertical frame resolution)"
+      };
+      hintEl.textContent = hints[uc] || hints.balanced;
+    }
     calculate();
   }
   function toggleMath() {
@@ -466,25 +502,50 @@ ${window.location.href}`).then(() => showToast("Score copied to clipboard!")).ca
   };
   function setupListeners() {
     ["width", "height", "size", "dist"].forEach((id) => {
-      document.getElementById(id).addEventListener("input", () => {
-        document.querySelectorAll(".preset-btn").forEach((b) => {
-          b.classList.remove("active");
-          b.setAttribute("aria-pressed", "false");
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener("input", () => {
+          document.querySelectorAll(".preset-btn").forEach((b) => {
+            b.classList.remove("active");
+            b.setAttribute("aria-pressed", "false");
+          });
+          state.presetName = "";
+          calculate();
         });
-        Promise.resolve().then(() => (init_state(), state_exports)).then(({ state: state2 }) => {
-          state2.presetName = "";
-        });
+      }
+    });
+    const slider = document.getElementById("dist-slider");
+    if (slider) {
+      slider.addEventListener("input", (e) => {
+        const distInput = document.getElementById("dist");
+        if (distInput) distInput.value = e.target.value;
         calculate();
       });
-    });
-    document.getElementById("dist-slider").addEventListener("input", (e) => {
-      document.getElementById("dist").value = e.target.value;
-      calculate();
-    });
+    }
     ["cw", "ch", "cs", "cd"].forEach((id) => {
-      document.getElementById(id).addEventListener("input", calcComparatorB);
+      const el = document.getElementById(id);
+      if (el) el.addEventListener("input", calcComparatorB);
     });
-    document.getElementById("dbSearch").addEventListener("input", renderDB);
+    const dbSearch = document.getElementById("dbSearch");
+    if (dbSearch) dbSearch.addEventListener("input", renderDB);
+    const dbBody = document.getElementById("dbBody");
+    if (dbBody) {
+      dbBody.addEventListener("click", (e) => {
+        const tr = e.target.closest("tr[data-w]");
+        if (!tr) return;
+        const { w, h, size, dist, name } = tr.dataset;
+        loadDevice(parseFloat(w), parseFloat(h), parseFloat(size), parseFloat(dist), name);
+      });
+      dbBody.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          const tr = e.target.closest("tr[data-w]");
+          if (!tr) return;
+          e.preventDefault();
+          const { w, h, size, dist, name } = tr.dataset;
+          loadDevice(parseFloat(w), parseFloat(h), parseFloat(size), parseFloat(dist), name);
+        }
+      });
+    }
   }
   function init() {
     setupNavbar();
@@ -492,8 +553,10 @@ ${window.location.href}`).then(() => showToast("Score copied to clipboard!")).ca
     setupTooltips();
     setupListeners();
     const ring = document.getElementById("ringFill");
-    ring.style.strokeDasharray = RING_CIRCUMFERENCE;
-    ring.style.strokeDashoffset = RING_CIRCUMFERENCE;
+    if (ring) {
+      ring.style.strokeDasharray = RING_CIRCUMFERENCE;
+      ring.style.strokeDashoffset = RING_CIRCUMFERENCE;
+    }
     calculate();
     calcComparatorB();
     renderDB();
