@@ -1,6 +1,5 @@
-# Redirect www to apex domain (Cloudflare Pages handles this via dashboard,
-# but listing here for clarity)
+# Redirect www to apex domain
 # https://www.visualfidelityindex.com/*  https://visualfidelityindex.com/:splat  301
 
-# SPA fallback — not strictly needed for a single-page app, but good practice
-/*  /index.html  200
+# Note: SPA fallback removed — this is a static site, not a SPA.
+# Cloudflare Workers handles 404s via not_found_handling in wrangler.jsonc.
