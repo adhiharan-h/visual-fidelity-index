@@ -12,7 +12,7 @@ import {
     getTier, getTierColor, RING_CIRCUMFERENCE,
 } from './formula.js';
 import { animateNum, showToast } from './ui.js';
-import { updateComparatorA } from './comparator.js';
+import { updateComparatorA, calcComparatorB } from './comparator.js';
 import { renderDB } from './database.js';
 
 // ---------------------------------------------------------------------------
@@ -184,6 +184,7 @@ export function setScale(sc) {
         btn.classList.toggle('active', parseFloat(btn.dataset.scale) === sc);
     });
     calculate();
+    calcComparatorB();
 }
 
 /**

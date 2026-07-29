@@ -55,6 +55,12 @@ export function renderDB() {
             return (av - bv) * mult;
         });
 
+    if (rows.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 24px 12px; color: var(--text-faint);">No matching devices found</td></tr>`;
+        _updateHeaderSortIcons();
+        return;
+    }
+
     tbody.innerHTML = rows.map(d => `
         <tr
             data-w="${d.w}"
