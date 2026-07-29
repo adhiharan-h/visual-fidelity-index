@@ -6,7 +6,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "cat assets/css/tokens.css assets/css/base.css assets/css/navbar.css assets/css/hero.css assets/css/calculator.css assets/css/comparator.css assets/css/database.css assets/css/science.css assets/css/footer.css assets/css/components.css > assets/css/styles.css && npx esbuild assets/js/main.js --bundle --minify --outfile=assets/js/bundle.js --format=iife && rm -rf dist && mkdir -p dist && cp -r index.html assets _headers docs robots.txt sitemap.xml dist/ && cp assets/favicon.svg dist/favicon.svg 2>/dev/null; true",
+    "build": "cat assets/css/tokens.css assets/css/base.css assets/css/navbar.css assets/css/hero.css assets/css/calculator.css assets/css/comparator.css assets/css/database.css assets/css/science.css assets/css/footer.css assets/css/components.css > assets/css/styles.css && npx esbuild assets/js/main.js --bundle --minify --outfile=assets/js/bundle.js --format=iife && rm -rf dist && mkdir -p dist && cp -r index.html assets _headers docs robots.txt sitemap.xml dist/ && cp assets/favicon.svg dist/favicon.svg 2>/dev/null && cp assets/favicon.png dist/favicon.png 2>/dev/null && cp assets/apple-touch-icon.png dist/apple-touch-icon.png 2>/dev/null; true",
     "watch": "npx esbuild assets/js/main.js --bundle --outfile=assets/js/bundle.js --format=iife --watch",
     "dev": "npx --yes serve . -p 8765 --no-clipboard",
     "dev:py": "python3 -m http.server 8765"
