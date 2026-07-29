@@ -19,3 +19,6 @@ npm-debug.log*
 # Environment files (if ever added)
 .env
 .env.local
+
+# Build output (Cloudflare deploys from dist/)
+dist/
