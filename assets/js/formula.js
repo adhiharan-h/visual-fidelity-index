@@ -119,7 +119,7 @@ export function getTier(vfi) {
     if (vfi < 33)  return { name: 'PIXELATED',    cls: 'theme-pixelated', badge: 'tier-pixelated', msg: 'Individual pixels are clearly visible. Not ideal for text-heavy work at this distance.' };
     if (vfi < 55)  return { name: 'LOW FIDELITY', cls: 'theme-low',       badge: 'tier-low',       msg: 'Visible pixel structure in text and fine detail. Consider sitting farther back or upgrading.' };
     if (vfi < 75)  return { name: 'STANDARD',      cls: 'theme-standard',  badge: 'tier-std',       msg: 'Acceptable for video and casual use. Text may appear slightly soft on close inspection.' };
-    if (vfi < 100) return { name: 'HIGH FIDELITY', cls: 'theme-high',      badge: 'tier-std',       msg: 'Pixels are very hard to see at this distance. Excellent for all uses.' };
+    if (vfi < 100) return { name: 'HIGH FIDELITY', cls: 'theme-high',      badge: 'tier-high',      msg: 'Pixels are very hard to see at this distance. Excellent for all uses.' };
     if (vfi < 133) return { name: 'RETINA GRADE',  cls: 'theme-retina',    badge: 'tier-retina',    msg: 'Exceeds the average human acuity limit. Zero visible pixelation at this distance.' };
     return           { name: 'OVERKILL',           cls: 'theme-overkill',  badge: 'tier-over',      msg: 'Beyond the biological limit of human vision. Extra pixels provide no perceptual benefit.' };
 }

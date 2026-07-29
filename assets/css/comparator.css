@@ -1,50 +1,50 @@
 /* ===========================================
-   VFI — Comparator Section
-   Side-by-side display comparison
+   VFI — Comparator Section (Mobile-First)
    =========================================== */
 
+/* MOBILE BASE */
 .section-compare {
-    padding: 64px 0;
+    padding: 32px 0 40px;
     background: linear-gradient(180deg, transparent, var(--bg-alt) 40%, transparent);
 }
 
+/* Stack panels vertically on mobile */
 .comparator-wrap {
     display: flex;
-    align-items: stretch;
+    flex-direction: column;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: var(--r-2xl);
+    border-radius: var(--r-lg);
     overflow: hidden;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 
 .comp-panel {
-    flex: 1;
-    min-width: 0;
-    padding: 28px;
+    padding: 16px 14px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 10px;
 }
 .comp-panel.comp-b { background: var(--surface-2); }
 
+/* VS divider — horizontal when stacked */
 .comp-vs {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 16px;
+    padding: 8px;
     font-weight: 900;
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     color: var(--text-faint);
-    border-left: 1px solid var(--border);
-    border-right: 1px solid var(--border);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
     background: var(--surface-3);
-    flex-shrink: 0;
+    letter-spacing: 2px;
 }
 
-.comp-panel-header { display: flex; flex-direction: column; gap: 4px; }
+.comp-panel-header { display: flex; flex-direction: column; gap: 3px; }
 .comp-label {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -52,14 +52,14 @@
 .label-a { color: var(--brand-light); }
 .label-b { color: #f97316; }
 
-.comp-device-name { font-weight: 700; font-size: 0.95rem; color: var(--text); }
+.comp-device-name { font-weight: 700; font-size: 0.875rem; color: var(--text); }
 .comp-device-name-input {
     background: transparent;
     border: none;
     border-bottom: 1px solid var(--border);
     color: var(--text);
     font-weight: 700;
-    font-size: 0.95rem;
+    font-size: 0.875rem;
     font-family: inherit;
     width: 100%;
     padding: 2px 0;
@@ -67,18 +67,18 @@
 }
 .comp-device-name-input:focus { border-color: var(--brand); }
 
-.comp-score-row { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.comp-score-row { display: flex; align-items: baseline; gap: 10px; }
 .comp-score {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 2.6rem;
+    font-size: 2.2rem;
     font-weight: 700;
     color: white;
     line-height: 1;
     transition: color 0.3s;
 }
-.comp-tier { font-size: 0.78rem; font-weight: 700; color: var(--text-faint); text-transform: uppercase; }
+.comp-tier { font-size: 0.72rem; font-weight: 700; color: var(--text-faint); text-transform: uppercase; }
 
-.comp-bar-wrap { height: 6px; background: var(--surface-3); border-radius: 3px; overflow: hidden; }
+.comp-bar-wrap { height: 5px; background: var(--surface-3); border-radius: 3px; overflow: hidden; }
 .comp-bar {
     height: 100%;
     background: var(--brand);
@@ -87,28 +87,28 @@
 }
 .comp-bar-b { background: #f97316; }
 
-.comp-metrics-mini { display: flex; gap: 12px; font-size: 0.8rem; color: var(--text-faint); flex-wrap: wrap; }
-.comp-note         { font-size: 0.75rem; color: var(--text-faint); font-style: italic; }
+.comp-metrics-mini { display: flex; gap: 12px; font-size: 0.75rem; color: var(--text-faint); }
+.comp-note         { font-size: 0.7rem; color: var(--text-faint); font-style: italic; }
 
-.comp-inputs-mini  { display: flex; flex-direction: column; gap: 8px; }
-.comp-input-row    { display: flex; align-items: center; gap: 8px; }
+.comp-inputs-mini  { display: flex; flex-direction: column; gap: 6px; }
+.comp-input-row    { display: flex; align-items: center; gap: 6px; }
 .comp-input-row label {
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 700;
     color: var(--text-faint);
-    width: 28px;
+    width: 26px;
     flex-shrink: 0;
     margin: 0;
 }
 .comp-input {
     flex: 1;
     min-width: 0;
-    padding: 7px 10px;
+    padding: 7px 8px;
     background: var(--bg-alt);
     border: 1px solid var(--border);
     color: var(--text);
     border-radius: var(--r-sm);
-    font-size: 0.875rem;
+    font-size: 0.85rem;
     font-family: 'Space Grotesk', sans-serif;
     -moz-appearance: textfield;
 }
@@ -118,9 +118,9 @@
 .comp-verdict {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: var(--r-lg);
-    padding: 18px 20px;
-    font-size: 0.95rem;
+    border-radius: var(--r-md);
+    padding: 14px 16px;
+    font-size: 0.875rem;
     color: var(--text-muted);
     text-align: center;
     transition: all 0.3s;
@@ -128,27 +128,30 @@
 }
 .comp-verdict.has-result { color: var(--text); }
 
-/* ---- Responsive ---- */
-@media (max-width: 900px) {
+/* DESKTOP — side by side */
+@media (min-width: 640px) {
+    .section-compare { padding: 56px 0; }
     .comparator-wrap {
-        flex-direction: column;
+        flex-direction: row;
+        align-items: stretch;
+        border-radius: var(--r-xl);
+        margin-bottom: 20px;
     }
+    .comp-panel { padding: 24px; gap: 14px; }
     .comp-vs {
-        padding: 12px;
-        border-left: none;
-        border-right: none;
-        border-top: 1px solid var(--border);
-        border-bottom: 1px solid var(--border);
+        padding: 0 16px;
+        border-top: none;
+        border-bottom: none;
+        border-left: 1px solid var(--border);
+        border-right: 1px solid var(--border);
+        font-size: 1.1rem;
     }
+    .comp-score { font-size: 2.6rem; }
+    .comp-verdict { padding: 18px 22px; font-size: 0.95rem; border-radius: var(--r-lg); }
 }
 
-@media (max-width: 640px) {
-    .section-compare    { padding: 48px 0; }
-    .comp-panel         { padding: 20px 16px; gap: 12px; }
-    .comparator-wrap    { border-radius: var(--r-xl); }
-    .comp-score         { font-size: 2.2rem; }
-
-    /* Input row: stack in pairs */
-    .comp-input-row     { gap: 6px; }
-    .comp-input         { padding: 6px 8px; font-size: 0.82rem; }
+@media (min-width: 900px) {
+    .section-compare { padding: 72px 0; }
+    .comparator-wrap { border-radius: var(--r-2xl); margin-bottom: 24px; }
+    .comp-panel { padding: 28px; gap: 16px; }
 }

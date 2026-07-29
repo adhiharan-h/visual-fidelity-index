@@ -112,6 +112,7 @@ function _updateSpectrum(vfi) {
 
 function _updateTheme(cls) {
     const panel = document.querySelector('.calc-results-panel');
+    if (!panel) return;
     panel.className = `calc-panel calc-results-panel ${cls}`;
 }
 

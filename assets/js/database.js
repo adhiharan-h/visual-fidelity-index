@@ -43,7 +43,9 @@ export function renderDB() {
         })
         .sort((a, b) => {
             const mult = _sortAsc ? 1 : -1;
-            return (a[_sortCol] - b[_sortCol]) * mult;
+            const av = a[_sortCol], bv = b[_sortCol];
+            if (typeof av === 'string') return av.localeCompare(bv) * mult;
+            return (av - bv) * mult;
         });
 
     tbody.innerHTML = rows.map(d => `

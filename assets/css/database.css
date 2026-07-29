@@ -1,21 +1,19 @@
 /* ===========================================
-   VFI — Device Database Section
-   Search · Filter · Sortable table
+   VFI — Device Database Section (Mobile-First)
    =========================================== */
 
-.section-database { padding: 64px 0; }
+/* MOBILE BASE */
+.section-database { padding: 32px 0 40px; }
 
 .db-filter-bar {
     display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    align-items: center;
-    margin-bottom: 20px;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 14px;
 }
 .db-search {
-    flex: 1;
-    min-width: 160px;
-    padding: 10px 16px;
+    width: 100%;
+    padding: 10px 14px;
     background: var(--surface);
     border: 1px solid var(--border);
     color: var(--text);
@@ -27,19 +25,31 @@
 .db-search::placeholder { color: var(--text-faint); }
 .db-search:focus { outline: none; border-color: var(--brand); }
 
-.db-filter-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+/* Scrollable horizontal pill strip */
+.db-filter-btns {
+    display: flex;
+    gap: 6px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+.db-filter-btns::-webkit-scrollbar { display: none; }
+
 .db-filter {
-    padding: 7px 14px;
+    padding: 6px 14px;
     background: var(--surface);
     border: 1px solid var(--border);
     color: var(--text-muted);
     border-radius: 100px;
     cursor: pointer;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     font-weight: 600;
     font-family: inherit;
     transition: all var(--fast);
     white-space: nowrap;
+    flex-shrink: 0;
 }
 .db-filter:hover, .db-filter.active {
     background: rgba(99,102,241,.15);
@@ -47,19 +57,19 @@
     color: var(--brand-light);
 }
 
-/* Table wrapper — must scroll horizontally on mobile */
+/* Table must scroll horizontally */
 .db-table-wrap {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: var(--r-xl);
+    border-radius: var(--r-lg);
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
 }
-.db-table { width: 100%; min-width: 480px; border-collapse: collapse; }
+.db-table { width: 100%; min-width: 440px; border-collapse: collapse; }
 .db-table th {
-    padding: 13px 14px;
+    padding: 11px 12px;
     text-align: left;
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -73,8 +83,8 @@
 .db-table th.sortable:hover { color: var(--text-muted); }
 .db-table th.active-sort   { color: var(--brand-light); }
 .db-table td {
-    padding: 12px 14px;
-    font-size: 0.85rem;
+    padding: 11px 12px;
+    font-size: 0.82rem;
     color: var(--text-muted);
     border-bottom: 1px solid var(--border);
     transition: background var(--fast);
@@ -82,22 +92,31 @@
 }
 .db-table tr:last-child td { border-bottom: none; }
 .db-table tr:hover td      { background: rgba(255,255,255,.03); cursor: pointer; }
-.db-table .device-name     { font-weight: 600; color: var(--text); white-space: normal; min-width: 140px; }
-.db-table .vfi-num         { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1rem; }
+.db-table .device-name     { font-weight: 600; color: var(--text); white-space: normal; min-width: 120px; }
+.db-table .vfi-num         { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.95rem; }
 
-/* Tier badge pills — shared with science table */
-.tier-badge     { display: inline-block; padding: 3px 10px; border-radius: 100px; font-size: 0.72rem; font-weight: 700; white-space: nowrap; }
-.tier-pixelated { background: rgba(239,68,68,.15);  color: #f87171; }
-.tier-low       { background: rgba(249,115,22,.15); color: #fb923c; }
-.tier-std       { background: rgba(34,197,94,.15);  color: #4ade80; }
-.tier-retina    { background: rgba(99,102,241,.15); color: var(--brand-light); }
-.tier-over      { background: rgba(168,85,247,.15); color: #c084fc; }
+/* Tier badge pills */
+.tier-badge     { display: inline-block; padding: 2px 8px; border-radius: 100px; font-size: 0.68rem; font-weight: 700; white-space: nowrap; }
+.tier-pixelated { background: rgba(239,68,68,.15);   color: #f87171; }
+.tier-low       { background: rgba(249,115,22,.15);  color: #fb923c; }
+.tier-std       { background: rgba(34,197,94,.15);   color: #4ade80; }
+.tier-high      { background: rgba(20,184,166,.15);  color: #2dd4bf; }
+.tier-retina    { background: rgba(99,102,241,.15);  color: var(--brand-light); }
+.tier-over      { background: rgba(168,85,247,.15);  color: #c084fc; }
 
-/* ---- Responsive ---- */
-@media (max-width: 640px) {
-    .section-database   { padding: 48px 0; }
-    .db-filter-bar      { flex-direction: column; align-items: stretch; }
-    .db-search          { min-width: unset; width: 100%; }
-    .db-filter-btns     { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
-    .db-filter          { flex-shrink: 0; }
+/* DESKTOP */
+@media (min-width: 640px) {
+    .section-database { padding: 56px 0; }
+    .db-filter-bar    { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .db-search        { flex: 1; min-width: 180px; width: auto; }
+    .db-filter-btns   { flex-wrap: wrap; overflow-x: visible; }
+    .db-table-wrap    { border-radius: var(--r-xl); }
+    .db-table th, .db-table td { padding: 13px 14px; }
+    .db-table th      { font-size: 0.72rem; }
+    .db-table td      { font-size: 0.875rem; }
+    .tier-badge       { padding: 3px 10px; font-size: 0.72rem; }
+}
+
+@media (min-width: 900px) {
+    .section-database { padding: 72px 0; }
 }

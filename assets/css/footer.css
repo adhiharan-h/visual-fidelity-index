@@ -1,41 +1,57 @@
 /* ===========================================
-   VFI — Footer
+   VFI — Footer (Mobile-First)
    =========================================== */
 
-.site-footer { padding: 56px 0 0; border-top: 1px solid var(--border); }
+/* MOBILE BASE */
+.site-footer { padding: 36px 0 0; border-top: 1px solid var(--border); }
 .footer-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 40px;
-    margin-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 28px;
 }
-.footer-logo    { font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; font-weight: 800; color: white; margin-bottom: 12px; }
-.footer-brand p { font-size: 0.875rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px; }
-.footer-badges  { display: flex; flex-wrap: wrap; gap: 8px; }
+.footer-logo    { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 800; color: white; margin-bottom: 10px; }
+.footer-brand p { font-size: 0.825rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 14px; }
+.footer-badges  { display: flex; flex-wrap: wrap; gap: 6px; }
 .footer-badge   {
     display: inline-block;
-    padding: 4px 12px;
+    padding: 3px 10px;
     background: rgba(99,102,241,.1);
     border: 1px solid rgba(99,102,241,.2);
     border-radius: 100px;
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     font-weight: 600;
     color: var(--brand-light);
 }
-.footer-col h4      { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-faint); margin-bottom: 14px; }
+.footer-col h4      { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-faint); margin-bottom: 12px; }
 .footer-col ul      { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-.footer-col a       { font-size: 0.875rem; color: var(--text-muted); text-decoration: none; transition: color var(--fast); }
+.footer-col a       { font-size: 0.825rem; color: var(--text-muted); text-decoration: none; transition: color var(--fast); }
 .footer-col a:hover { color: var(--text); }
-.footer-bottom      { border-top: 1px solid var(--border); padding: 20px 0; font-size: 0.78rem; color: var(--text-faint); text-align: center; line-height: 1.5; }
 
-/* ---- Responsive ---- */
-@media (max-width: 900px) {
-    .footer-grid { grid-template-columns: 1fr 1fr; }
-    .footer-brand { grid-column: 1 / -1; }
+/* Two link columns sit side by side on mobile */
+.footer-cols-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
 }
 
-@media (max-width: 640px) {
-    .site-footer  { padding: 40px 0 0; }
-    .footer-grid  { grid-template-columns: 1fr; gap: 28px; margin-bottom: 28px; }
-    .footer-brand { grid-column: auto; }
+.footer-bottom { border-top: 1px solid var(--border); padding: 16px 0; font-size: 0.72rem; color: var(--text-faint); text-align: center; line-height: 1.6; }
+
+/* DESKTOP */
+@media (min-width: 640px) {
+    .site-footer  { padding: 48px 0 0; }
+    .footer-grid  {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: 40px;
+        margin-bottom: 40px;
+    }
+    .footer-cols-row { display: contents; } /* let grid handle placement */
+    .footer-logo  { font-size: 1.2rem; }
+    .footer-bottom { font-size: 0.78rem; padding: 20px 0; }
+}
+
+@media (min-width: 900px) {
+    .site-footer { padding: 56px 0 0; }
+    .footer-grid { gap: 48px; margin-bottom: 48px; }
 }

@@ -75,7 +75,7 @@
     if (vfi < 33) return { name: "PIXELATED", cls: "theme-pixelated", badge: "tier-pixelated", msg: "Individual pixels are clearly visible. Not ideal for text-heavy work at this distance." };
     if (vfi < 55) return { name: "LOW FIDELITY", cls: "theme-low", badge: "tier-low", msg: "Visible pixel structure in text and fine detail. Consider sitting farther back or upgrading." };
     if (vfi < 75) return { name: "STANDARD", cls: "theme-standard", badge: "tier-std", msg: "Acceptable for video and casual use. Text may appear slightly soft on close inspection." };
-    if (vfi < 100) return { name: "HIGH FIDELITY", cls: "theme-high", badge: "tier-std", msg: "Pixels are very hard to see at this distance. Excellent for all uses." };
+    if (vfi < 100) return { name: "HIGH FIDELITY", cls: "theme-high", badge: "tier-high", msg: "Pixels are very hard to see at this distance. Excellent for all uses." };
     if (vfi < 133) return { name: "RETINA GRADE", cls: "theme-retina", badge: "tier-retina", msg: "Exceeds the average human acuity limit. Zero visible pixelation at this distance." };
     return { name: "OVERKILL", cls: "theme-overkill", badge: "tier-over", msg: "Beyond the biological limit of human vision. Extra pixels provide no perceptual benefit." };
   }
@@ -291,7 +291,9 @@
       return { ...d, ppi, ppd, vfi, tier };
     }).sort((a, b) => {
       const mult = _sortAsc ? 1 : -1;
-      return (a[_sortCol] - b[_sortCol]) * mult;
+      const av = a[_sortCol], bv = b[_sortCol];
+      if (typeof av === "string") return av.localeCompare(bv) * mult;
+      return (av - bv) * mult;
     });
     tbody.innerHTML = rows.map((d) => `
         <tr
@@ -387,6 +389,7 @@
   }
   function _updateTheme(cls) {
     const panel = document.querySelector(".calc-results-panel");
+    if (!panel) return;
     panel.className = `calc-panel calc-results-panel ${cls}`;
   }
   function _updateMathPanel(w, h, size, dist, ppi, effPPI, sc, ppd, vfi, conf) {
