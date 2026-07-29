@@ -528,6 +528,74 @@ ${window.location.href}`).then(() => showToast("Score copied to clipboard!")).ca
     });
     const dbSearch = document.getElementById("dbSearch");
     if (dbSearch) dbSearch.addEventListener("input", renderDB);
+    const presetsContainer = document.querySelector(".presets");
+    if (presetsContainer) {
+      presetsContainer.addEventListener("click", (e) => {
+        const btn = e.target.closest(".preset-btn");
+        if (!btn) return;
+        const onclickAttr = btn.getAttribute("onclick");
+        if (onclickAttr) {
+          const match = onclickAttr.match(/setPreset\((\d+),\s*(\d+),\s*([\d.]+),\s*([\d.]+),\s*([\d.]+),\s*['"]([^'"]+)['"]\)/);
+          if (match) {
+            const [, w, h, s, d, sc, name] = match;
+            setPreset(parseFloat(w), parseFloat(h), parseFloat(s), parseFloat(d), parseFloat(sc), name);
+            return;
+          }
+        }
+        const presetName = btn.dataset.preset || btn.textContent.trim();
+        if (presetName === '27" 1440p') setPreset(2560, 1440, 27, 24, 1, '27" 1440p');
+        else if (presetName === '27" 1080p') setPreset(1920, 1080, 27, 24, 1, '27" 1080p');
+        else if (presetName === '27" 4K') setPreset(3840, 2160, 27, 24, 1, '27" 4K');
+        else if (presetName === "iPhone 15 Pro Max" || presetName === "iPhone 15 Pro") setPreset(2796, 1290, 6.7, 14, 3, "iPhone 15 Pro Max");
+        else if (presetName.includes("MacBook")) setPreset(3024, 1964, 14.2, 18, 2, 'MacBook Pro 14"');
+        else if (presetName.includes("65")) setPreset(3840, 2160, 65, 84, 1, '65" 4K TV');
+        else if (presetName.includes("55")) setPreset(1920, 1080, 55, 84, 1, '55" 1080p TV');
+        else if (presetName.includes("Surface")) setPreset(2256, 1504, 13.5, 18, 1, "Surface Laptop 5");
+      });
+    }
+    const scaleContainer = document.querySelector(".scale-btns");
+    if (scaleContainer) {
+      scaleContainer.addEventListener("click", (e) => {
+        const btn = e.target.closest(".scale-btn");
+        if (!btn) return;
+        const sc = parseFloat(btn.dataset.scale);
+        if (!isNaN(sc)) setScale(sc);
+      });
+    }
+    const usecaseContainer = document.querySelector(".usecase-btns");
+    if (usecaseContainer) {
+      usecaseContainer.addEventListener("click", (e) => {
+        const btn = e.target.closest(".usecase-btn");
+        if (!btn) return;
+        const uc = btn.dataset.case;
+        if (uc) setUseCase(uc);
+      });
+    }
+    const mathBtn = document.getElementById("mathToggleBtn");
+    if (mathBtn) mathBtn.addEventListener("click", toggleMath);
+    const shareBtn = document.querySelector(".share-btn-new");
+    if (shareBtn) shareBtn.addEventListener("click", shareResult);
+    const filterContainer = document.querySelector(".db-filter-btns");
+    if (filterContainer) {
+      filterContainer.addEventListener("click", (e) => {
+        const btn = e.target.closest(".db-filter");
+        if (!btn) return;
+        const cat = btn.dataset.cat;
+        if (cat) filterDB(cat);
+      });
+    }
+    const dbTable = document.getElementById("dbTable");
+    if (dbTable) {
+      const thead = dbTable.querySelector("thead");
+      if (thead) {
+        thead.addEventListener("click", (e) => {
+          const th = e.target.closest("th[data-sort]");
+          if (!th) return;
+          const col = th.dataset.sort;
+          if (col) sortDB(col);
+        });
+      }
+    }
     const dbBody = document.getElementById("dbBody");
     if (dbBody) {
       dbBody.addEventListener("click", (e) => {
