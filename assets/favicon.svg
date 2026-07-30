@@ -1,4 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="7" fill="#060b18"/>
-  <text x="16" y="22" font-family="system-ui, sans-serif" font-size="18" font-weight="700" fill="#6366f1" text-anchor="middle">◈</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <defs>
+    <linearGradient id="vfiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#818cf8"/>
+      <stop offset="50%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Circle (Dark Navy Brand Badge with transparent outer corners) -->
+  <circle cx="96" cy="96" r="90" fill="#0b0f19" stroke="url(#vfiGrad)" stroke-width="6"/>
+  
+  <!-- Outer Diamond Emblem -->
+  <polygon points="96,38 154,96 96,154 38,96" fill="none" stroke="url(#vfiGrad)" stroke-width="12" stroke-linejoin="round"/>
+  
+  <!-- Inner Diamond Core -->
+  <polygon points="96,66 126,96 96,126 66,96" fill="url(#vfiGrad)"/>
 </svg>
