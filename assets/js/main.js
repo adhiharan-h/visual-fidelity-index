@@ -41,6 +41,15 @@ window.__vfi = {
 // Event listeners
 // ---------------------------------------------------------------------------
 
+let _debounceTimer = null;
+function _debouncedCalculate() {
+    clearTimeout(_debounceTimer);
+    _debounceTimer = setTimeout(() => {
+        calculate();
+        renderDB();
+    }, 80);
+}
+
 function setupListeners() {
     // Main calculator inputs — recalculate on every keystroke
     ['width', 'height', 'size', 'dist'].forEach(id => {
@@ -53,18 +62,22 @@ function setupListeners() {
                     b.setAttribute('aria-pressed', 'false');
                 });
                 state.presetName = '';
-                calculate();
+                _debouncedCalculate();
             });
         }
     });
 
     // Distance slider — bidirectionally synced with the number input
+    let _sliderDBTimer = null;
     const slider = document.getElementById('dist-slider');
     if (slider) {
         slider.addEventListener('input', (e) => {
             const distInput = document.getElementById('dist');
             if (distInput) distInput.value = e.target.value;
             calculate();
+            // Debounce the expensive DB table rebuild while dragging
+            clearTimeout(_sliderDBTimer);
+            _sliderDBTimer = setTimeout(renderDB, 200);
         });
     }
 
@@ -84,15 +97,6 @@ function setupListeners() {
         presetsContainer.addEventListener('click', (e) => {
             const btn = e.target.closest('.preset-btn');
             if (!btn) return;
-            const onclickAttr = btn.getAttribute('onclick');
-            if (onclickAttr) {
-                const match = onclickAttr.match(/setPreset\((\d+),\s*(\d+),\s*([\d.]+),\s*([\d.]+),\s*([\d.]+),\s*['"]([^'"]+)['"]\)/);
-                if (match) {
-                    const [, w, h, s, d, sc, name] = match;
-                    setPreset(parseFloat(w), parseFloat(h), parseFloat(s), parseFloat(d), parseFloat(sc), name);
-                    return;
-                }
-            }
             const presetName = btn.dataset.preset || btn.textContent.trim();
             if (presetName === '27" 1440p') setPreset(2560, 1440, 27, 24, 1, '27" 1440p');
             else if (presetName === '27" 1080p') setPreset(1920, 1080, 27, 24, 1, '27" 1080p');

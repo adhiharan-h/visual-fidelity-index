@@ -13,7 +13,6 @@ import {
 } from './formula.js';
 import { animateNum, showToast } from './ui.js';
 import { updateComparatorA, calcComparatorB } from './comparator.js';
-import { renderDB } from './database.js';
 
 // ---------------------------------------------------------------------------
 // Core calculate — called on every input change
@@ -88,7 +87,6 @@ export function calculate() {
     // --- Update device database distance label ---
     const dbDistLabel = document.getElementById('dbDistLabel');
     if (dbDistLabel) dbDistLabel.textContent = `${dist}"`;
-    renderDB();
 }
 
 // ---------------------------------------------------------------------------
@@ -230,7 +228,14 @@ export function shareResult() {
     const text  = `My display scored ${score} VFI (${tier}) — ${setup}. Check yours at VisualFidelityIndex.com`;
 
     if (navigator.share) {
-        navigator.share({ title: 'VFI Score', text, url: window.location.href }).catch(() => {});
+        navigator.share({ title: 'VFI Score', text, url: window.location.href }).catch((err) => {
+            // Ignore user cancellation (AbortError), but fall back to clipboard for real failures
+            if (err.name !== 'AbortError' && navigator.clipboard) {
+                navigator.clipboard.writeText(`${text}\n${window.location.href}`)
+                    .then(() => showToast('Score copied to clipboard!'))
+                    .catch(() => showToast('Sharing failed.'));
+            }
+        });
     } else if (navigator.clipboard) {
         navigator.clipboard.writeText(`${text}\n${window.location.href}`)
             .then(() => showToast('Score copied to clipboard!'))

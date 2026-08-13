@@ -87,13 +87,18 @@ export function setupTooltips() {
         const show = (e) => {
             tooltip.textContent = el.dataset.tip;
             tooltip.classList.add('visible');
+            el.setAttribute('aria-describedby', 'tooltip');
             _positionTooltip(e);
+        };
+        const hide = () => {
+            tooltip.classList.remove('visible');
+            el.removeAttribute('aria-describedby');
         };
         el.addEventListener('mouseenter', show);
         el.addEventListener('mousemove',  _positionTooltip);
-        el.addEventListener('mouseleave', () => tooltip.classList.remove('visible'));
+        el.addEventListener('mouseleave', hide);
         el.addEventListener('focus',      show);
-        el.addEventListener('blur',       () => tooltip.classList.remove('visible'));
+        el.addEventListener('blur',       hide);
     });
 }
 

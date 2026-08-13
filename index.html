@@ -9,6 +9,7 @@
     <title>Visual Fidelity Index — Does Your Screen Pass the Sharpness Test?</title>
     <meta name="description" content="VFI calculates real-world display sharpness based on your actual viewing distance, not just PPI. Free, open, vendor-neutral. Compare monitors, TVs, phones, and laptops.">
     <meta name="keywords" content="pixels per degree, PPD calculator, monitor sharpness, retina display test, VFI score, viewing distance calculator, 4K TV distance, 1440p vs 1080p">
+    <meta name="author" content="Visual Fidelity Index">
     <link rel="canonical" href="https://visualfidelityindex.com/">
 
     <!-- Open Graph -->
@@ -23,17 +24,16 @@
     <meta name="twitter:image" content="https://visualfidelityindex.com/assets/og-image.jpg">
 
     <!-- Favicon & Mobile Touch Icons (Google Search, PWA & Browsers) -->
-    <link rel="icon" type="image/svg+xml" href="https://visualfidelityindex.com/assets/vfi-icon.svg">
-    <link rel="icon" type="image/png" sizes="192x192" href="https://visualfidelityindex.com/assets/vfi-icon-192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="https://visualfidelityindex.com/assets/vfi-icon-512.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="https://visualfidelityindex.com/vfi-icon-192.png">
-    <link rel="icon" type="image/png" sizes="48x48" href="https://visualfidelityindex.com/assets/favicon-48x48.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="https://visualfidelityindex.com/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="https://visualfidelityindex.com/assets/apple-touch-icon.png">
-    <link rel="shortcut icon" href="https://visualfidelityindex.com/vfi-icon-192.png">
+    <link rel="icon" type="image/svg+xml" href="assets/vfi-icon.svg">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/vfi-icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="assets/vfi-icon-512.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <link rel="shortcut icon" href="assets/vfi-icon-192.png">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <!-- Single combined stylesheet (tokens → base → components) -->
@@ -625,7 +625,7 @@
                 <ul>
                     <li><a href="#science">Formula Derivation</a></li>
                     <li><a href="#science">Limitations</a></li>
-                    <li><a href="docs/METHODOLOGY.md" target="_blank">Full Docs</a></li>
+                    <li><a href="https://github.com/adhiharan-h/visual-fidelity-index/blob/main/docs/METHODOLOGY.md" target="_blank" rel="noopener">Full Docs</a></li>
                     <li><a href="https://github.com/adhiharan-h/visual-fidelity-index" target="_blank" rel="noopener">Contribute</a></li>
                 </ul>
             </div>
@@ -641,7 +641,7 @@
 <div class="tooltip" id="tooltip" role="tooltip" aria-hidden="true"></div>
 <div class="toast"   id="toast"   role="status"  aria-live="polite"></div>
 
-<!-- Compiled bundle — no server required, works via file:// directly -->
+<!-- Compiled bundle — serves via HTTP (file:// may fail due to CORS) -->
 <script src="assets/js/bundle.js?v=2.0.3"></script>
 
 </body>
