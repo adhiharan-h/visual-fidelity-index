@@ -19,17 +19,36 @@ import { updateComparatorA, calcComparatorB } from './comparator.js';
 // ---------------------------------------------------------------------------
 
 export function calculate() {
-    const w    = parseFloat(document.getElementById('width').value);
-    const h    = parseFloat(document.getElementById('height').value);
-    const size = parseFloat(document.getElementById('size').value);
-    const dist = parseFloat(document.getElementById('dist').value);
-    const sc   = state.scale;
+    const w       = parseFloat(document.getElementById('width').value);
+    const h       = parseFloat(document.getElementById('height').value);
+    const size    = parseFloat(document.getElementById('size').value);
+    const rawDist = parseFloat(document.getElementById('dist').value);
+    const sc      = state.scale;
+
+    // Convert distance to inches for standardized internal physics calculation
+    const dist = state.unit === 'cm' ? (rawDist / 2.54) : rawDist;
 
     // Guard: skip if any input is missing or nonsensical
-    if (!w || !h || !size || !dist || w < 1 || h < 1 || size < 1 || dist < 1) return;
+    if (!w || !h || !size || !dist || w < 1 || h < 1 || size < 1 || dist < 0.5) return;
 
-    // Persist to shared state
+    // Persist to shared state (dist is always stored in inches)
     Object.assign(state, { w, h, size, dist });
+
+    // Sync URL search params for seamless link sharing
+    try {
+        const url = new URL(window.location.href);
+        url.searchParams.set('w', w);
+        url.searchParams.set('h', h);
+        url.searchParams.set('s', size);
+        url.searchParams.set('d', Math.round(dist * 10) / 10);
+        if (sc !== 1) url.searchParams.set('sc', sc);
+        else url.searchParams.delete('sc');
+        if (state.useCase !== 'balanced') url.searchParams.set('uc', state.useCase);
+        else url.searchParams.delete('uc');
+        if (state.unit === 'cm') url.searchParams.set('unit', 'cm');
+        else url.searchParams.delete('unit');
+        window.history.replaceState({}, '', url);
+    } catch (_) {}
 
     // --- Formula ---
     const ppi     = computePPI(w, h, size);
@@ -47,12 +66,18 @@ export function calculate() {
 
     const tier = getTier(vfi);
 
+    // Formatted distance strings based on active unit
+    const isMetric = state.unit === 'cm';
+    const distVarText = isMetric ? '±8 cm' : '±3"';
+    const optDistDisplay = isMetric ? `${Math.round(optDist * 2.54)} cm` : `${Math.round(optDist)}"`;
+    const currentDistDisplay = isMetric ? `${Math.round(dist * 2.54)} cm` : `${Math.round(dist)}"`;
+
     // --- Update score display ---
     animateNum('vfiScore', Math.round(vfi));
     document.getElementById('scoreTier').textContent = tier.name;
     document.getElementById('scoreMessage').textContent = tier.msg;
     document.getElementById('scoreConfidence').textContent =
-        `${Math.round(vfi - conf)}–${Math.round(vfi + conf)} (±${Math.round(conf)} at ±3" distance variation)`;
+        `${Math.round(vfi - conf)}–${Math.round(vfi + conf)} (±${Math.round(conf)} at ${distVarText} distance variation)`;
 
     // --- Update SVG ring ---
     _updateRing(vfi, tier);
@@ -61,15 +86,15 @@ export function calculate() {
     _updateSpectrum(vfi);
 
     // --- Update metric cards ---
-    animateNum('ppdVal', Math.round(ppdH));
-    document.getElementById('ppdVert').textContent = `${Math.round(ppdV)} vertical`;
+    animateNum('ppdVal', Math.round(activePPD));
+    document.getElementById('ppdVert').textContent = 'Pixels per degree';
     animateNum('ppiVal', Math.round(ppi));
     animateNum('effPpiVal', Math.round(effPPI));
     document.getElementById('effPpiSub').textContent = sc !== 1 ? `After ${sc}× scaling` : 'Native (no scaling)';
-    document.getElementById('optimalDist').textContent = `${Math.round(optDist)}"`;
+    document.getElementById('optimalDist').textContent = optDistDisplay;
     document.getElementById('optimalHint').textContent = optDist <= dist
-        ? 'You\'re past Retina threshold!'
-        : `Sit ≤${Math.round(optDist)}" for Retina grade`;
+        ? "You're past Retina threshold!"
+        : `Sit ≤${optDistDisplay} for Retina grade`;
 
     // --- Update math derivation panel ---
     _updateMathPanel(w, h, size, dist, ppi, effPPI, sc, activePPD, vfi, conf);
@@ -78,15 +103,25 @@ export function calculate() {
     _updateTheme(tier.cls);
 
     // --- Sync comparator panel A ---
-    updateComparatorA(vfi, tier, ppdH, ppi);
+    const deviceName = state.presetName || `${w}×${h} (${size}")`;
+    updateComparatorA(vfi, tier, activePPD, ppi, deviceName);
 
     // --- Sync distance slider without triggering a feedback loop ---
     const slider = document.getElementById('dist-slider');
-    if (slider && Math.abs(parseFloat(slider.value) - dist) > 0.5) slider.value = dist;
+    const expectedSliderVal = isMetric ? Math.round(dist * 2.54) : Math.round(dist);
+    if (slider && Math.abs(parseFloat(slider.value) - expectedSliderVal) > 0.5) {
+        slider.value = expectedSliderVal;
+    }
 
-    // --- Update device database distance label ---
+    // --- Update quick distance chips active highlight ---
+    _highlightActiveChip(dist);
+
+    // --- Update device database distance labels ---
     const dbDistLabel = document.getElementById('dbDistLabel');
-    if (dbDistLabel) dbDistLabel.textContent = `${dist}"`;
+    if (dbDistLabel) dbDistLabel.textContent = currentDistDisplay;
+
+    const dbDistToggleLabel = document.getElementById('dbDistToggleLabel');
+    if (dbDistToggleLabel) dbDistToggleLabel.textContent = currentDistDisplay;
 }
 
 // ---------------------------------------------------------------------------
@@ -152,8 +187,9 @@ export function setPreset(w, h, s, d, sc = 1, name = '') {
     document.getElementById('width').value  = w;
     document.getElementById('height').value = h;
     document.getElementById('size').value   = s;
-    document.getElementById('dist').value   = d;
-    document.getElementById('dist-slider').value = d;
+    const distVal = state.unit === 'cm' ? Math.round(d * 2.54) : d;
+    document.getElementById('dist').value   = distVal;
+    document.getElementById('dist-slider').value = distVal;
     state.presetName = name || `${w}×${h} / ${s}"`;
 
     // Highlight the matching preset button
@@ -170,6 +206,93 @@ export function setPreset(w, h, s, d, sc = 1, name = '') {
     });
 
     calculate();
+}
+
+/**
+ * Switch measurement unit between 'in' (inches) and 'cm' (centimeters).
+ * @param {'in'|'cm'} u
+ */
+export function setUnit(u) {
+    if (state.unit === u) return;
+    state.unit = u;
+
+    document.querySelectorAll('.unit-btn').forEach(btn => {
+        const active = btn.dataset.unit === u;
+        btn.classList.toggle('active', active);
+        btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+
+    const distInput = document.getElementById('dist');
+    const distSlider = document.getElementById('dist-slider');
+    const distUnitLabel = document.getElementById('distUnit');
+
+    if (u === 'cm') {
+        if (distUnitLabel) distUnitLabel.textContent = 'cm';
+        if (distSlider) {
+            distSlider.min = '15';
+            distSlider.max = '360';
+        }
+        if (distInput) {
+            distInput.min = '15';
+            distInput.max = '360';
+            const cmVal = Math.round(state.dist * 2.54);
+            distInput.value = cmVal;
+            if (distSlider) distSlider.value = cmVal;
+        }
+    } else {
+        if (distUnitLabel) distUnitLabel.textContent = 'in';
+        if (distSlider) {
+            distSlider.min = '6';
+            distSlider.max = '144';
+        }
+        if (distInput) {
+            distInput.min = '6';
+            distInput.max = '144';
+            const inVal = Math.round(state.dist);
+            distInput.value = inVal;
+            if (distSlider) distSlider.value = inVal;
+        }
+    }
+
+    _updateDistChipsLabels();
+    calculate();
+}
+
+/**
+ * Set viewing distance directly from a quick distance chip.
+ * @param {number} distInches — Distance in inches
+ */
+export function setQuickDist(distInches) {
+    state.dist = distInches;
+    const distInput = document.getElementById('dist');
+    const distSlider = document.getElementById('dist-slider');
+    const val = state.unit === 'cm' ? Math.round(distInches * 2.54) : Math.round(distInches);
+    if (distInput) distInput.value = val;
+    if (distSlider) distSlider.value = val;
+    calculate();
+}
+
+function _highlightActiveChip(distInches) {
+    document.querySelectorAll('.dist-chip').forEach(chip => {
+        const targetIn = parseFloat(chip.dataset.distIn);
+        const active = Math.abs(distInches - targetIn) < 1.0;
+        chip.classList.toggle('active', active);
+        chip.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+}
+
+export function _updateDistChipsLabels() {
+    const isMetric = state.unit === 'cm';
+    document.querySelectorAll('.dist-chip').forEach(chip => {
+        const distIn = parseFloat(chip.dataset.distIn);
+        const role = chip.dataset.role || '';
+        if (isMetric) {
+            const cm = Math.round(distIn * 2.54);
+            chip.textContent = `${role} (${cm} cm)`;
+        } else {
+            chip.textContent = `${role} (${distIn}")`;
+        }
+    });
 }
 
 /**
@@ -198,11 +321,11 @@ export function setUseCase(uc) {
     const hintEl = document.getElementById('useCaseHint');
     if (hintEl) {
         const hints = {
-            balanced: '⚖ Balanced mode: Evaluated on standard diagonal PPD',
-            text:     '📝 Text/Code mode: Evaluated on horizontal PPD (critical for text clarity & subpixel rendering)',
-            gaming:   '🎮 Gaming mode: Evaluated on diagonal PPD for dynamic motion & immersion',
-            design:   '🎨 Design mode: Evaluated on worst-axis PPD (ensures precision for fine lines & vectors)',
-            video:    '📺 Video mode: Evaluated on vertical PPD (16:9 vertical frame resolution)',
+            balanced: '⚖ Balanced mode: Standard ISO foveal acuity baseline (60 CPD)',
+            text:     '📝 Text/Code mode: Calibrated for fine typography & subpixel glyph rendering (demands ~10% higher acuity)',
+            gaming:   '🎮 Gaming mode: Calibrated for dynamic motion clarity & spatial immersion',
+            design:   '🎨 Design mode: Calibrated for precision vector hairlines & pixel-grid alignment',
+            video:    '📺 Video mode: Calibrated for 24–60fps cinematic content (motion blur masks micro-edges)',
         };
         hintEl.textContent = hints[uc] || hints.balanced;
     }
@@ -225,20 +348,21 @@ export function shareResult() {
     const score = document.getElementById('vfiScore').textContent;
     const tier  = document.getElementById('scoreTier').textContent;
     const setup = `${state.w}×${state.h} on ${state.size}" screen at ${state.dist}" distance`;
-    const text  = `My display scored ${score} VFI (${tier}) — ${setup}. Check yours at VisualFidelityIndex.com`;
+    const shareUrl = window.location.href;
+    const text  = `My display scored ${score} VFI (${tier}) — ${setup}. Check yours:`;
 
     if (navigator.share) {
-        navigator.share({ title: 'VFI Score', text, url: window.location.href }).catch((err) => {
+        navigator.share({ title: 'VFI Score', text, url: shareUrl }).catch((err) => {
             // Ignore user cancellation (AbortError), but fall back to clipboard for real failures
             if (err.name !== 'AbortError' && navigator.clipboard) {
-                navigator.clipboard.writeText(`${text}\n${window.location.href}`)
-                    .then(() => showToast('Score copied to clipboard!'))
+                navigator.clipboard.writeText(`${text} ${shareUrl}`)
+                    .then(() => showToast('Score link copied to clipboard!'))
                     .catch(() => showToast('Sharing failed.'));
             }
         });
     } else if (navigator.clipboard) {
-        navigator.clipboard.writeText(`${text}\n${window.location.href}`)
-            .then(() => showToast('Score copied to clipboard!'))
+        navigator.clipboard.writeText(`${text} ${shareUrl}`)
+            .then(() => showToast('Score link copied to clipboard!'))
             .catch(() => showToast('Copy failed — select and copy manually.'));
     } else {
         showToast('Sharing not supported in this browser.');

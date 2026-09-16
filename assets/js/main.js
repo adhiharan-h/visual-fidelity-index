@@ -16,9 +16,9 @@
  */
 
 import { state } from './state.js';
-import { calculate, setPreset, setScale, setUseCase, toggleMath, shareResult } from './calculator.js';
-import { calcComparatorB } from './comparator.js';
-import { renderDB, filterDB, sortDB, loadDevice } from './database.js';
+import { calculate, setPreset, setScale, setUseCase, setUnit, setQuickDist, toggleMath, shareResult } from './calculator.js';
+import { calcComparatorB, updateVerdict } from './comparator.js';
+import { renderDB, filterDB, sortDB, loadDevice, setDBDistMode } from './database.js';
 import { setupTooltips, setupNavbar, setupHamburger } from './ui.js';
 import { RING_CIRCUMFERENCE } from './formula.js';
 
@@ -30,6 +30,9 @@ window.__vfi = {
     setPreset,
     setScale,
     setUseCase,
+    setUnit,
+    setQuickDist,
+    setDBDistMode,
     toggleMath,
     shareResult,
     filterDB,
@@ -87,6 +90,9 @@ function setupListeners() {
         if (el) el.addEventListener('input', calcComparatorB);
     });
 
+    const compNameB = document.getElementById('compNameB');
+    if (compNameB) compNameB.addEventListener('input', updateVerdict);
+
     // Device database search
     const dbSearch = document.getElementById('dbSearch');
     if (dbSearch) dbSearch.addEventListener('input', renderDB);
@@ -101,8 +107,8 @@ function setupListeners() {
             if (presetName === '27" 1440p') setPreset(2560, 1440, 27, 24, 1, '27" 1440p');
             else if (presetName === '27" 1080p') setPreset(1920, 1080, 27, 24, 1, '27" 1080p');
             else if (presetName === '27" 4K') setPreset(3840, 2160, 27, 24, 1, '27" 4K');
-            else if (presetName === 'iPhone 15 Pro Max' || presetName === 'iPhone 15 Pro') setPreset(2796, 1290, 6.7, 14, 3, 'iPhone 15 Pro Max');
-            else if (presetName.includes('MacBook')) setPreset(3024, 1964, 14.2, 18, 2, 'MacBook Pro 14"');
+            else if (presetName === 'iPhone 15 Pro Max' || presetName === 'iPhone 15 Pro') setPreset(2796, 1290, 6.7, 14, 1, 'iPhone 15 Pro Max');
+            else if (presetName.includes('MacBook')) setPreset(3024, 1964, 14.2, 18, 1, 'MacBook Pro 14"');
             else if (presetName.includes('65')) setPreset(3840, 2160, 65, 84, 1, '65" 4K TV');
             else if (presetName.includes('55')) setPreset(1920, 1080, 55, 84, 1, '55" 1080p TV');
             else if (presetName.includes('Surface')) setPreset(2256, 1504, 13.5, 18, 1, 'Surface Laptop 5');
@@ -131,12 +137,45 @@ function setupListeners() {
         });
     }
 
+    // Unit toggle delegation (Inches vs Centimeters)
+    const unitContainer = document.querySelector('.unit-toggle');
+    if (unitContainer) {
+        unitContainer.addEventListener('click', (e) => {
+            const btn = e.target.closest('.unit-btn');
+            if (!btn) return;
+            const u = btn.dataset.unit;
+            if (u) setUnit(u);
+        });
+    }
+
+    // Quick distance chips delegation
+    const distChipsContainer = document.querySelector('.dist-chips');
+    if (distChipsContainer) {
+        distChipsContainer.addEventListener('click', (e) => {
+            const chip = e.target.closest('.dist-chip');
+            if (!chip) return;
+            const distIn = parseFloat(chip.dataset.distIn);
+            if (!isNaN(distIn)) setQuickDist(distIn);
+        });
+    }
+
     // Math toggle & Share buttons
     const mathBtn = document.getElementById('mathToggleBtn');
     if (mathBtn) mathBtn.addEventListener('click', toggleMath);
 
     const shareBtn = document.querySelector('.share-btn-new');
     if (shareBtn) shareBtn.addEventListener('click', shareResult);
+
+    // Database Distance Evaluation Mode Toggle
+    const dbDistToggle = document.querySelector('.db-dist-toggle');
+    if (dbDistToggle) {
+        dbDistToggle.addEventListener('click', (e) => {
+            const btn = e.target.closest('.db-dist-btn');
+            if (!btn) return;
+            const mode = btn.dataset.distMode;
+            if (mode) setDBDistMode(mode);
+        });
+    }
 
     // Database Category Filters
     const filterContainer = document.querySelector('.db-filter-btns');
@@ -159,6 +198,15 @@ function setupListeners() {
                 if (!th) return;
                 const col = th.dataset.sort;
                 if (col) sortDB(col);
+            });
+            thead.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    const th = e.target.closest('th[data-sort]');
+                    if (!th) return;
+                    e.preventDefault();
+                    const col = th.dataset.sort;
+                    if (col) sortDB(col);
+                }
             });
         }
     }
@@ -203,7 +251,48 @@ function init() {
         ring.style.strokeDashoffset = RING_CIRCUMFERENCE;
     }
 
-    // Run with default values (state.js defaults = 27" 1440p @ 24")
+    // Restore state from URL params if present
+    try {
+        const params = new URLSearchParams(window.location.search);
+        const w = parseFloat(params.get('w'));
+        const h = parseFloat(params.get('h'));
+        const s = parseFloat(params.get('s'));
+        const d = parseFloat(params.get('d'));
+        const sc = parseFloat(params.get('sc'));
+        const uc = params.get('uc');
+
+        if (w && h && s && d && w >= 1 && h >= 1 && s >= 1 && d >= 1) {
+            document.getElementById('width').value = w;
+            document.getElementById('height').value = h;
+            document.getElementById('size').value = s;
+            document.getElementById('dist').value = d;
+            const slider = document.getElementById('dist-slider');
+            if (slider) slider.value = d;
+            state.presetName = `${w}×${h} / ${s}"`;
+        }
+        if (sc && !isNaN(sc) && sc >= 1) {
+            state.scale = sc;
+            document.querySelectorAll('.scale-btn').forEach(btn => {
+                btn.classList.toggle('active', parseFloat(btn.dataset.scale) === sc);
+            });
+        }
+        if (uc) {
+            state.useCase = uc;
+            document.querySelectorAll('.usecase-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.case === uc);
+            });
+        }
+        const unitParam = params.get('unit') || params.get('u');
+        if (unitParam === 'cm' || unitParam === 'in') {
+            setUnit(unitParam);
+        }
+        const dbmParam = params.get('dbdist') || params.get('dbm');
+        if (dbmParam === 'custom' || dbmParam === 'typical') {
+            setDBDistMode(dbmParam);
+        }
+    } catch (_) {}
+
+    // Run calculation
     calculate();
     calcComparatorB();
     renderDB();

@@ -23,6 +23,12 @@ export const state = {
     /** Active use-case mode — affects future weighting extensions */
     useCase: 'balanced',
 
+    /** Measurement unit: 'in' (inches) | 'cm' (centimeters) */
+    unit: 'in',
+
+    /** Database distance evaluation mode: 'typical' | 'custom' */
+    dbDistMode: 'typical',
+
     /** Human-readable name of the currently loaded preset */
     presetName: '27" 1440p Monitor',
 };

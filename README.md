@@ -19,9 +19,9 @@ PPD = 2 × viewing_distance × effective_PPI × tan(0.5°)
 VFI = (PPD / 60) × 100
 ```
 
-**VFI 100** means pixels are at the very threshold of human vision.
-**VFI 85** means pixels are very hard to see.
-**VFI 56** means visible pixel structure in text.
+**VFI 100** means pixels are at the threshold of human 20/20 vision (Retina grade).
+**VFI 75** means high fidelity — pixels are very hard to see.
+**VFI 57** means low fidelity — visible pixel structure in text.
 
 ---
 

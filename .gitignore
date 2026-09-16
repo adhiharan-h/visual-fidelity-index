@@ -22,3 +22,7 @@ npm-debug.log*
 
 # Build output (Cloudflare deploys from dist/)
 dist/
+
+# Local backups & exports
+assets/*-original.*
+docs/seo/

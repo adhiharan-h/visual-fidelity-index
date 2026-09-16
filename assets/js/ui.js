@@ -88,29 +88,43 @@ export function setupTooltips() {
             tooltip.textContent = el.dataset.tip;
             tooltip.classList.add('visible');
             el.setAttribute('aria-describedby', 'tooltip');
-            _positionTooltip(e);
+            _positionTooltip(e, el);
         };
         const hide = () => {
             tooltip.classList.remove('visible');
             el.removeAttribute('aria-describedby');
         };
         el.addEventListener('mouseenter', show);
-        el.addEventListener('mousemove',  _positionTooltip);
+        el.addEventListener('mousemove',  (e) => _positionTooltip(e, el));
         el.addEventListener('mouseleave', hide);
         el.addEventListener('focus',      show);
         el.addEventListener('blur',       hide);
     });
 }
 
-function _positionTooltip(e) {
+function _positionTooltip(e, el) {
     const tooltip = document.getElementById('tooltip');
     if (!tooltip) return;
-    const x  = e.clientX + 14;
-    const y  = e.clientY + 14;
-    const tw = tooltip.offsetWidth;
-    const th = tooltip.offsetHeight;
-    tooltip.style.left = `${Math.min(x, window.innerWidth  - tw - 8)}px`;
-    tooltip.style.top  = `${Math.min(y, window.innerHeight - th - 8)}px`;
+
+    let x, y;
+    if (e && typeof e.clientX === 'number' && !isNaN(e.clientX)) {
+        x = e.clientX + 14;
+        y = e.clientY + 14;
+    } else {
+        const target = el || (e && e.target);
+        if (target && target.getBoundingClientRect) {
+            const rect = target.getBoundingClientRect();
+            x = rect.left + rect.width / 2;
+            y = rect.bottom + 8;
+        } else {
+            return;
+        }
+    }
+
+    const tw = tooltip.offsetWidth || 160;
+    const th = tooltip.offsetHeight || 32;
+    tooltip.style.left = `${Math.max(8, Math.min(x, window.innerWidth  - tw - 8))}px`;
+    tooltip.style.top  = `${Math.max(8, Math.min(y, window.innerHeight - th - 8))}px`;
 }
 
 // ---------------------------------------------------------------------------

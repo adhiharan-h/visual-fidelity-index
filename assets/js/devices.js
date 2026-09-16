@@ -29,14 +29,20 @@ export const DEVICES = [
     { name: 'LG 32UN880 32" 4K',                cat: 'monitor', w: 3840, h: 2160, size: 32,   typicalDist: 26 },
     { name: 'ASUS ROG PG279QM 27" 1440p',       cat: 'monitor', w: 2560, h: 1440, size: 27,   typicalDist: 24 },
     { name: 'AOC U28G2X 28" 4K',               cat: 'monitor', w: 3840, h: 2160, size: 28,   typicalDist: 24 },
+    { name: 'Apple Studio Display 27" 5K',     cat: 'monitor', w: 5120, h: 2880, size: 27,   typicalDist: 24 },
+    { name: 'Apple Pro Display XDR 32" 6K',    cat: 'monitor', w: 6016, h: 3384, size: 32,   typicalDist: 26 },
+    { name: 'Samsung Odyssey Neo G9 49"',       cat: 'monitor', w: 5120, h: 1440, size: 49,   typicalDist: 28 },
+    { name: 'LG UltraGear 45" Curved OLED',    cat: 'monitor', w: 3440, h: 1440, size: 45,   typicalDist: 30 },
     { name: 'Alienware AW3423DW 34" QD-OLED',  cat: 'monitor', w: 3440, h: 1440, size: 34,   typicalDist: 28 },
     { name: 'LG 34WP85C 34" UltraWide 1440p',  cat: 'monitor', w: 3440, h: 1440, size: 34,   typicalDist: 28 },
     { name: 'LG 27GP850 27" 1440p 165Hz',      cat: 'monitor', w: 2560, h: 1440, size: 27,   typicalDist: 24 },
 
-    // ---- Laptops ----
+    // ---- Laptops & Tablets ----
     { name: 'MacBook Pro 14" M3 Pro',           cat: 'laptop',  w: 3024, h: 1964, size: 14.2, typicalDist: 18 },
     { name: 'MacBook Pro 16" M3 Pro',           cat: 'laptop',  w: 3456, h: 2234, size: 16.2, typicalDist: 20 },
     { name: 'MacBook Air 13" M2',               cat: 'laptop',  w: 2560, h: 1664, size: 13.6, typicalDist: 18 },
+    { name: 'iPad Pro 13" M4 OLED',             cat: 'laptop',  w: 2752, h: 2064, size: 13,   typicalDist: 16 },
+    { name: 'iPad Pro 11" M4 OLED',             cat: 'laptop',  w: 2420, h: 1668, size: 11,   typicalDist: 15 },
     { name: 'Dell XPS 13 OLED',                cat: 'laptop',  w: 3456, h: 2160, size: 13.4, typicalDist: 18 },
     { name: 'ThinkPad X1 Carbon Gen 11',        cat: 'laptop',  w: 2880, h: 1800, size: 14,   typicalDist: 18 },
     { name: 'Surface Laptop 5 13.5"',           cat: 'laptop',  w: 2256, h: 1504, size: 13.5, typicalDist: 18 },
@@ -44,13 +50,15 @@ export const DEVICES = [
     { name: 'Budget Laptop 15" 768p',           cat: 'laptop',  w: 1366, h: 768,  size: 15.6, typicalDist: 20 },
     { name: 'HP Spectre x360 14"',              cat: 'laptop',  w: 2560, h: 1600, size: 14,   typicalDist: 18 },
 
-    // ---- Phones ----
+    // ---- Phones & Handhelds ----
     { name: 'iPhone 15 Pro Max',               cat: 'phone',   w: 2796, h: 1290, size: 6.7,  typicalDist: 14 },
     { name: 'iPhone 15',                       cat: 'phone',   w: 2556, h: 1179, size: 6.1,  typicalDist: 14 },
     { name: 'Samsung Galaxy S24 Ultra',        cat: 'phone',   w: 3088, h: 1440, size: 6.8,  typicalDist: 14 },
     { name: 'Google Pixel 8 Pro',              cat: 'phone',   w: 2992, h: 1344, size: 6.7,  typicalDist: 14 },
     { name: 'OnePlus 12 6.82"',                cat: 'phone',   w: 3168, h: 1440, size: 6.82, typicalDist: 14 },
     { name: 'Samsung Galaxy A54',              cat: 'phone',   w: 2340, h: 1080, size: 6.4,  typicalDist: 14 },
+    { name: 'Steam Deck OLED',                 cat: 'phone',   w: 1280, h: 800,  size: 7.4,  typicalDist: 14 },
+    { name: 'ASUS ROG Ally',                   cat: 'phone',   w: 1920, h: 1080, size: 7.0,  typicalDist: 14 },
 
     // ---- TVs ----
     { name: 'LG C3 55" OLED 4K',               cat: 'tv',      w: 3840, h: 2160, size: 55,   typicalDist: 72  },

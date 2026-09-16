@@ -27,11 +27,16 @@ const _scores = { A: NaN, B: NaN };
  * @param {object} tier  — Tier descriptor from getTier()
  * @param {number} ppdH  — Horizontal PPD
  * @param {number} ppi   — Physical PPI
+ * @param {string} [name] — Name of Display A
  */
-export function updateComparatorA(vfi, tier, ppdH, ppi) {
+export function updateComparatorA(vfi, tier, ppdH, ppi, name) {
     _scores.A = vfi;
+    if (name) {
+        const nameEl = document.getElementById('compNameA');
+        if (nameEl) nameEl.textContent = name;
+    }
     _setPanel('A', vfi, tier, ppdH, ppi);
-    _updateVerdict();
+    updateVerdict();
 }
 
 // ---------------------------------------------------------------------------
@@ -45,7 +50,25 @@ export function calcComparatorB() {
     const size = parseFloat(document.getElementById('cs').value);
     const dist = parseFloat(document.getElementById('cd').value);
 
-    if (!w || !h || !size || !dist || w < 1 || h < 1 || size < 1 || dist < 1) return;
+    if (!w || !h || !size || !dist || w < 1 || h < 1 || size < 1 || dist < 1) {
+        _scores.B = NaN;
+        const scoreEl = document.getElementById('compScoreB');
+        if (scoreEl) scoreEl.textContent = '—';
+        const tierEl = document.getElementById('compTierB');
+        if (tierEl) tierEl.textContent = '—';
+        const bar = document.getElementById('compBarB');
+        if (bar) bar.style.width = '0%';
+        const ppdEl = document.getElementById('compPPDB');
+        if (ppdEl) ppdEl.textContent = '— PPD';
+        const ppiEl = document.getElementById('compPPIB');
+        if (ppiEl) ppiEl.textContent = '— PPI';
+        const verdict = document.getElementById('compVerdict');
+        if (verdict) {
+            verdict.textContent = 'Enter valid display specifications for Display B.';
+            verdict.classList.remove('has-result');
+        }
+        return;
+    }
 
     // Apply the same scaling factor as the main calculator
     const sc   = state.scale;
@@ -57,11 +80,11 @@ export function calcComparatorB() {
 
     _scores.B = vfi;
     _setPanel('B', vfi, tier, ppd, ppi);
-    _updateVerdict();
+    updateVerdict();
 }
 
 // ---------------------------------------------------------------------------
-// Private helpers
+// Helpers
 // ---------------------------------------------------------------------------
 
 function _setPanel(id, vfi, tier, ppd, ppi) {
@@ -77,30 +100,33 @@ function _setPanel(id, vfi, tier, ppd, ppi) {
     document.getElementById(`compPPI${suffix}`).textContent = `${Math.round(ppi)} PPI`;
 }
 
-function _updateVerdict() {
+export function updateVerdict() {
     const aScore = _scores.A;
     const bScore = _scores.B;
     const verdict = document.getElementById('compVerdict');
+    if (!verdict) return;
 
     if (isNaN(aScore) || isNaN(bScore)) return;
 
     const diff   = Math.abs(aScore - bScore);
-    const winner = aScore > bScore ? 'A' : bScore > aScore ? 'B' : null;
+    const nameA  = document.getElementById('compNameA')?.textContent || 'Display A';
+    const nameB  = document.getElementById('compNameB')?.value || 'Display B';
 
-    if (!winner) {
-        verdict.textContent = 'Both displays are perceptually identical at these settings.';
+    if (diff < 2) {
+        verdict.textContent = `${nameA} and ${nameB} are perceptually identical at these viewing distances (Δ${Math.round(diff)} VFI).`;
+    } else if (diff < 5) {
+        const winner = aScore > bScore ? nameA : nameB;
+        const loser  = aScore > bScore ? nameB : nameA;
+        verdict.textContent = `${winner} is practically indistinguishable from ${loser} (below perceptual threshold, Δ${Math.round(diff)} VFI).`;
     } else {
-        const nameA = document.getElementById('compNameA').textContent || 'Display A';
-        const nameB = document.getElementById('compNameB')?.value || 'Display B';
-        const winnerName = winner === 'A' ? nameA : nameB;
-        const loserName  = winner === 'A' ? nameB : nameA;
+        const winner = aScore > bScore ? nameA : nameB;
+        const loser  = aScore > bScore ? nameB : nameA;
         const significance =
-            diff < 5  ? 'practically identical (below perceptual threshold)' :
             diff < 15 ? 'marginally sharper' :
             diff < 30 ? 'noticeably sharper' : 'significantly sharper';
 
         verdict.textContent =
-            `${winnerName} is ${significance} than ${loserName} at your viewing distances (Δ${Math.round(diff)} VFI).`;
+            `${winner} is ${significance} than ${loser} at your viewing distances (Δ${Math.round(diff)} VFI).`;
     }
     verdict.classList.add('has-result');
 }

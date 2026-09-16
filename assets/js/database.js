@@ -21,27 +21,57 @@ let _category = 'all';
 let _sortCol  = 'vfi';
 let _sortAsc  = false;
 
-// ---------------------------------------------------------------------------
-// Public API
-// ---------------------------------------------------------------------------
+/**
+ * Set distance evaluation mode: 'typical' (product default) | 'custom' (user distance).
+ * @param {'typical'|'custom'} mode
+ */
+export function setDBDistMode(mode) {
+    state.dbDistMode = mode;
+    document.querySelectorAll('.db-dist-btn').forEach(btn => {
+        const active = btn.dataset.distMode === mode;
+        btn.classList.toggle('active', active);
+        btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+
+    const isMetric = state.unit === 'cm';
+    const distText = isMetric ? `${Math.round(state.dist * 2.54)} cm` : `${Math.round(state.dist)}"`;
+
+    const sub = document.getElementById('dbSubText');
+    if (sub) {
+        if (mode === 'typical') {
+            sub.textContent = 'Scored at typical real-world viewing distance for each device category. Click any row to load.';
+        } else {
+            sub.textContent = `Scored at your current viewing distance (${distText}). Click any row to load.`;
+        }
+    }
+
+    renderDB();
+}
 
 /** Re-render the device table. Called after any state change. */
 export function renderDB() {
-    const dist  = state.dist;
+    const isMetric = state.unit === 'cm';
+    const distMode = state.dbDistMode || 'typical';
     const searchInput = document.getElementById('dbSearch');
     const query = searchInput ? searchInput.value.toLowerCase() : '';
     const tbody = document.getElementById('dbBody');
     if (!tbody) return;
 
+    // Update toggle button text for custom distance
+    const dbDistToggleLabel = document.getElementById('dbDistToggleLabel');
+    const distText = isMetric ? `${Math.round(state.dist * 2.54)} cm` : `${Math.round(state.dist)}"`;
+    if (dbDistToggleLabel) dbDistToggleLabel.textContent = distText;
+
     const rows = DEVICES
         .filter(d => _category === 'all' || d.cat === _category)
         .filter(d => !query || d.name.toLowerCase().includes(query))
         .map(d => {
+            const evalDist = distMode === 'typical' ? d.typicalDist : state.dist;
             const ppi  = computePPI(d.w, d.h, d.size);
-            const ppd  = computePPD(dist, ppi);
+            const ppd  = computePPD(evalDist, ppi);
             const vfi  = computeVFI(ppd);
             const tier = getTier(vfi);
-            return { ...d, ppi, ppd, vfi, tier };
+            return { ...d, evalDist, ppi, ppd, vfi, tier };
         })
         .sort((a, b) => {
             const mult = _sortAsc ? 1 : -1;
@@ -50,18 +80,23 @@ export function renderDB() {
             if (_sortCol === 'res') {
                 av = a.w * a.h;
                 bv = b.w * b.h;
+            } else if (_sortCol === 'dist') {
+                av = a.evalDist;
+                bv = b.evalDist;
             }
             if (typeof av === 'string') return av.localeCompare(bv) * mult;
             return (av - bv) * mult;
         });
 
     if (rows.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 24px 12px; color: var(--text-faint);">No matching devices found</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 24px 12px; color: var(--text-faint);">No matching devices found</td></tr>`;
         _updateHeaderSortIcons();
         return;
     }
 
-    tbody.innerHTML = rows.map(d => `
+    tbody.innerHTML = rows.map(d => {
+        const rowDistFormatted = isMetric ? `${Math.round(d.evalDist * 2.54)} cm` : `${d.evalDist}"`;
+        return `
         <tr
             data-w="${d.w}"
             data-h="${d.h}"
@@ -74,11 +109,13 @@ export function renderDB() {
             <td class="device-name">${_esc(d.name)}</td>
             <td>${d.w}×${d.h}</td>
             <td>${d.size}"</td>
+            <td class="db-dist-cell">${rowDistFormatted}</td>
             <td>${Math.round(d.ppi)}</td>
             <td class="vfi-num" style="color:${getTierColor(d.tier.cls)}">${Math.round(d.vfi)}</td>
             <td><span class="tier-badge ${d.tier.badge}">${d.tier.name}</span></td>
         </tr>
-    `).join('');
+    `;
+    }).join('');
 
     _updateHeaderSortIcons();
 }
@@ -115,7 +152,7 @@ export function sortDB(col) {
  * @param {string} name — Device name
  */
 export function loadDevice(w, h, size, dist, name) {
-    setPreset(w, h, size, dist, state.scale, name);
+    setPreset(w, h, size, dist, 1, name);
     document.getElementById('calculator').scrollIntoView({ behavior: 'smooth' });
     showToast(`Loaded: ${name}`);
 }
@@ -132,9 +169,10 @@ function _updateHeaderSortIcons() {
         th.classList.toggle('active-sort', isCurrent);
         const arrow = isCurrent ? (_sortAsc ? ' ↑' : ' ↓') : '';
         th.setAttribute('aria-sort', isCurrent ? (_sortAsc ? 'ascending' : 'descending') : 'none');
-        const baseName = th.dataset.label || th.textContent.replace(/[↑↓]/g, '').trim();
-        th.dataset.label = baseName;
-        th.textContent = baseName + arrow;
+        if (!th.dataset.label) {
+            th.dataset.label = th.textContent.replace(/[↑↓]/g, '').trim();
+        }
+        th.textContent = th.dataset.label + arrow;
     });
 }
 

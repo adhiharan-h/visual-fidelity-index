@@ -25,6 +25,16 @@
     padding: 16px 14px;
     box-shadow: none;              /* skip shadow — saves visual weight on mobile */
 }
+.calc-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+.calc-panel-header .panel-title {
+    margin-bottom: 0;
+}
 .panel-title {
     font-size: 0.72rem;
     font-weight: 700;
@@ -32,6 +42,36 @@
     letter-spacing: 1px;
     color: var(--text-faint);
     margin-bottom: 14px;
+}
+
+/* Unit Toggle */
+.unit-toggle {
+    display: inline-flex;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 2px;
+    gap: 2px;
+    flex-shrink: 0;
+}
+.unit-btn {
+    padding: 3px 10px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    border-radius: 100px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all var(--fast);
+}
+.unit-btn:hover {
+    color: var(--text);
+}
+.unit-btn.active {
+    background: var(--brand);
+    color: #fff;
 }
 
 /* ---- Presets ---- */
@@ -157,6 +197,42 @@ label {
 }
 .distance-slider::-webkit-slider-thumb:active { transform: scale(1.15); }
 .slider-hint { font-size: 0.68rem; color: var(--text-faint); margin-top: 6px; text-align: center; }
+
+/* Quick Distance Chips */
+.dist-chips {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+}
+.dist-chips::-webkit-scrollbar { display: none; }
+.dist-chip {
+    padding: 4px 10px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: 100px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all var(--fast);
+}
+.dist-chip:hover {
+    border-color: var(--brand);
+    color: var(--text);
+}
+.dist-chip.active {
+    background: rgba(99,102,241,.18);
+    border-color: var(--brand);
+    color: var(--brand-light);
+    font-weight: 600;
+}
 
 /* ---- Scale & UseCase toggles — scrollable strips on mobile ---- */
 .scale-btns {
@@ -446,8 +522,8 @@ label {
     .preset-group { margin-bottom: 22px; }
     .presets { flex-wrap: wrap; overflow-x: visible; }
     .preset-btn { font-size: 0.78rem; }
-    .input-section { gap: 18px; }
-    .scale-btns, .usecase-btns { flex-wrap: wrap; overflow-x: visible; }
+    .scale-btns, .usecase-btns, .dist-chips { flex-wrap: wrap; overflow-x: visible; }
+    .dist-chip { font-size: 0.76rem; }
 
     /* Score ring — side by side on tablet */
     .score-display-wrap {

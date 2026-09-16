@@ -46,6 +46,7 @@ export const RING_CIRCUMFERENCE = 2 * Math.PI * 85;
  * @returns {number} PPI
  */
 export function computePPI(w, h, size) {
+    if (!size || size <= 0 || !w || !h || w <= 0 || h <= 0) return 0;
     return Math.sqrt(w * w + h * h) / size;
 }
 
@@ -56,6 +57,7 @@ export function computePPI(w, h, size) {
  * @returns {number} PPD
  */
 export function computePPD(dist, ppi) {
+    if (!dist || dist <= 0 || !ppi || ppi <= 0) return 0;
     return 2 * dist * ppi * TAN_HALF_DEG;
 }
 
@@ -69,18 +71,24 @@ export function computePPD(dist, ppi) {
  * @returns {number} Effective PPD for VFI scoring
  */
 export function computeEffectivePPD(dist, ppi, ppiH, ppiV, useCase = 'balanced') {
-    const ppd  = computePPD(dist, ppi);
-    const ppdH = computePPD(dist, ppiH);
-    const ppdV = computePPD(dist, ppiV);
+    const ppd = computePPD(dist, ppi);
+    if (!ppd) return 0;
 
+    // Task-specific acuity calibration factors:
+    // - text: fine subpixel glyphs & serifs demand higher acuity (~10% higher PPD requirement)
+    // - design: vector precision & hairline borders demand elevated acuity (~6% higher PPD requirement)
+    // - balanced: standard ISO 9241-303 foveal acuity baseline (60 CPD)
+    // - gaming: temporal motion smoothing shifts perceptual threshold (~6% lower static acuity demand)
+    // - video: cinematic 24-60fps content with motion blur masks micro pixel edges (~15% lower demand)
     switch (useCase) {
         case 'text':
-            return ppdH;
+            return ppd * 0.91;
         case 'design':
-            return Math.min(ppdH, ppdV);
-        case 'video':
-            return ppdV;
+            return ppd * 0.94;
         case 'gaming':
+            return ppd * 1.06;
+        case 'video':
+            return ppd * 1.15;
         case 'balanced':
         default:
             return ppd;
@@ -115,6 +123,7 @@ export function computeConfidence(ppi) {
  * @returns {number} Distance in inches
  */
 export function computeOptimalDist(ppi, targetPPD = RETINA_PPD) {
+    if (!ppi || ppi <= 0) return 0;
     return targetPPD / (2 * ppi * TAN_HALF_DEG);
 }
 
