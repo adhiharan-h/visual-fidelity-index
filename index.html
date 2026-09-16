@@ -26,20 +26,21 @@
     <!-- Favicon & Mobile Touch Icons (Google Search, PWA & Browsers) -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="icon" type="image/svg+xml" href="assets/vfi-icon.svg">
-    <link rel="icon" type="image/png" sizes="192x192" href="assets/vfi-icon-192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="assets/vfi-icon-512.png">
-    <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48x48.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="manifest" href="manifest.webmanifest">
 
-    <!-- Fonts -->
+    <!-- Fonts (preconnected & asynchronously loaded for 0ms render-blocking) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap">
+    </noscript>
 
     <!-- Single combined stylesheet (tokens → base → components) -->
-    <link rel="stylesheet" href="assets/css/styles.css?v=2.1.0">
+    <link rel="stylesheet" href="assets/css/styles.css?v=2.2.0">
 
     <!-- Structured Data (JSON-LD) for Search Engines -->
     <script type="application/ld+json">
@@ -151,19 +152,35 @@
                     </div>
                 </div>
 
-                <!-- Quick presets & Auto-detect -->
+                <!-- Prominent 1-Click Screen Detection Hero Banner -->
+                <div class="detect-screen-banner" id="detectScreenBanner">
+                    <button type="button" class="detect-screen-btn" id="detectScreenBtn" aria-label="Auto-detect this screen hardware and viewing distance">
+                        <div class="detect-screen-content">
+                            <div class="detect-screen-icon-wrap" aria-hidden="true">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                                </svg>
+                                <span class="detect-screen-ping" aria-hidden="true"></span>
+                            </div>
+                            <div class="detect-screen-text">
+                                <div class="detect-screen-heading">
+                                    <span class="detect-screen-title">Detect My Screen</span>
+                                    <span class="detect-screen-badge">1-Click Auto Fill</span>
+                                </div>
+                                <div class="detect-screen-sub" id="detectScreenPreview">Checking screen resolution &amp; scale...</div>
+                            </div>
+                        </div>
+                        <div class="detect-screen-cta">
+                            <span class="detect-screen-action-btn" id="detectScreenCtaText">Auto Fill →</span>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Quick presets -->
                 <div class="preset-group">
-                    <div class="preset-header-row">
-                        <p class="preset-label">Quick-load a device</p>
-                        <button type="button" class="detect-btn" id="detectScreenBtn" aria-label="Auto-detect this screen">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
-                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                                <line x1="8" y1="21" x2="16" y2="21"/>
-                                <line x1="12" y1="17" x2="12" y2="21"/>
-                            </svg>
-                            <span>Detect My Screen</span>
-                        </button>
-                    </div>
+                    <p class="preset-label">Or quick-load a preset device</p>
                     <div class="presets" role="group" aria-label="Quick load presets">
                         <button class="preset-btn active" data-preset="27&quot; 1440p" aria-pressed="true">27" 1440p</button>
                         <button class="preset-btn" data-preset="27&quot; 1080p" aria-pressed="false">27" 1080p</button>
@@ -725,7 +742,7 @@
 </div>
 
 <!-- Compiled bundle — serves via HTTP (file:// may fail due to CORS) -->
-<script src="assets/js/bundle.js?v=2.1.0"></script>
+<script defer src="assets/js/bundle.js?v=2.2.0"></script>
 
 </body>
 </html>

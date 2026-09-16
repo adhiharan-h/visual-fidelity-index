@@ -111,6 +111,18 @@ export function detectScreen() {
             b.setAttribute('aria-pressed', isMatch ? 'true' : 'false');
         });
 
+        // Visual feedback on the Detect button itself
+        const btn = document.getElementById('detectScreenBtn');
+        const ctaText = document.getElementById('detectScreenCtaText');
+        if (btn) {
+            btn.classList.add('applied');
+            if (ctaText) ctaText.textContent = 'Applied ✓';
+            setTimeout(() => {
+                btn.classList.remove('applied');
+                if (ctaText) ctaText.textContent = 'Auto Fill →';
+            }, 2500);
+        }
+
         const scaleLabel = scaleVal !== 1 ? ` @ ${scaleVal}× scale` : '';
         showToast(`Detected: ${w}×${h}${scaleLabel} (${name}) — verify screen size`);
 
@@ -120,4 +132,27 @@ export function detectScreen() {
         showToast('Screen detection failed — enter specifications manually.');
         return null;
     }
+}
+
+/**
+ * Previews detected screen info on page load inside the detection banner.
+ */
+export function initScreenDetectPreview() {
+    try {
+        const previewEl = document.getElementById('detectScreenPreview');
+        if (!previewEl) return;
+        const dpr = window.devicePixelRatio || 1;
+        const rawW = window.screen.width || window.innerWidth || 1920;
+        const rawH = window.screen.height || window.innerHeight || 1080;
+        let w = Math.round(rawW * dpr);
+        let h = Math.round(rawH * dpr);
+        const userAgent = navigator.userAgent || '';
+        const isMobile = /Mobi|Android|iPhone/i.test(userAgent) ||
+                         (window.matchMedia && window.matchMedia('(max-width: 767px) and (pointer: coarse)').matches);
+        if (!isMobile && w < h) {
+            [w, h] = [h, w];
+        }
+        const dprStr = dpr !== 1 ? ` · ${dpr}× DPR` : '';
+        previewEl.textContent = `Detected ~${w}×${h}${dprStr} · 1-click apply`;
+    } catch (_) {}
 }

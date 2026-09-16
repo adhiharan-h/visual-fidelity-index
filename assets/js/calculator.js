@@ -18,7 +18,28 @@ import { updateComparatorA, calcComparatorB } from './comparator.js';
 // Core calculate — called on every input change
 // ---------------------------------------------------------------------------
 
-export function calculate() {
+let _urlSyncTimer = null;
+function _debouncedSyncUrl(w, h, size, dist, sc) {
+    clearTimeout(_urlSyncTimer);
+    _urlSyncTimer = setTimeout(() => {
+        try {
+            const url = new URL(window.location.href);
+            url.searchParams.set('w', w);
+            url.searchParams.set('h', h);
+            url.searchParams.set('s', size);
+            url.searchParams.set('d', Math.round(dist * 10) / 10);
+            if (sc !== 1) url.searchParams.set('sc', sc);
+            else url.searchParams.delete('sc');
+            if (state.useCase !== 'balanced') url.searchParams.set('uc', state.useCase);
+            else url.searchParams.delete('uc');
+            if (state.unit === 'cm') url.searchParams.set('unit', 'cm');
+            else url.searchParams.delete('unit');
+            window.history.replaceState({}, '', url);
+        } catch (_) {}
+    }, 350);
+}
+
+export function calculate(animate = false) {
     const w       = parseFloat(document.getElementById('width').value);
     const h       = parseFloat(document.getElementById('height').value);
     const size    = parseFloat(document.getElementById('size').value);
@@ -34,21 +55,8 @@ export function calculate() {
     // Persist to shared state (dist is always stored in inches)
     Object.assign(state, { w, h, size, dist });
 
-    // Sync URL search params for seamless link sharing
-    try {
-        const url = new URL(window.location.href);
-        url.searchParams.set('w', w);
-        url.searchParams.set('h', h);
-        url.searchParams.set('s', size);
-        url.searchParams.set('d', Math.round(dist * 10) / 10);
-        if (sc !== 1) url.searchParams.set('sc', sc);
-        else url.searchParams.delete('sc');
-        if (state.useCase !== 'balanced') url.searchParams.set('uc', state.useCase);
-        else url.searchParams.delete('uc');
-        if (state.unit === 'cm') url.searchParams.set('unit', 'cm');
-        else url.searchParams.delete('unit');
-        window.history.replaceState({}, '', url);
-    } catch (_) {}
+    // Sync URL search params debounced (avoids browser history IPC lockups during slider drag)
+    _debouncedSyncUrl(w, h, size, dist, sc);
 
     // --- Formula ---
     const ppi     = computePPI(w, h, size);
@@ -73,7 +81,12 @@ export function calculate() {
     const currentDistDisplay = isMetric ? `${Math.round(dist * 2.54)} cm` : `${Math.round(dist)}"`;
 
     // --- Update score display ---
-    animateNum('vfiScore', Math.round(vfi));
+    if (animate) {
+        animateNum('vfiScore', Math.round(vfi));
+    } else {
+        const scoreEl = document.getElementById('vfiScore');
+        if (scoreEl) scoreEl.textContent = Math.round(vfi);
+    }
     document.getElementById('scoreTier').textContent = tier.name;
     document.getElementById('scoreMessage').textContent = tier.msg;
     document.getElementById('scoreConfidence').textContent =
@@ -86,10 +99,19 @@ export function calculate() {
     _updateSpectrum(vfi);
 
     // --- Update metric cards ---
-    animateNum('ppdVal', Math.round(activePPD));
+    if (animate) {
+        animateNum('ppdVal', Math.round(activePPD));
+        animateNum('ppiVal', Math.round(ppi));
+        animateNum('effPpiVal', Math.round(effPPI));
+    } else {
+        const ppdEl = document.getElementById('ppdVal');
+        if (ppdEl) ppdEl.textContent = Math.round(activePPD);
+        const ppiEl = document.getElementById('ppiVal');
+        if (ppiEl) ppiEl.textContent = Math.round(ppi);
+        const effEl = document.getElementById('effPpiVal');
+        if (effEl) effEl.textContent = Math.round(effPPI);
+    }
     document.getElementById('ppdVert').textContent = 'Pixels per degree';
-    animateNum('ppiVal', Math.round(ppi));
-    animateNum('effPpiVal', Math.round(effPPI));
     document.getElementById('effPpiSub').textContent = sc !== 1 ? `After ${sc}× scaling` : 'Native (no scaling)';
     document.getElementById('optimalDist').textContent = optDistDisplay;
     document.getElementById('optimalHint').textContent = optDist <= dist
@@ -205,7 +227,7 @@ export function setPreset(w, h, s, d, sc = 1, name = '') {
         btn.classList.toggle('active', parseFloat(btn.dataset.scale) === sc);
     });
 
-    calculate();
+    calculate(true);
 }
 
 /**
@@ -255,7 +277,7 @@ export function setUnit(u) {
     }
 
     _updateDistChipsLabels();
-    calculate();
+    calculate(false);
 }
 
 /**
@@ -269,7 +291,7 @@ export function setQuickDist(distInches) {
     const val = state.unit === 'cm' ? Math.round(distInches * 2.54) : Math.round(distInches);
     if (distInput) distInput.value = val;
     if (distSlider) distSlider.value = val;
-    calculate();
+    calculate(true);
 }
 
 function _highlightActiveChip(distInches) {

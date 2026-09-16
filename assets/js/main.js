@@ -21,7 +21,7 @@ import { calcComparatorB, updateVerdict } from './comparator.js';
 import { renderDB, filterDB, sortDB, loadDevice, setDBDistMode } from './database.js';
 import { setupTooltips, setupNavbar, setupHamburger } from './ui.js';
 import { RING_CIRCUMFERENCE } from './formula.js';
-import { detectScreen } from './screendetect.js';
+import { detectScreen, initScreenDetectPreview } from './screendetect.js';
 import {
     openShareModal,
     closeShareModal,
@@ -60,9 +60,9 @@ let _debounceTimer = null;
 function _debouncedCalculate() {
     clearTimeout(_debounceTimer);
     _debounceTimer = setTimeout(() => {
-        calculate();
-        renderDB();
-    }, 80);
+        calculate(false);
+        renderDB(false);
+    }, 60);
 }
 
 function setupListeners() {
@@ -89,10 +89,10 @@ function setupListeners() {
         slider.addEventListener('input', (e) => {
             const distInput = document.getElementById('dist');
             if (distInput) distInput.value = e.target.value;
-            calculate();
-            // Debounce the expensive DB table rebuild while dragging
+            calculate(false);
+            // Debounce the DB table check while dragging
             clearTimeout(_sliderDBTimer);
-            _sliderDBTimer = setTimeout(renderDB, 200);
+            _sliderDBTimer = setTimeout(() => renderDB(false), 150);
         });
     }
 
@@ -335,10 +335,13 @@ function init() {
         }
     } catch (_) {}
 
-    // Run calculation
-    calculate();
+    // Screen detection preview on load
+    initScreenDetectPreview();
+
+    // Run initial calculation
+    calculate(true);
     calcComparatorB();
-    renderDB();
+    renderDB(true);
 }
 
 document.addEventListener('DOMContentLoaded', init);

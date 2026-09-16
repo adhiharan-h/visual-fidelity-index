@@ -48,8 +48,10 @@ export function setDBDistMode(mode) {
     renderDB();
 }
 
+let _lastRenderKey = '';
+
 /** Re-render the device table. Called after any state change. */
-export function renderDB() {
+export function renderDB(force = false) {
     const isMetric = state.unit === 'cm';
     const distMode = state.dbDistMode || 'typical';
     const searchInput = document.getElementById('dbSearch');
@@ -61,6 +63,11 @@ export function renderDB() {
     const dbDistToggleLabel = document.getElementById('dbDistToggleLabel');
     const distText = isMetric ? `${Math.round(state.dist * 2.54)} cm` : `${Math.round(state.dist)}"`;
     if (dbDistToggleLabel) dbDistToggleLabel.textContent = distText;
+
+    // Skip DOM rebuild if data hasn't changed (e.g. slider moving while in typical mode)
+    const renderKey = `${distMode}:${distMode === 'custom' ? Math.round(state.dist * 10) : ''}:${_category}:${query}:${_sortCol}:${_sortAsc}:${isMetric}`;
+    if (!force && renderKey === _lastRenderKey) return;
+    _lastRenderKey = renderKey;
 
     const rows = DEVICES
         .filter(d => _category === 'all' || d.cat === _category)
