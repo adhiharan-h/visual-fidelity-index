@@ -21,6 +21,15 @@ import { calcComparatorB, updateVerdict } from './comparator.js';
 import { renderDB, filterDB, sortDB, loadDevice, setDBDistMode } from './database.js';
 import { setupTooltips, setupNavbar, setupHamburger } from './ui.js';
 import { RING_CIRCUMFERENCE } from './formula.js';
+import { detectScreen } from './screendetect.js';
+import {
+    openShareModal,
+    closeShareModal,
+    copyCardImage,
+    downloadCardImage,
+    nativeShareCard,
+    copyLink
+} from './sharecard.js';
 
 // ---------------------------------------------------------------------------
 // Expose minimal global API for inline HTML handlers
@@ -33,6 +42,9 @@ window.__vfi = {
     setUnit,
     setQuickDist,
     setDBDistMode,
+    detectScreen,
+    openShareModal,
+    closeShareModal,
     toggleMath,
     shareResult,
     filterDB,
@@ -159,12 +171,43 @@ function setupListeners() {
         });
     }
 
+    // Auto-detect screen button
+    const detectBtn = document.getElementById('detectScreenBtn');
+    if (detectBtn) detectBtn.addEventListener('click', detectScreen);
+
     // Math toggle & Share buttons
     const mathBtn = document.getElementById('mathToggleBtn');
     if (mathBtn) mathBtn.addEventListener('click', toggleMath);
 
-    const shareBtn = document.querySelector('.share-btn-new');
-    if (shareBtn) shareBtn.addEventListener('click', shareResult);
+    const shareBtn = document.getElementById('shareBtn') || document.querySelector('.share-btn-new');
+    if (shareBtn) shareBtn.addEventListener('click', openShareModal);
+
+    // Share Modal controls
+    const closeShareModalBtn = document.getElementById('closeShareModalBtn');
+    if (closeShareModalBtn) closeShareModalBtn.addEventListener('click', closeShareModal);
+
+    const shareModalBackdrop = document.getElementById('shareModalBackdrop');
+    if (shareModalBackdrop) {
+        shareModalBackdrop.addEventListener('click', (e) => {
+            if (e.target === shareModalBackdrop) closeShareModal();
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeShareModal();
+    });
+
+    const copyCardImgBtn = document.getElementById('copyCardImgBtn');
+    if (copyCardImgBtn) copyCardImgBtn.addEventListener('click', copyCardImage);
+
+    const downloadCardImgBtn = document.getElementById('downloadCardImgBtn');
+    if (downloadCardImgBtn) downloadCardImgBtn.addEventListener('click', downloadCardImage);
+
+    const nativeShareBtn = document.getElementById('nativeShareBtn');
+    if (nativeShareBtn) nativeShareBtn.addEventListener('click', nativeShareCard);
+
+    const copyLinkOnlyBtn = document.getElementById('copyLinkOnlyBtn');
+    if (copyLinkOnlyBtn) copyLinkOnlyBtn.addEventListener('click', copyLink);
 
     // Database Distance Evaluation Mode Toggle
     const dbDistToggle = document.querySelector('.db-dist-toggle');

@@ -151,9 +151,19 @@
                     </div>
                 </div>
 
-                <!-- Quick presets -->
+                <!-- Quick presets & Auto-detect -->
                 <div class="preset-group">
-                    <p class="preset-label">Quick-load a device</p>
+                    <div class="preset-header-row">
+                        <p class="preset-label">Quick-load a device</p>
+                        <button type="button" class="detect-btn" id="detectScreenBtn" aria-label="Auto-detect this screen">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                                <line x1="8" y1="21" x2="16" y2="21"/>
+                                <line x1="12" y1="17" x2="12" y2="21"/>
+                            </svg>
+                            <span>Detect My Screen</span>
+                        </button>
+                    </div>
                     <div class="presets" role="group" aria-label="Quick load presets">
                         <button class="preset-btn active" data-preset="27&quot; 1440p" aria-pressed="true">27" 1440p</button>
                         <button class="preset-btn" data-preset="27&quot; 1080p" aria-pressed="false">27" 1080p</button>
@@ -338,13 +348,13 @@
                         aria-expanded="false" aria-controls="mathPanel">
                         Show the math ▾
                     </button>
-                    <button class="share-btn-new" aria-label="Share your VFI score">
+                    <button class="share-btn-new" id="shareBtn" aria-label="Share or export your VFI score card">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
                             <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
                             <line x1="15.41" y1="6.51"  x2="8.59"  y2="10.49"/>
                         </svg>
-                        Share
+                        Share Card
                     </button>
                 </div>
 
@@ -663,6 +673,56 @@
 <!-- UI overlays -->
 <div class="tooltip" id="tooltip" role="tooltip" aria-hidden="true"></div>
 <div class="toast"   id="toast"   role="status"  aria-live="polite"></div>
+
+<!-- SHARE SCORE CARD MODAL -->
+<div class="share-modal-backdrop" id="shareModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="shareModalTitle" style="display: none;">
+    <div class="share-modal-card">
+        <div class="share-modal-header">
+            <div>
+                <h3 class="share-modal-title" id="shareModalTitle">Share Your VFI Score Card</h3>
+                <p class="share-modal-sub">High-resolution graphic card for social media, Discord & forums</p>
+            </div>
+            <button type="button" class="share-modal-close" id="closeShareModalBtn" aria-label="Close modal">✕</button>
+        </div>
+
+        <div class="share-modal-preview">
+            <canvas id="shareCanvas" class="share-canvas" width="2400" height="1260"></canvas>
+        </div>
+
+        <div class="share-modal-actions">
+            <button type="button" class="share-action-btn share-action-primary" id="copyCardImgBtn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                <span>Copy Image</span>
+            </button>
+            <button type="button" class="share-action-btn share-action-secondary" id="downloadCardImgBtn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                <span>Download PNG</span>
+            </button>
+            <button type="button" class="share-action-btn share-action-secondary" id="nativeShareBtn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                    <line x1="15.41" y1="6.51"  x2="8.59"  y2="10.49"/>
+                </svg>
+                <span>Share...</span>
+            </button>
+            <button type="button" class="share-action-btn share-action-ghost" id="copyLinkOnlyBtn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                </svg>
+                <span>Copy Link</span>
+            </button>
+        </div>
+    </div>
+</div>
 
 <!-- Compiled bundle — serves via HTTP (file:// may fail due to CORS) -->
 <script src="assets/js/bundle.js?v=2.1.0"></script>
