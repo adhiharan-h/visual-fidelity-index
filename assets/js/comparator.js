@@ -6,7 +6,7 @@
  * Panel B has its own independent inputs (but shares the scaling factor).
  */
 
-import { computePPI, computePPD, computeVFI, getTier, getTierColor } from './formula.js';
+import { computePPI, computePPD, computeEffectivePPD, computeVFI, computePPIHV, getTier, getTierColor } from './formula.js';
 import { state } from './state.js';
 
 // ---------------------------------------------------------------------------
@@ -57,7 +57,7 @@ export function calcComparatorB() {
         const tierEl = document.getElementById('compTierB');
         if (tierEl) tierEl.textContent = '—';
         const bar = document.getElementById('compBarB');
-        if (bar) bar.style.width = '0%';
+        if (bar) bar.style.setProperty('--bar-pct', 0);
         const ppdEl = document.getElementById('compPPDB');
         if (ppdEl) ppdEl.textContent = '— PPD';
         const ppiEl = document.getElementById('compPPIB');
@@ -74,12 +74,13 @@ export function calcComparatorB() {
     const sc   = state.scale;
     const ppi  = computePPI(w, h, size);
     const effPPI = ppi / sc;
-    const ppd  = computePPD(dist, effPPI);
-    const vfi  = computeVFI(ppd);
+    const { ppiH, ppiV } = computePPIHV(w, h, size);
+    const activePPD = computeEffectivePPD(dist, effPPI, ppiH / sc, ppiV / sc, state.useCase);
+    const vfi  = computeVFI(activePPD);
     const tier = getTier(vfi);
 
     _scores.B = vfi;
-    _setPanel('B', vfi, tier, ppd, ppi);
+    _setPanel('B', vfi, tier, activePPD, ppi);
     updateVerdict();
 }
 
@@ -89,15 +90,21 @@ export function calcComparatorB() {
 
 function _setPanel(id, vfi, tier, ppd, ppi) {
     const suffix = id; // 'A' or 'B'
-    document.getElementById(`compScore${suffix}`).textContent = Math.round(vfi);
-    document.getElementById(`compTier${suffix}`).textContent  = tier.name;
+    const scoreEl = document.getElementById(`compScore${suffix}`);
+    if (scoreEl) scoreEl.textContent = Math.round(vfi);
+    const tierEl = document.getElementById(`compTier${suffix}`);
+    if (tierEl) tierEl.textContent = tier.name;
 
     const bar = document.getElementById(`compBar${suffix}`);
-    bar.style.width      = `${Math.min(vfi / 150 * 100, 100)}%`;
-    bar.style.background = getTierColor(tier.cls);
+    if (bar) {
+        bar.style.setProperty('--bar-pct', Math.min(vfi / 150, 1));
+        bar.style.background = getTierColor(tier.cls);
+    }
 
-    document.getElementById(`compPPD${suffix}`).textContent = `${Math.round(ppd)} PPD`;
-    document.getElementById(`compPPI${suffix}`).textContent = `${Math.round(ppi)} PPI`;
+    const ppdEl = document.getElementById(`compPPD${suffix}`);
+    if (ppdEl) ppdEl.textContent = `${Math.round(ppd)} PPD`;
+    const ppiEl = document.getElementById(`compPPI${suffix}`);
+    if (ppiEl) ppiEl.textContent = `${Math.round(ppi)} PPI`;
 }
 
 export function updateVerdict() {

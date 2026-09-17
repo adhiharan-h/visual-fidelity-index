@@ -81,9 +81,13 @@
 .comp-bar-wrap { height: 5px; background: var(--surface-3); border-radius: 3px; overflow: hidden; }
 .comp-bar {
     height: 100%;
+    width: 100%;
     background: var(--brand);
     border-radius: 3px;
-    transition: width 0.5s var(--ease), background 0.4s;
+    transform: scaleX(var(--bar-pct, 0));
+    transform-origin: left;
+    transition: transform 0.5s var(--ease), background 0.4s;
+    will-change: transform;
 }
 .comp-bar-b { background: #f97316; }
 

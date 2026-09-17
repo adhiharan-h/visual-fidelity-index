@@ -34,9 +34,15 @@ function _debouncedSyncUrl(w, h, size, dist, sc) {
             else url.searchParams.delete('uc');
             if (state.unit === 'cm') url.searchParams.set('unit', 'cm');
             else url.searchParams.delete('unit');
-            window.history.replaceState({}, '', url);
+            try {
+                window.history.replaceState({}, '', url);
+            } catch (_replaceErr) {
+                // Safari enforces a rate limit on replaceState (~100 calls / 30s).
+                // Silently ignore SecurityError — the URL will sync on the next
+                // successful call after the rate limit window resets.
+            }
         } catch (_) {}
-    }, 350);
+    }, 500);
 }
 
 export function calculate(animate = false) {
@@ -163,9 +169,10 @@ function _updateSpectrum(vfi) {
     const pct    = Math.min(Math.max(vfi / 150, 0), 1) * 100;
     const needle = document.getElementById('spectrumNeedle');
     const label  = document.getElementById('spectrumLabel');
-    if (needle) needle.style.left = `${pct}%`;
+
+    if (needle) needle.style.setProperty('--needle-pos', `${pct}%`);
     if (label) {
-        label.style.left  = `${pct}%`;
+        label.style.setProperty('--needle-pos', `${pct}%`);
         label.textContent = Math.round(vfi);
     }
 }

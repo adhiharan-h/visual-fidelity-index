@@ -312,7 +312,7 @@ export function downloadCardImage() {
     if (!canvas) return;
 
     try {
-        const vfi = Math.round(document.getElementById('vfiScore')?.textContent || '76');
+        const vfi = parseInt(document.getElementById('vfiScore')?.textContent, 10) || 76;
         const filename = `vfi-score-${state.w}x${state.h}-${vfi}vfi.png`;
         const dataUrl = canvas.toDataURL('image/png');
 

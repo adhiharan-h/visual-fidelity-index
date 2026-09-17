@@ -105,9 +105,13 @@ function setupListeners() {
     const compNameB = document.getElementById('compNameB');
     if (compNameB) compNameB.addEventListener('input', updateVerdict);
 
-    // Device database search
+    // Device database search (debounced to avoid rebuilding table on every keystroke)
     const dbSearch = document.getElementById('dbSearch');
-    if (dbSearch) dbSearch.addEventListener('input', renderDB);
+    let _dbSearchTimer = null;
+    if (dbSearch) dbSearch.addEventListener('input', () => {
+        clearTimeout(_dbSearchTimer);
+        _dbSearchTimer = setTimeout(() => renderDB(false), 200);
+    });
 
     // Preset buttons delegation (CSP compliant)
     const presetsContainer = document.querySelector('.presets');

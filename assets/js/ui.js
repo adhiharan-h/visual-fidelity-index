@@ -31,10 +31,11 @@ export function animateNum(id, target) {
 
     if (_animFrames[id]) cancelAnimationFrame(_animFrames[id]);
 
-    const start    = performance.now();
+    let start      = null;
     const duration = 400; // ms
 
     function step(now) {
+        if (!start) start = now;
         const t    = Math.min((now - start) / duration, 1);
         const ease = 1 - Math.pow(1 - t, 3); // ease-out cubic
         el.textContent = Math.round(current + (target - current) * ease);
@@ -83,6 +84,8 @@ export function setupTooltips() {
     const tooltip = document.getElementById('tooltip');
     if (!tooltip) return;
 
+    let _tooltipRAF = null;
+
     document.querySelectorAll('[data-tip]').forEach(el => {
         const show = (e) => {
             tooltip.textContent = el.dataset.tip;
@@ -95,7 +98,13 @@ export function setupTooltips() {
             el.removeAttribute('aria-describedby');
         };
         el.addEventListener('mouseenter', show);
-        el.addEventListener('mousemove',  (e) => _positionTooltip(e, el));
+        el.addEventListener('mousemove', (e) => {
+            if (_tooltipRAF) return;
+            _tooltipRAF = requestAnimationFrame(() => {
+                _positionTooltip(e, el);
+                _tooltipRAF = null;
+            });
+        });
         el.addEventListener('mouseleave', hide);
         el.addEventListener('focus',      show);
         el.addEventListener('blur',       hide);
