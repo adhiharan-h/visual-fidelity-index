@@ -216,11 +216,12 @@ export async function renderShareCard(canvas) {
     const startX = 56;
 
     // Spec Box 1: Hardware Setup
+    const isMetric = state.unit === 'cm';
     const aspect = _computeAspectRatio(w, h);
-    _drawSpecBox(ctx, startX, cardY, cardW, cardH, 'DISPLAY SETUP', `${w} × ${h}`, `${size}" screen (${aspect})`);
+    const sizeFormatted = isMetric ? `${Math.round(size * 2.54 * 10) / 10} cm (${size}")` : `${size}"`;
+    _drawSpecBox(ctx, startX, cardY, cardW, cardH, 'DISPLAY SETUP', `${w} × ${h}`, `${sizeFormatted} screen (${aspect})`);
 
     // Spec Box 2: Distance
-    const isMetric = state.unit === 'cm';
     const distText = isMetric ? `${Math.round(dist * 2.54)} cm` : `${Math.round(dist)}"`;
     const optDistText = isMetric ? `${Math.round(optDist * 2.54)} cm` : `${Math.round(optDist)}"`;
     _drawSpecBox(ctx, startX + cardW + gap, cardY, cardW, cardH, 'VIEWING DISTANCE', distText, `Retina threshold at ≤ ${optDistText}`);

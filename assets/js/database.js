@@ -103,6 +103,7 @@ export function renderDB(force = false) {
 
     tbody.innerHTML = rows.map(d => {
         const rowDistFormatted = isMetric ? `${Math.round(d.evalDist * 2.54)} cm` : `${d.evalDist}"`;
+        const rowSizeFormatted = isMetric ? `${Math.round(d.size * 2.54 * 10) / 10} cm` : `${d.size}"`;
         return `
         <tr
             data-w="${d.w}"
@@ -115,7 +116,7 @@ export function renderDB(force = false) {
             aria-label="Load ${_esc(d.name)} into calculator">
             <td class="device-name">${_esc(d.name)}</td>
             <td>${d.w}×${d.h}</td>
-            <td>${d.size}"</td>
+            <td>${rowSizeFormatted}</td>
             <td class="db-dist-cell">${rowDistFormatted}</td>
             <td>${Math.round(d.ppi)}</td>
             <td class="vfi-num" style="color:${getTierColor(d.tier.cls)}">${Math.round(d.vfi)}</td>
