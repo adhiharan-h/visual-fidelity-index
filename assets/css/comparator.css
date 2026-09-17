@@ -67,7 +67,7 @@
 }
 .comp-device-name-input:focus { border-color: var(--brand); }
 
-.comp-score-row { display: flex; align-items: baseline; gap: 10px; }
+.comp-score-row { display: flex; align-items: center; gap: 12px; }
 .comp-score {
     font-family: 'Space Grotesk', sans-serif;
     font-size: 2.2rem;
@@ -75,11 +75,18 @@
     font-variant-numeric: tabular-nums;
     color: white;
     line-height: 1;
-    transition: color 0.3s;
+    transition: color 0.35s ease, text-shadow 0.35s ease;
 }
-.comp-tier { font-size: 0.72rem; font-weight: 700; color: var(--text-faint); text-transform: uppercase; }
+.comp-tier {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
 
-.comp-bar-wrap { height: 5px; background: var(--surface-3); border-radius: 3px; overflow: hidden; }
+.comp-bar-wrap { height: 6px; background: var(--surface-3); border-radius: 3px; overflow: hidden; }
 .comp-bar {
     height: 100%;
     width: 100%;
@@ -87,10 +94,9 @@
     border-radius: 3px;
     transform: scaleX(var(--bar-pct, 0));
     transform-origin: left;
-    transition: transform 0.5s var(--ease), background 0.4s;
+    transition: transform 0.5s var(--ease), background 0.4s, box-shadow 0.4s;
     will-change: transform;
 }
-.comp-bar-b { background: #f97316; }
 
 .comp-metrics-mini { display: flex; gap: 12px; font-size: 0.75rem; color: var(--text-faint); }
 .comp-note         { font-size: 0.7rem; color: var(--text-faint); font-style: italic; }

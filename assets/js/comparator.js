@@ -57,11 +57,22 @@ export function calcComparatorB() {
     if (!w || !h || !size || !dist || w < 1 || h < 1 || size < 0.5 || dist < 0.5) {
         _scores.B = NaN;
         const scoreEl = document.getElementById('compScoreB');
-        if (scoreEl) scoreEl.textContent = '—';
+        if (scoreEl) {
+            scoreEl.textContent = '—';
+            scoreEl.style.color = '';
+            scoreEl.style.textShadow = '';
+        }
         const tierEl = document.getElementById('compTierB');
-        if (tierEl) tierEl.textContent = '—';
+        if (tierEl) {
+            tierEl.textContent = '—';
+            tierEl.className = 'comp-tier';
+        }
         const bar = document.getElementById('compBarB');
-        if (bar) bar.style.setProperty('--bar-pct', 0);
+        if (bar) {
+            bar.style.setProperty('--bar-pct', 0);
+            bar.style.background = '';
+            bar.style.boxShadow = '';
+        }
         const ppdEl = document.getElementById('compPPDB');
         if (ppdEl) ppdEl.textContent = '— PPD';
         const ppiEl = document.getElementById('compPPIB');
@@ -92,17 +103,35 @@ export function calcComparatorB() {
 // Helpers
 // ---------------------------------------------------------------------------
 
+function _esc(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 function _setPanel(id, vfi, tier, ppd, ppi) {
     const suffix = id; // 'A' or 'B'
+    const color = getTierColor(tier.cls);
     const scoreEl = document.getElementById(`compScore${suffix}`);
-    if (scoreEl) scoreEl.textContent = Math.round(vfi);
+    if (scoreEl) {
+        scoreEl.textContent = Math.round(vfi);
+        scoreEl.style.color = color;
+        scoreEl.style.textShadow = `0 0 20px ${color}40`;
+    }
     const tierEl = document.getElementById(`compTier${suffix}`);
-    if (tierEl) tierEl.textContent = tier.name;
+    if (tierEl) {
+        tierEl.textContent = tier.name;
+        tierEl.className = `comp-tier tier-badge ${tier.badge}`;
+    }
 
     const bar = document.getElementById(`compBar${suffix}`);
     if (bar) {
         bar.style.setProperty('--bar-pct', Math.min(vfi / 150, 1));
-        bar.style.background = getTierColor(tier.cls);
+        bar.style.background = color;
+        bar.style.boxShadow = `0 0 8px ${color}60`;
     }
 
     const ppdEl = document.getElementById(`compPPD${suffix}`);
@@ -122,22 +151,24 @@ export function updateVerdict() {
     const diff   = Math.abs(aScore - bScore);
     const nameA  = document.getElementById('compNameA')?.textContent || 'Display A';
     const nameB  = document.getElementById('compNameB')?.value || 'Display B';
+    const safeA  = _esc(nameA);
+    const safeB  = _esc(nameB);
 
     if (diff < 2) {
-        verdict.textContent = `${nameA} and ${nameB} are perceptually identical at these viewing distances (Δ${Math.round(diff)} VFI).`;
+        verdict.innerHTML = `<strong>${safeA}</strong> and <strong>${safeB}</strong> are perceptually identical at these viewing distances (Δ${Math.round(diff)} VFI).`;
     } else if (diff < 5) {
-        const winner = aScore > bScore ? nameA : nameB;
-        const loser  = aScore > bScore ? nameB : nameA;
-        verdict.textContent = `${winner} is practically indistinguishable from ${loser} (below perceptual threshold, Δ${Math.round(diff)} VFI).`;
+        const winner = aScore > bScore ? safeA : safeB;
+        const loser  = aScore > bScore ? safeB : safeA;
+        verdict.innerHTML = `<strong>${winner}</strong> is practically indistinguishable from <strong>${loser}</strong> (below perceptual threshold, Δ${Math.round(diff)} VFI).`;
     } else {
-        const winner = aScore > bScore ? nameA : nameB;
-        const loser  = aScore > bScore ? nameB : nameA;
+        const winner = aScore > bScore ? safeA : safeB;
+        const loser  = aScore > bScore ? safeB : safeA;
         const significance =
             diff < 15 ? 'marginally sharper' :
             diff < 30 ? 'noticeably sharper' : 'significantly sharper';
 
-        verdict.textContent =
-            `${winner} is ${significance} than ${loser} at your viewing distances (Δ${Math.round(diff)} VFI).`;
+        verdict.innerHTML =
+            `<strong>${winner}</strong> is <strong>${significance}</strong> than <strong>${loser}</strong> at your viewing distances (Δ${Math.round(diff)} VFI).`;
     }
     verdict.classList.add('has-result');
 }

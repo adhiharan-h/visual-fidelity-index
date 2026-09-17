@@ -101,6 +101,26 @@ a:hover { text-decoration: underline; }
     line-height: 1.6;
 }
 
+/* Shared Tier Badge Pills */
+.tier-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+    line-height: 1.4;
+    text-transform: uppercase;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+.tier-pixelated { background: rgba(239, 68, 68, 0.15);  color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+.tier-low       { background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.3); }
+.tier-std       { background: rgba(234, 179, 8, 0.15);  color: #facc15; border: 1px solid rgba(234, 179, 8, 0.3); }
+.tier-high      { background: rgba(34, 197, 94, 0.15);  color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+.tier-retina    { background: rgba(99, 102, 241, 0.18); color: var(--brand-light); border: 1px solid rgba(99, 102, 241, 0.35); }
+.tier-over      { background: rgba(168, 85, 247, 0.18); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.35); }
+
 /* Keyboard focus ring */
 *:focus-visible {
     outline: 2px solid var(--brand);
@@ -1195,7 +1215,7 @@ label {
 }
 .comp-device-name-input:focus { border-color: var(--brand); }
 
-.comp-score-row { display: flex; align-items: baseline; gap: 10px; }
+.comp-score-row { display: flex; align-items: center; gap: 12px; }
 .comp-score {
     font-family: 'Space Grotesk', sans-serif;
     font-size: 2.2rem;
@@ -1203,11 +1223,18 @@ label {
     font-variant-numeric: tabular-nums;
     color: white;
     line-height: 1;
-    transition: color 0.3s;
+    transition: color 0.35s ease, text-shadow 0.35s ease;
 }
-.comp-tier { font-size: 0.72rem; font-weight: 700; color: var(--text-faint); text-transform: uppercase; }
+.comp-tier {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
 
-.comp-bar-wrap { height: 5px; background: var(--surface-3); border-radius: 3px; overflow: hidden; }
+.comp-bar-wrap { height: 6px; background: var(--surface-3); border-radius: 3px; overflow: hidden; }
 .comp-bar {
     height: 100%;
     width: 100%;
@@ -1215,10 +1242,9 @@ label {
     border-radius: 3px;
     transform: scaleX(var(--bar-pct, 0));
     transform-origin: left;
-    transition: transform 0.5s var(--ease), background 0.4s;
+    transition: transform 0.5s var(--ease), background 0.4s, box-shadow 0.4s;
     will-change: transform;
 }
-.comp-bar-b { background: #f97316; }
 
 .comp-metrics-mini { display: flex; gap: 12px; font-size: 0.75rem; color: var(--text-faint); }
 .comp-note         { font-size: 0.7rem; color: var(--text-faint); font-style: italic; }
