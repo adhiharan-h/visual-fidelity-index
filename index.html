@@ -261,32 +261,32 @@
 
                     <!-- Display scaling -->
                     <div class="input-group">
-                        <label>
+                        <div class="input-group-label" id="scale-label">
                             Display Scaling
                             <button class="info-btn" aria-label="Help: Display scaling"
                                 data-tip="OS render scale. 1× = native resolution. macOS Retina uses 2×. Windows HiDPI often 1.5× or 2×. A 4K screen at 200% scaling renders as an effective 1080p resolution.">?</button>
-                        </label>
-                        <div class="scale-btns" role="group" aria-label="Display scale factor">
-                            <button class="scale-btn active" data-scale="1">1× Native</button>
-                            <button class="scale-btn"        data-scale="1.25">1.25×</button>
-                            <button class="scale-btn"        data-scale="1.5">1.5×</button>
-                            <button class="scale-btn"        data-scale="2">2× HiDPI</button>
+                        </div>
+                        <div class="scale-btns" role="group" aria-labelledby="scale-label">
+                            <button class="scale-btn active" data-scale="1" aria-pressed="true">1× Native</button>
+                            <button class="scale-btn"        data-scale="1.25" aria-pressed="false">1.25×</button>
+                            <button class="scale-btn"        data-scale="1.5" aria-pressed="false">1.5×</button>
+                            <button class="scale-btn"        data-scale="2" aria-pressed="false">2× HiDPI</button>
                         </div>
                     </div>
 
                     <!-- Use case mode -->
                     <div class="input-group">
-                        <label>
+                        <div class="input-group-label" id="usecase-label">
                             Primary Use Case
                             <button class="info-btn" aria-label="Help: Use case"
                                 data-tip="Adjusts sharpness context for your use case. Text work needs higher acuity. Video and gaming account for motion clarity.">?</button>
-                        </label>
-                        <div class="usecase-btns" role="group" aria-label="Use case selection">
-                            <button class="usecase-btn active" data-case="balanced">⚖ Balanced</button>
-                            <button class="usecase-btn"        data-case="text">📝 Text/Code</button>
-                            <button class="usecase-btn"        data-case="gaming">🎮 Gaming</button>
-                            <button class="usecase-btn"        data-case="design">🎨 Design</button>
-                            <button class="usecase-btn"        data-case="video">📺 Video</button>
+                        </div>
+                        <div class="usecase-btns" role="group" aria-labelledby="usecase-label">
+                            <button class="usecase-btn active" data-case="balanced" aria-pressed="true">⚖ Balanced</button>
+                            <button class="usecase-btn"        data-case="text" aria-pressed="false">📝 Text/Code</button>
+                            <button class="usecase-btn"        data-case="gaming" aria-pressed="false">🎮 Gaming</button>
+                            <button class="usecase-btn"        data-case="design" aria-pressed="false">🎨 Design</button>
+                            <button class="usecase-btn"        data-case="video" aria-pressed="false">📺 Video</button>
                         </div>
                         <p id="useCaseHint" class="usecase-hint">⚖ Balanced mode: Standard ISO foveal acuity baseline (60 CPD)</p>
                     </div>
@@ -530,12 +530,12 @@
             <table class="db-table" id="dbTable" aria-label="Display devices sorted by VFI score">
                 <thead>
                     <tr>
-                        <th scope="col" class="sortable" data-sort="name" tabindex="0">Device</th>
-                        <th scope="col" class="sortable" data-sort="res" tabindex="0">Resolution</th>
-                        <th scope="col" class="sortable" data-sort="size" tabindex="0">Size</th>
-                        <th scope="col" class="sortable" data-sort="dist" tabindex="0">Dist</th>
-                        <th scope="col" class="sortable" data-sort="ppi" tabindex="0">PPI</th>
-                        <th scope="col" class="sortable active-sort" data-sort="vfi" aria-sort="descending" tabindex="0">VFI ↓</th>
+                        <th scope="col" class="sortable" data-sort="name" tabindex="0" role="button">Device</th>
+                        <th scope="col" class="sortable" data-sort="res" tabindex="0" role="button">Resolution</th>
+                        <th scope="col" class="sortable" data-sort="size" tabindex="0" role="button">Size</th>
+                        <th scope="col" class="sortable" data-sort="dist" tabindex="0" role="button">Dist</th>
+                        <th scope="col" class="sortable" data-sort="ppi" tabindex="0" role="button">PPI</th>
+                        <th scope="col" class="sortable active-sort" data-sort="vfi" aria-sort="descending" tabindex="0" role="button">VFI ↓</th>
                         <th scope="col">Tier</th>
                     </tr>
                 </thead>

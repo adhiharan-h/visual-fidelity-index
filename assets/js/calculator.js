@@ -331,7 +331,9 @@ export function _updateDistChipsLabels() {
 export function setScale(sc) {
     state.scale = sc;
     document.querySelectorAll('.scale-btn').forEach(btn => {
-        btn.classList.toggle('active', parseFloat(btn.dataset.scale) === sc);
+        const active = parseFloat(btn.dataset.scale) === sc;
+        btn.classList.toggle('active', active);
+        btn.setAttribute('aria-pressed', active ? 'true' : 'false');
     });
     calculate();
     calcComparatorB();
@@ -344,7 +346,9 @@ export function setScale(sc) {
 export function setUseCase(uc) {
     state.useCase = uc;
     document.querySelectorAll('.usecase-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.case === uc);
+        const active = btn.dataset.case === uc;
+        btn.classList.toggle('active', active);
+        btn.setAttribute('aria-pressed', active ? 'true' : 'false');
     });
 
     const hintEl = document.getElementById('useCaseHint');
