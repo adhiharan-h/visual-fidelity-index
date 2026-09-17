@@ -45,12 +45,16 @@ export function updateComparatorA(vfi, tier, ppdH, ppi, name) {
 
 /** Recalculate and update Panel B from its own input fields. */
 export function calcComparatorB() {
-    const w    = parseFloat(document.getElementById('cw').value);
-    const h    = parseFloat(document.getElementById('ch').value);
-    const size = parseFloat(document.getElementById('cs').value);
-    const dist = parseFloat(document.getElementById('cd').value);
+    const w       = parseFloat(document.getElementById('cw').value);
+    const h       = parseFloat(document.getElementById('ch').value);
+    const rawSize = parseFloat(document.getElementById('cs').value);
+    const rawDist = parseFloat(document.getElementById('cd').value);
 
-    if (!w || !h || !size || !dist || w < 1 || h < 1 || size < 1 || dist < 1) {
+    const isMetric = state.unit === 'cm';
+    const size = isMetric ? (rawSize / 2.54) : rawSize;
+    const dist = isMetric ? (rawDist / 2.54) : rawDist;
+
+    if (!w || !h || !size || !dist || w < 1 || h < 1 || size < 0.5 || dist < 0.5) {
         _scores.B = NaN;
         const scoreEl = document.getElementById('compScoreB');
         if (scoreEl) scoreEl.textContent = '—';

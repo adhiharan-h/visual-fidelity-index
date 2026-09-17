@@ -48,17 +48,18 @@ function _debouncedSyncUrl(w, h, size, dist, sc) {
 export function calculate(animate = false) {
     const w       = parseFloat(document.getElementById('width').value);
     const h       = parseFloat(document.getElementById('height').value);
-    const size    = parseFloat(document.getElementById('size').value);
+    const rawSize = parseFloat(document.getElementById('size').value);
     const rawDist = parseFloat(document.getElementById('dist').value);
     const sc      = state.scale;
 
-    // Convert distance to inches for standardized internal physics calculation
+    // Convert both size and distance to inches for standardized internal physics calculation
+    const size = state.unit === 'cm' ? (rawSize / 2.54) : rawSize;
     const dist = state.unit === 'cm' ? (rawDist / 2.54) : rawDist;
 
     // Guard: skip if any input is missing or nonsensical
-    if (!w || !h || !size || !dist || w < 1 || h < 1 || size < 1 || dist < 0.5) return;
+    if (!w || !h || !size || !dist || w < 1 || h < 1 || size < 0.5 || dist < 0.5) return;
 
-    // Persist to shared state (dist is always stored in inches)
+    // Persist to shared state (size and dist are always stored in inches)
     Object.assign(state, { w, h, size, dist });
 
     // Sync URL search params debounced (avoids browser history IPC lockups during slider drag)
@@ -213,10 +214,13 @@ function _updateMathPanel(w, h, size, dist, ppi, effPPI, sc, activePPD, vfi, con
  * @param {string} name — Human-readable device name
  */
 export function setPreset(w, h, s, d, sc = 1, name = '') {
+    const isMetric = state.unit === 'cm';
+    const sizeVal = isMetric ? Math.round(s * 2.54 * 10) / 10 : s;
+    const distVal = isMetric ? Math.round(d * 2.54) : d;
+
     document.getElementById('width').value  = w;
     document.getElementById('height').value = h;
-    document.getElementById('size').value   = s;
-    const distVal = state.unit === 'cm' ? Math.round(d * 2.54) : d;
+    document.getElementById('size').value   = sizeVal;
     document.getElementById('dist').value   = distVal;
     document.getElementById('dist-slider').value = distVal;
     state.presetName = name || `${w}×${h} / ${s}"`;
@@ -251,11 +255,22 @@ export function setUnit(u) {
         btn.setAttribute('aria-pressed', active ? 'true' : 'false');
     });
 
+    const sizeInput = document.getElementById('size');
+    const sizeUnitLabel = document.getElementById('sizeUnit');
     const distInput = document.getElementById('dist');
     const distSlider = document.getElementById('dist-slider');
     const distUnitLabel = document.getElementById('distUnit');
 
     if (u === 'cm') {
+        if (sizeUnitLabel) sizeUnitLabel.textContent = 'cm';
+        if (sizeInput) {
+            sizeInput.min = '10';
+            sizeInput.max = '300';
+            sizeInput.step = '0.5';
+            const cmVal = Math.round(state.size * 2.54 * 10) / 10;
+            sizeInput.value = cmVal;
+        }
+
         if (distUnitLabel) distUnitLabel.textContent = 'cm';
         if (distSlider) {
             distSlider.min = '15';
@@ -268,7 +283,22 @@ export function setUnit(u) {
             distInput.value = cmVal;
             if (distSlider) distSlider.value = cmVal;
         }
+
+        const sIn = Math.round(state.size * 10) / 10;
+        const sCm = Math.round(state.size * 2.54 * 10) / 10;
+        const dIn = Math.round(state.dist);
+        const dCm = Math.round(state.dist * 2.54);
+        showToast(`Metric (cm): ${sIn}" → ${sCm}cm size, ${dIn}" → ${dCm}cm distance. Score unchanged (same physical setup).`);
     } else {
+        if (sizeUnitLabel) sizeUnitLabel.textContent = 'in';
+        if (sizeInput) {
+            sizeInput.min = '4';
+            sizeInput.max = '120';
+            sizeInput.step = '0.1';
+            const inVal = Math.round(state.size * 10) / 10;
+            sizeInput.value = inVal;
+        }
+
         if (distUnitLabel) distUnitLabel.textContent = 'in';
         if (distSlider) {
             distSlider.min = '6';
@@ -281,6 +311,8 @@ export function setUnit(u) {
             distInput.value = inVal;
             if (distSlider) distSlider.value = inVal;
         }
+
+        showToast('Imperial (in): Switched to inches.');
     }
 
     _updateDistChipsLabels();

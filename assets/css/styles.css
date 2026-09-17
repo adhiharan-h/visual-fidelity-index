@@ -30,7 +30,7 @@
     /* Text */
     --text:       #f1f5f9;
     --text-muted: #94a3b8;
-    --text-faint: #475569;
+    --text-faint: #64748b;
 
     /* Border Radii */
     --r-sm:  8px;
@@ -268,24 +268,23 @@ a:hover { text-decoration: underline; }
 .hero-orb {
     position: absolute;
     border-radius: 50%;
-    filter: blur(60px);
     opacity: 0.14;
 }
 .hero-orb-1 {
     width: 260px; height: 260px;
-    background: radial-gradient(circle, #6366f1, transparent);
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.9) 0%, rgba(99, 102, 241, 0.4) 30%, rgba(99, 102, 241, 0) 70%);
     top: -60px; left: -60px;
     animation: orb-float 8s ease-in-out infinite;
 }
 .hero-orb-2 {
     width: 200px; height: 200px;
-    background: radial-gradient(circle, #a855f7, transparent);
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.9) 0%, rgba(168, 85, 247, 0.4) 30%, rgba(168, 85, 247, 0) 70%);
     bottom: -40px; right: -40px;
     animation: orb-float 10s ease-in-out infinite reverse;
 }
 .hero-orb-3 {
     width: 160px; height: 160px;
-    background: radial-gradient(circle, #22c55e, transparent);
+    background: radial-gradient(circle, rgba(34, 197, 94, 0.9) 0%, rgba(34, 197, 94, 0.4) 30%, rgba(34, 197, 94, 0) 70%);
     top: 40%; right: 20%;
     animation: orb-float 7s ease-in-out infinite 2s;
 }
@@ -636,6 +635,15 @@ label {
     color: var(--text-muted);
     margin-bottom: 6px;
 }
+.input-group-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
 .info-btn {
     display: inline-flex;
     align-items: center;
@@ -833,6 +841,7 @@ label {
     font-family: 'Space Grotesk', sans-serif;
     font-size: 2.2rem;
     font-weight: 700;
+    font-variant-numeric: tabular-nums;
     color: white;
     line-height: 1;
     transition: color 0.4s var(--ease);
@@ -882,25 +891,29 @@ label {
 .spectrum-needle {
     position: absolute;
     top: 50%;
-    transform: translateX(-50%) translateY(-50%);
+    left: 0;
+    transform: translateX(var(--needle-pos, 0)) translateY(-50%);
     width: 14px; height: 14px;
     background: white;
     border-radius: 50%;
     border: 2px solid var(--bg);
     box-shadow: 0 0 0 2px white, 0 2px 8px rgba(0,0,0,.4);
-    transition: left 0.6s var(--ease);
+    transition: transform 0.6s var(--ease);
     z-index: 2;
+    will-change: transform;
 }
 .spectrum-needle-label {
     position: absolute;
     top: 16px;
-    transform: translateX(-50%);
+    left: 0;
+    transform: translateX(var(--needle-pos, 0)) translateX(-50%);
     font-size: 0.65rem;
     font-weight: 700;
     color: white;
     white-space: nowrap;
-    transition: left 0.6s var(--ease);
+    transition: transform 0.6s var(--ease);
     pointer-events: none;
+    will-change: transform;
 }
 .spectrum-ticks {
     display: flex;
@@ -924,7 +937,7 @@ label {
     padding: 10px 8px;
     text-align: center;
 }
-.metric-value { font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; font-weight: 700; color: white; margin-bottom: 2px; }
+.metric-value { font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; font-weight: 700; font-variant-numeric: tabular-nums; color: white; margin-bottom: 2px; }
 .metric-name  { font-size: 0.62rem; font-weight: 700; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 2px; }
 .metric-sub   { font-size: 0.62rem; color: var(--text-faint); }
 
@@ -1172,6 +1185,7 @@ label {
     font-family: 'Space Grotesk', sans-serif;
     font-size: 2.2rem;
     font-weight: 700;
+    font-variant-numeric: tabular-nums;
     color: white;
     line-height: 1;
     transition: color 0.3s;
@@ -1181,9 +1195,13 @@ label {
 .comp-bar-wrap { height: 5px; background: var(--surface-3); border-radius: 3px; overflow: hidden; }
 .comp-bar {
     height: 100%;
+    width: 100%;
     background: var(--brand);
     border-radius: 3px;
-    transition: width 0.5s var(--ease), background 0.4s;
+    transform: scaleX(var(--bar-pct, 0));
+    transform-origin: left;
+    transition: transform 0.5s var(--ease), background 0.4s;
+    will-change: transform;
 }
 .comp-bar-b { background: #f97316; }
 

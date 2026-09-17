@@ -40,7 +40,7 @@
     </noscript>
 
     <!-- Single combined stylesheet (tokens → base → components) -->
-    <link rel="stylesheet" href="assets/css/styles.css?v=2.2.0">
+    <link rel="stylesheet" href="assets/css/styles.css?v=2.3.0">
 
     <!-- Structured Data (JSON-LD) for Search Engines -->
     <script type="application/ld+json">
@@ -146,7 +146,8 @@
             <div class="calc-panel calc-inputs-panel" aria-labelledby="calc-inputs-heading">
                 <div class="calc-panel-header">
                     <h2 class="panel-title" id="calc-inputs-heading">Your Display Setup</h2>
-                    <div class="unit-toggle" role="group" aria-label="Measurement units">
+                    <div class="unit-toggle" role="group" aria-label="Measurement units"
+                        data-tip="Toggle between inches and centimeters. Automatically converts both screen size and distance to preserve your physical display setup.">
                         <button type="button" class="unit-btn active" data-unit="in" aria-pressed="true">in</button>
                         <button type="button" class="unit-btn" data-unit="cm" aria-pressed="false">cm</button>
                     </div>
@@ -182,8 +183,9 @@
                 <div class="preset-group">
                     <p class="preset-label">Or quick-load a preset device</p>
                     <div class="presets" role="group" aria-label="Quick load presets">
+                        <button class="preset-btn" data-preset="14&quot; 1080p Laptop" aria-pressed="false">14" 1080p Laptop</button>
+                        <button class="preset-btn" data-preset="24&quot; 1080p" aria-pressed="false">24" 1080p</button>
                         <button class="preset-btn active" data-preset="27&quot; 1440p" aria-pressed="true">27" 1440p</button>
-                        <button class="preset-btn" data-preset="27&quot; 1080p" aria-pressed="false">27" 1080p</button>
                         <button class="preset-btn" data-preset="27&quot; 4K" aria-pressed="false">27" 4K</button>
                         <button class="preset-btn" data-preset="iPhone 15 Pro Max" aria-pressed="false">iPhone 15 Pro</button>
                         <button class="preset-btn" data-preset="MacBook Pro 14&quot;" aria-pressed="false">MacBook Pro 14"</button>
@@ -226,11 +228,11 @@
                         <label for="size">
                             Screen Size (diagonal)
                             <button class="info-btn" aria-label="Help: Screen size"
-                                data-tip="The diagonal measurement of your screen in inches, printed on the box or listed in specs. This is the physical size, not the resolution.">?</button>
+                                data-tip="The diagonal measurement of your screen (inches or cm), printed on the box or listed in specs. This is the physical size, not the resolution.">?</button>
                         </label>
                         <div class="input-wrap">
-                            <input type="number" id="size" value="27" min="4" max="120" step="0.1" aria-label="Screen size in inches">
-                            <span class="input-unit">in</span>
+                            <input type="number" id="size" value="27" min="4" max="120" step="0.1" aria-label="Screen size">
+                            <span class="input-unit" id="sizeUnit">in</span>
                         </div>
                     </div>
 
@@ -742,7 +744,7 @@
 </div>
 
 <!-- Compiled bundle — serves via HTTP (file:// may fail due to CORS) -->
-<script defer src="assets/js/bundle.js?v=2.2.0"></script>
+<script defer src="assets/js/bundle.js?v=2.3.0"></script>
 
 </body>
 </html>

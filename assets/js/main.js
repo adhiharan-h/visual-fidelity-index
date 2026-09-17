@@ -120,7 +120,9 @@ function setupListeners() {
             const btn = e.target.closest('.preset-btn');
             if (!btn) return;
             const presetName = btn.dataset.preset || btn.textContent.trim();
-            if (presetName === '27" 1440p') setPreset(2560, 1440, 27, 24, 1, '27" 1440p');
+            if (presetName === '14" 1080p Laptop') setPreset(1920, 1080, 14, 18, 1, '14" 1080p Laptop');
+            else if (presetName === '24" 1080p') setPreset(1920, 1080, 24, 22, 1, '24" 1080p');
+            else if (presetName === '27" 1440p') setPreset(2560, 1440, 27, 24, 1, '27" 1440p');
             else if (presetName === '27" 1080p') setPreset(1920, 1080, 27, 24, 1, '27" 1080p');
             else if (presetName === '27" 4K') setPreset(3840, 2160, 27, 24, 1, '27" 4K');
             else if (presetName === 'iPhone 15 Pro Max' || presetName === 'iPhone 15 Pro') setPreset(2796, 1290, 6.7, 14, 1, 'iPhone 15 Pro Max');
