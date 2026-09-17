@@ -1,0 +1,233 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <!-- Gradients -->
+    <radialGradient id="bgGlowTop" cx="85%" cy="15%" r="60%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.22" />
+      <stop offset="60%" stop-color="#4f46e5" stop-opacity="0.05" />
+      <stop offset="100%" stop-color="#060b18" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="bgGlowBottom" cx="15%" cy="85%" r="50%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.12" />
+      <stop offset="50%" stop-color="#3b82f6" stop-opacity="0.03" />
+      <stop offset="100%" stop-color="#060b18" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="cardGlow" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.16" />
+      <stop offset="100%" stop-color="#111827" stop-opacity="0" />
+    </radialGradient>
+
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="60%" stop-color="#f1f5f9" />
+      <stop offset="100%" stop-color="#a5b4fc" />
+    </linearGradient>
+
+    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="#a855f7" />
+    </linearGradient>
+
+    <linearGradient id="cardBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255, 255, 255, 0.2)" />
+      <stop offset="100%" stop-color="rgba(99, 102, 241, 0.2)" />
+    </linearGradient>
+
+    <!-- Dot Pattern -->
+    <pattern id="dotGrid" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.2" fill="#ffffff" fill-opacity="0.045" />
+    </pattern>
+
+    <!-- Filter for subtle drop shadows -->
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="16" stdDeviation="24" flood-color="#000000" flood-opacity="0.55" />
+    </filter>
+  </defs>
+
+  <style>
+    .font-title { font-family: 'Space Grotesk', -apple-system, sans-serif; font-weight: 700; }
+    .font-body  { font-family: 'Google Sans Flex', 'Space Grotesk', -apple-system, sans-serif; }
+    .font-mono  { font-family: 'Space Grotesk', monospace; font-variant-numeric: tabular-nums; }
+  </style>
+
+  <!-- Deep Base Background -->
+  <rect width="1200" height="630" fill="#060b18" />
+
+  <!-- Ambient Glows -->
+  <rect width="1200" height="630" fill="url(#bgGlowTop)" />
+  <rect width="1200" height="630" fill="url(#bgGlowBottom)" />
+
+  <!-- Subtle Dot Grid Overlay -->
+  <rect width="1200" height="630" fill="url(#dotGrid)" />
+
+  <!-- Outer Frame Bezel -->
+  <rect x="24" y="24" width="1152" height="582" rx="20" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1.5" />
+
+  <!-- ======================================================== -->
+  <!-- HEADER BAR                                               -->
+  <!-- ======================================================== -->
+  <g transform="translate(56, 52)">
+    <!-- Logo Icon -->
+    <rect width="44" height="44" rx="12" fill="#1e1b4b" stroke="#6366f1" stroke-width="1.5" />
+    <circle cx="22" cy="22" r="9" fill="none" stroke="#ffffff" stroke-width="2.2" />
+    <circle cx="22" cy="22" r="3.5" fill="#818cf8" />
+
+    <!-- Site Title -->
+    <text x="56" y="22" fill="#ffffff" class="font-title" font-size="20" letter-spacing="0.5">VISUAL FIDELITY INDEX</text>
+    <text x="56" y="38" fill="#94a3b8" class="font-body" font-size="12" font-weight="500">Real-World Display Sharpness Standard • PPD Based</text>
+
+    <!-- Top Right Pill -->
+    <g transform="translate(860, 4)">
+      <rect width="228" height="36" rx="18" fill="rgba(255, 255, 255, 0.04)" stroke="rgba(255, 255, 255, 0.12)" stroke-width="1" />
+      <circle cx="22" cy="18" r="4.5" fill="#10b981" />
+      <text x="36" y="23" fill="#cbd5e1" class="font-title" font-size="13" font-weight="600">visualfidelityindex.com</text>
+    </g>
+  </g>
+
+  <!-- Divider Line -->
+  <line x1="56" y1="116" x2="1144" y2="116" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1" />
+
+  <!-- ======================================================== -->
+  <!-- LEFT COLUMN: HERO HEADLINE & VALUE PROP                  -->
+  <!-- ======================================================== -->
+  <g transform="translate(56, 154)">
+    <!-- Category Pill -->
+    <g>
+      <rect width="270" height="28" rx="14" fill="rgba(99, 102, 241, 0.14)" stroke="rgba(99, 102, 241, 0.35)" stroke-width="1" />
+      <text x="14" y="19" fill="#a5b4fc" class="font-title" font-size="11" font-weight="700" letter-spacing="1">🔬 ANGULAR RESOLUTION SCIENCE</text>
+    </g>
+
+    <!-- Big Bold Headline -->
+    <text x="0" y="86" fill="url(#textGrad)" class="font-title" font-size="46" font-weight="700" letter-spacing="-1">
+      Is Your Screen
+    </text>
+    <text x="0" y="142" fill="url(#textGrad)" class="font-title" font-size="46" font-weight="700" letter-spacing="-1">
+      Actually Retina?
+    </text>
+
+    <!-- Subtitle Explanation -->
+    <text x="0" y="188" fill="#94a3b8" class="font-body" font-size="16.5" font-weight="400" line-height="24">
+      PPI ignores viewing distance. VFI measures real-world
+    </text>
+    <text x="0" y="214" fill="#94a3b8" class="font-body" font-size="16.5" font-weight="400">
+      sharpness using <tspan fill="#f1f5f9" font-weight="600">Pixels Per Degree (PPD)</tspan> anchored to the
+    </text>
+    <text x="0" y="240" fill="#94a3b8" class="font-body" font-size="16.5" font-weight="400">
+      human 20/20 foveal visual acuity limit.
+    </text>
+
+    <!-- Feature Pills Row -->
+    <g transform="translate(0, 276)">
+      <!-- Pill 1 -->
+      <g>
+        <rect width="168" height="34" rx="8" fill="rgba(255, 255, 255, 0.04)" stroke="rgba(255, 255, 255, 0.09)" stroke-width="1" />
+        <text x="14" y="22" fill="#cbd5e1" class="font-title" font-size="12" font-weight="600">⚡ 1-Click Screen Detect</text>
+      </g>
+      <!-- Pill 2 -->
+      <g transform="translate(178, 0)">
+        <rect width="162" height="34" rx="8" fill="rgba(255, 255, 255, 0.04)" stroke="rgba(255, 255, 255, 0.09)" stroke-width="1" />
+        <text x="14" y="22" fill="#cbd5e1" class="font-title" font-size="12" font-weight="600">⚖️ Display Comparator</text>
+      </g>
+      <!-- Pill 3 -->
+      <g transform="translate(350, 0)">
+        <rect width="170" height="34" rx="8" fill="rgba(255, 255, 255, 0.04)" stroke="rgba(255, 255, 255, 0.09)" stroke-width="1" />
+        <text x="14" y="22" fill="#cbd5e1" class="font-title" font-size="12" font-weight="600">🎯 Optimal Distance Tool</text>
+      </g>
+    </g>
+
+    <!-- Quick Formula Teaser -->
+    <g transform="translate(0, 332)">
+      <text x="0" y="16" fill="#64748b" class="font-mono" font-size="12">
+        FORMULA: VFI = (PPD / 60 CPD) × 100 • ISO 9241-303
+      </text>
+    </g>
+  </g>
+
+  <!-- ======================================================== -->
+  <!-- RIGHT COLUMN: FLOATING PRODUCT UI SCORE CARD             -->
+  <!-- ======================================================== -->
+  <g transform="translate(628, 146)" filter="url(#cardShadow)">
+    <!-- Main Card Body -->
+    <rect width="516" height="376" rx="22" fill="#111827" stroke="url(#cardBorder)" stroke-width="1.5" />
+    <rect width="516" height="376" rx="22" fill="url(#cardGlow)" />
+
+    <!-- Card Header -->
+    <g transform="translate(26, 24)">
+      <text x="0" y="12" fill="#818cf8" class="font-title" font-size="10.5" font-weight="800" letter-spacing="1.5">LIVE FIDELITY BENCHMARK</text>
+      <text x="0" y="32" fill="#ffffff" class="font-title" font-size="18" font-weight="700">27" 4K Monitor @ 24" (60 cm) Desk Distance</text>
+    </g>
+
+    <!-- Score Section (Ring + Verdict) -->
+    <g transform="translate(26, 82)">
+      <!-- Background Circle for Ring -->
+      <circle cx="68" cy="68" r="54" fill="none" stroke="rgba(255, 255, 255, 0.06)" stroke-width="10" />
+      <!-- Animated / Progress Arc (76% of 360deg) -->
+      <circle cx="68" cy="68" r="54" fill="none" stroke="url(#ringGrad)" stroke-width="10"
+              stroke-dasharray="339.29" stroke-dashoffset="81.43" stroke-linecap="round"
+              transform="rotate(-90 68 68)" />
+
+      <!-- Score Inside Ring -->
+      <text x="68" y="74" fill="#ffffff" class="font-mono" font-size="44" font-weight="700" text-anchor="middle">114</text>
+      <text x="68" y="94" fill="#94a3b8" class="font-title" font-size="10.5" font-weight="700" text-anchor="middle" letter-spacing="1">VFI SCORE</text>
+
+      <!-- Right of Ring: Tier & Verdict -->
+      <g transform="translate(148, 12)">
+        <!-- Tier Badge Pill -->
+        <rect width="132" height="26" rx="13" fill="rgba(99, 102, 241, 0.2)" stroke="#6366f1" stroke-width="1.2" />
+        <text x="14" y="17.5" fill="#818cf8" class="font-title" font-size="11.5" font-weight="800" letter-spacing="1">RETINA GRADE</text>
+
+        <!-- Headline Verdict -->
+        <text x="0" y="56" fill="#f8fafc" class="font-body" font-size="19" font-weight="700">Zero Visible Pixelation</text>
+        <text x="0" y="78" fill="#94a3b8" class="font-body" font-size="13.5" font-weight="400">Exceeds 20/20 human eye resolution limit</text>
+        <text x="0" y="98" fill="#64748b" class="font-body" font-size="12" font-weight="500">68 PPD • 163 PPI Native • Retina threshold at ≤ 27"</text>
+      </g>
+    </g>
+
+    <!-- Horizontal Comparison Mini-Bars -->
+    <g transform="translate(26, 236)">
+      <line x1="0" y1="0" x2="464" y2="0" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1" />
+
+      <!-- Comparison Row 1: 27" 1080p -->
+      <g transform="translate(0, 16)">
+        <text x="0" y="14" fill="#cbd5e1" class="font-body" font-size="12" font-weight="600">27" 1080p</text>
+        <text x="464" y="14" fill="#f97316" class="font-mono" font-size="12.5" font-weight="700" text-anchor="end">VFI 57 • Standard</text>
+        <rect x="0" y="20" width="464" height="6" rx="3" fill="#1e293b" />
+        <rect x="0" y="20" width="176" height="6" rx="3" fill="#f97316" />
+      </g>
+
+      <!-- Comparison Row 2: 27" 1440p -->
+      <g transform="translate(0, 48)">
+        <text x="0" y="14" fill="#cbd5e1" class="font-body" font-size="12" font-weight="600">27" 1440p (Sweet Spot)</text>
+        <text x="464" y="14" fill="#22c55e" class="font-mono" font-size="12.5" font-weight="700" text-anchor="end">VFI 76 • High Fidelity</text>
+        <rect x="0" y="20" width="464" height="6" rx="3" fill="#1e293b" />
+        <rect x="0" y="20" width="235" height="6" rx="3" fill="#22c55e" />
+      </g>
+
+      <!-- Comparison Row 3: 27" 4K -->
+      <g transform="translate(0, 80)">
+        <text x="0" y="14" fill="#cbd5e1" class="font-body" font-size="12" font-weight="600">27" 4K (This Display)</text>
+        <text x="464" y="14" fill="#818cf8" class="font-mono" font-size="12.5" font-weight="700" text-anchor="end">VFI 114 • Retina Grade</text>
+        <rect x="0" y="20" width="464" height="6" rx="3" fill="#1e293b" />
+        <rect x="0" y="20" width="352" height="6" rx="3" fill="url(#ringGrad)" />
+      </g>
+    </g>
+  </g>
+
+  <!-- ======================================================== -->
+  <!-- BOTTOM FOOTER TRUST BAR                                  -->
+  <!-- ======================================================== -->
+  <g transform="translate(56, 568)">
+    <circle cx="6" cy="6" r="3" fill="#6366f1" />
+    <text x="16" y="10" fill="#94a3b8" class="font-title" font-size="12" font-weight="600">100% Free &amp; Open Source (MIT)</text>
+
+    <circle cx="250" cy="6" r="3" fill="#6366f1" />
+    <text x="260" y="10" fill="#94a3b8" class="font-title" font-size="12" font-weight="600">Zero Ads, Zero Affiliates, Zero Tracking</text>
+
+    <circle cx="584" cy="6" r="3" fill="#6366f1" />
+    <text x="594" y="10" fill="#94a3b8" class="font-title" font-size="12" font-weight="600">ISO 9241-303 Foveal Acuity Standard</text>
+
+    <circle cx="910" cy="6" r="3" fill="#10b981" />
+    <text x="920" y="10" fill="#10b981" class="font-title" font-size="12" font-weight="600">Instant Static Load (&lt;40ms)</text>
+  </g>
+</svg>
