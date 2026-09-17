@@ -933,36 +933,36 @@ label {
 .spectrum-needle {
     position: absolute;
     top: 50%;
-    left: 0;
-    transform: translateX(var(--needle-pos, 0)) translateY(-50%);
+    left: clamp(7px, var(--needle-pos, 0%), calc(100% - 7px));
+    transform: translate(-50%, -50%);
     width: 14px; height: 14px;
     background: white;
     border-radius: 50%;
     border: 2px solid var(--bg);
     box-shadow: 0 0 0 2px white, 0 2px 8px rgba(0,0,0,.4);
-    transition: transform 0.6s var(--ease);
+    transition: left 0.5s var(--ease), border-color 0.4s ease, box-shadow 0.4s ease;
     z-index: 2;
-    will-change: transform;
+    will-change: left;
 }
 .spectrum-needle-label {
     position: absolute;
     top: 16px;
-    left: 0;
-    transform: translateX(var(--needle-pos, 0)) translateX(-50%);
+    left: clamp(12px, var(--needle-pos, 0%), calc(100% - 12px));
+    transform: translateX(-50%);
     font-size: 0.65rem;
     font-weight: 700;
     color: white;
     white-space: nowrap;
-    transition: transform 0.6s var(--ease);
+    transition: left 0.5s var(--ease), color 0.4s ease;
     pointer-events: none;
-    will-change: transform;
+    will-change: left;
 }
 .spectrum-ticks {
     display: flex;
     justify-content: space-between;
     font-size: 0.65rem;
     color: var(--text-faint);
-    margin-top: 20px;
+    margin-top: 22px;
 }
 
 /* ---- Metric Cards — 2x2 grid ---- */

@@ -115,7 +115,7 @@ export function calculate(animate = false) {
     _updateRing(vfi, tier);
 
     // --- Update spectrum needle ---
-    _updateSpectrum(vfi);
+    _updateSpectrum(vfi, tier);
 
     // --- Update metric cards ---
     if (animate) {
@@ -178,15 +178,30 @@ function _updateRing(vfi, tier) {
     ring.style.stroke           = getTierColor(tier.cls);
 }
 
-function _updateSpectrum(vfi) {
-    const pct    = Math.min(Math.max(vfi / 150, 0), 1) * 100;
+function _updateSpectrum(vfi, tier) {
+    const pct = Math.min(Math.max(vfi / 150, 0), 1) * 100;
     const needle = document.getElementById('spectrumNeedle');
     const label  = document.getElementById('spectrumLabel');
 
-    if (needle) needle.style.setProperty('--needle-pos', `${pct}%`);
+    const leftVal = `clamp(7px, ${pct.toFixed(2)}%, calc(100% - 7px))`;
+    const labelLeftVal = `clamp(12px, ${pct.toFixed(2)}%, calc(100% - 12px))`;
+
+    if (needle) {
+        needle.style.left = leftVal;
+        needle.style.setProperty('--needle-pos', `${pct.toFixed(2)}%`);
+        if (tier) {
+            const color = getTierColor(tier.cls);
+            needle.style.borderColor = color;
+            needle.style.boxShadow = `0 0 0 2px white, 0 0 10px ${color}80`;
+        }
+    }
     if (label) {
-        label.style.setProperty('--needle-pos', `${pct}%`);
+        label.style.left = labelLeftVal;
+        label.style.setProperty('--needle-pos', `${pct.toFixed(2)}%`);
         label.textContent = Math.round(vfi);
+        if (tier) {
+            label.style.color = getTierColor(tier.cls);
+        }
     }
 }
 
