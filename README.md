@@ -3,6 +3,7 @@
 > **An open, vendor-neutral standard for measuring display sharpness as humans actually experience it.**
 
 [![Open Standard](https://img.shields.io/badge/standard-open-blue)](docs/METHODOLOGY.md)
+[![Deep Dive](https://img.shields.io/badge/deep--dive-how--it--works-6366f1)](docs/HOW_IT_WORKS.md)
 [![No Affiliates](https://img.shields.io/badge/affiliates-none-green)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
@@ -72,6 +73,7 @@ vfi/
 │       └── devices.js      # Device data (pure data, easy to extend)
 │
 └── docs/
+    ├── HOW_IT_WORKS.md     # Visual science deep dive & buyer guide
     └── METHODOLOGY.md      # Full formula derivation and scientific references
 ```
 
