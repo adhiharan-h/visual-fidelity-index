@@ -218,7 +218,7 @@ export async function renderShareCard(canvas) {
     // Spec Box 1: Hardware Setup
     const isMetric = state.unit === 'cm';
     const aspect = _computeAspectRatio(w, h);
-    const sizeFormatted = isMetric ? `${Math.round(size * 2.54 * 10) / 10} cm (${size}")` : `${size}"`;
+    const sizeFormatted = `${size}"`;
     _drawSpecBox(ctx, startX, cardY, cardW, cardH, 'DISPLAY SETUP', `${w} × ${h}`, `${sizeFormatted} screen (${aspect})`);
 
     // Spec Box 2: Distance

@@ -17,14 +17,14 @@
     <meta property="og:description" content="Stop chasing PPI. Calculate how sharp your screen actually looks at your real viewing distance.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://visualfidelityindex.com/">
-    <meta property="og:image" content="https://visualfidelityindex.com/assets/og-image.jpg?v=2.3.2">
+    <meta property="og:image" content="https://visualfidelityindex.com/assets/og-image.jpg?v=2.3.3">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="Visual Fidelity Index display sharpness benchmark showing Retina Grade score of 114">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Visual Fidelity Index — Does Your Screen Pass the Sharpness Test?">
     <meta name="twitter:description" content="Stop chasing PPI. Calculate how sharp your screen actually looks at your real viewing distance.">
-    <meta name="twitter:image" content="https://visualfidelityindex.com/assets/og-image.jpg?v=2.3.2">
+    <meta name="twitter:image" content="https://visualfidelityindex.com/assets/og-image.jpg?v=2.3.3">
 
     <!-- Favicon & Mobile Touch Icons (Google Search, PWA & Browsers) -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -43,7 +43,7 @@
     </noscript>
 
     <!-- Single combined stylesheet (tokens → base → components) -->
-    <link rel="stylesheet" href="assets/css/styles.css?v=2.3.2">
+    <link rel="stylesheet" href="assets/css/styles.css?v=2.3.3">
 
     <!-- Structured Data (JSON-LD) for Search Engines -->
     <script type="application/ld+json">
@@ -150,7 +150,7 @@
                 <div class="calc-panel-header">
                     <h2 class="panel-title" id="calc-inputs-heading">Your Display Setup</h2>
                     <div class="unit-toggle" role="group" aria-label="Measurement units"
-                        data-tip="Toggle between inches and centimeters. Automatically converts both screen size and distance to preserve your physical display setup.">
+                        data-tip="Toggle viewing distance between inches and centimeters (screen diagonal remains in standard inches).">
                         <button type="button" class="unit-btn active" data-unit="in" aria-pressed="true">in</button>
                         <button type="button" class="unit-btn" data-unit="cm" aria-pressed="false">cm</button>
                     </div>
@@ -228,9 +228,9 @@
                     <!-- Screen size -->
                     <div class="input-group">
                         <label for="size">
-                            Screen Size (diagonal)
+                            Screen Size (diagonal) <span id="sizeMetricHint" class="size-metric-hint" style="display:none;"></span>
                             <button class="info-btn" aria-label="Help: Screen size"
-                                data-tip="The diagonal measurement of your screen (inches or cm), printed on the box or listed in specs. This is the physical size, not the resolution.">?</button>
+                                data-tip="The diagonal measurement of your screen in inches (standard industry measurement worldwide, e.g. 24&quot;, 27&quot;, 34&quot;, 55&quot;). Physical size, not resolution.">?</button>
                         </label>
                         <div class="input-wrap">
                             <input type="number" id="size" value="27" min="4" max="120" step="0.1" aria-label="Screen size">
@@ -746,7 +746,7 @@
 </div>
 
 <!-- Compiled bundle — serves via HTTP (file:// may fail due to CORS) -->
-<script defer src="assets/js/bundle.js?v=2.3.2"></script>
+<script defer src="assets/js/bundle.js?v=2.3.3"></script>
 
 </body>
 </html>

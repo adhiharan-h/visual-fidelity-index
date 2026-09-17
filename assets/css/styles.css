@@ -670,6 +670,13 @@ label {
     color: var(--text-muted);
     margin-bottom: 6px;
 }
+.size-metric-hint {
+    font-size: 0.73rem;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: normal;
+    text-transform: none;
+}
 .input-group-label {
     display: flex;
     align-items: center;

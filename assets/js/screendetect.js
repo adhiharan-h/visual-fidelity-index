@@ -184,7 +184,7 @@ export function detectScreen() {
         }
 
         const isMetric = state.unit === 'cm';
-        const sizeDisplay = isMetric ? `${Math.round(size * 2.54 * 10) / 10} cm` : `${size}"`;
+        const sizeDisplay = `${size}"`;
         const distDisplay = isMetric ? `${Math.round(dist * 2.54)} cm` : `${dist}"`;
         const scaleLabel = scaleVal !== 1 ? ` @ ${scaleVal}×` : '';
         showToast(`Detected: ${w}×${h}${scaleLabel} (${name}) — ${sizeDisplay} screen, ${distDisplay} dist.`);

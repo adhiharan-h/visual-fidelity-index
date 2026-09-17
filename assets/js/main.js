@@ -318,6 +318,8 @@ function init() {
             const slider = document.getElementById('dist-slider');
             if (slider) slider.value = d;
             state.presetName = `${w}×${h} / ${s}"`;
+            state.size = s;
+            state.dist = d;
         }
         if (sc && !isNaN(sc) && sc >= 1) {
             state.scale = sc;

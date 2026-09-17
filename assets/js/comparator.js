@@ -51,7 +51,7 @@ export function calcComparatorB() {
     const rawDist = parseFloat(document.getElementById('cd').value);
 
     const isMetric = state.unit === 'cm';
-    const size = isMetric ? (rawSize / 2.54) : rawSize;
+    const size = rawSize; // Screen size is ALWAYS in standard inches
     const dist = isMetric ? (rawDist / 2.54) : rawDist;
 
     if (!w || !h || !size || !dist || w < 1 || h < 1 || size < 0.5 || dist < 0.5) {

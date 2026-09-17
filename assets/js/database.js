@@ -103,7 +103,7 @@ export function renderDB(force = false) {
 
     tbody.innerHTML = rows.map(d => {
         const rowDistFormatted = isMetric ? `${Math.round(d.evalDist * 2.54)} cm` : `${d.evalDist}"`;
-        const rowSizeFormatted = isMetric ? `${Math.round(d.size * 2.54 * 10) / 10} cm` : `${d.size}"`;
+        const rowSizeFormatted = `${d.size}"`;
         return `
         <tr
             data-w="${d.w}"

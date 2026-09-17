@@ -52,8 +52,9 @@ export function calculate(animate = false) {
     const rawDist = parseFloat(document.getElementById('dist').value);
     const sc      = state.scale;
 
-    // Convert both size and distance to inches for standardized internal physics calculation
-    const size = state.unit === 'cm' ? (rawSize / 2.54) : rawSize;
+    // Screen size is always entered and interpreted in standard diagonal inches
+    const size = rawSize;
+    // Viewing distance respects active unit toggle ('cm' converted to inches for internal physics calculation)
     const dist = state.unit === 'cm' ? (rawDist / 2.54) : rawDist;
 
     // Guard: skip if any input is missing or nonsensical
@@ -86,6 +87,17 @@ export function calculate(animate = false) {
     const distVarText = isMetric ? '±8 cm' : '±3"';
     const optDistDisplay = isMetric ? `${Math.round(optDist * 2.54)} cm` : `${Math.round(optDist)}"`;
     const currentDistDisplay = isMetric ? `${Math.round(dist * 2.54)} cm` : `${Math.round(dist)}"`;
+
+    // Dynamic screen size metric hint (~XX cm)
+    const sizeHintEl = document.getElementById('sizeMetricHint');
+    if (sizeHintEl) {
+        if (isMetric && size) {
+            sizeHintEl.textContent = `(~${Math.round(size * 2.54)} cm)`;
+            sizeHintEl.style.display = 'inline';
+        } else {
+            sizeHintEl.style.display = 'none';
+        }
+    }
 
     // --- Update score display ---
     if (animate) {
@@ -215,12 +227,11 @@ function _updateMathPanel(w, h, size, dist, ppi, effPPI, sc, activePPD, vfi, con
  */
 export function setPreset(w, h, s, d, sc = 1, name = '') {
     const isMetric = state.unit === 'cm';
-    const sizeVal = isMetric ? Math.round(s * 2.54 * 10) / 10 : s;
     const distVal = isMetric ? Math.round(d * 2.54) : d;
 
     document.getElementById('width').value  = w;
     document.getElementById('height').value = h;
-    document.getElementById('size').value   = sizeVal;
+    document.getElementById('size').value   = s;
     document.getElementById('dist').value   = distVal;
     document.getElementById('dist-slider').value = distVal;
     state.presetName = name || `${w}×${h} / ${s}"`;
@@ -243,6 +254,7 @@ export function setPreset(w, h, s, d, sc = 1, name = '') {
 
 /**
  * Switch measurement unit between 'in' (inches) and 'cm' (centimeters).
+ * Screen size diagonal remains in standard inches; viewing distance toggles between in and cm.
  * @param {'in'|'cm'} u
  */
 export function setUnit(u) {
@@ -260,15 +272,21 @@ export function setUnit(u) {
     const distInput = document.getElementById('dist');
     const distSlider = document.getElementById('dist-slider');
     const distUnitLabel = document.getElementById('distUnit');
+    const sizeHintEl = document.getElementById('sizeMetricHint');
+
+    // Screen size always remains in inches
+    if (sizeUnitLabel) sizeUnitLabel.textContent = 'in';
+    if (sizeInput) {
+        sizeInput.min = '4';
+        sizeInput.max = '120';
+        sizeInput.step = '0.1';
+        sizeInput.value = Math.round(state.size * 10) / 10;
+    }
 
     if (u === 'cm') {
-        if (sizeUnitLabel) sizeUnitLabel.textContent = 'cm';
-        if (sizeInput) {
-            sizeInput.min = '10';
-            sizeInput.max = '300';
-            sizeInput.step = '0.5';
-            const cmVal = Math.round(state.size * 2.54 * 10) / 10;
-            sizeInput.value = cmVal;
+        if (sizeHintEl) {
+            sizeHintEl.textContent = `(~${Math.round(state.size * 2.54)} cm)`;
+            sizeHintEl.style.display = 'inline';
         }
 
         if (distUnitLabel) distUnitLabel.textContent = 'cm';
@@ -284,19 +302,21 @@ export function setUnit(u) {
             if (distSlider) distSlider.value = cmVal;
         }
 
-        const sIn = Math.round(state.size * 10) / 10;
-        const sCm = Math.round(state.size * 2.54 * 10) / 10;
+        // Convert Display B distance in comparator if present
+        const cdInput = document.getElementById('cd');
+        if (cdInput) {
+            const currentCdIn = parseFloat(cdInput.value);
+            if (!isNaN(currentCdIn) && currentCdIn > 0) {
+                cdInput.value = Math.round(currentCdIn * 2.54);
+            }
+        }
+
         const dIn = Math.round(state.dist);
         const dCm = Math.round(state.dist * 2.54);
-        showToast(`Metric (cm): ${sIn}" → ${sCm}cm size, ${dIn}" → ${dCm}cm distance. Score unchanged (same physical setup).`);
+        showToast(`Metric mode: Viewing distance in cm (${dIn}" → ${dCm} cm). Screen diagonal remains in standard inches.`);
     } else {
-        if (sizeUnitLabel) sizeUnitLabel.textContent = 'in';
-        if (sizeInput) {
-            sizeInput.min = '4';
-            sizeInput.max = '120';
-            sizeInput.step = '0.1';
-            const inVal = Math.round(state.size * 10) / 10;
-            sizeInput.value = inVal;
+        if (sizeHintEl) {
+            sizeHintEl.style.display = 'none';
         }
 
         if (distUnitLabel) distUnitLabel.textContent = 'in';
@@ -312,11 +332,21 @@ export function setUnit(u) {
             if (distSlider) distSlider.value = inVal;
         }
 
-        showToast('Imperial (in): Switched to inches.');
+        // Convert Display B distance in comparator back to inches if present
+        const cdInput = document.getElementById('cd');
+        if (cdInput) {
+            const currentCdCm = parseFloat(cdInput.value);
+            if (!isNaN(currentCdCm) && currentCdCm > 0) {
+                cdInput.value = Math.round(currentCdCm / 2.54);
+            }
+        }
+
+        showToast('Imperial mode: Viewing distance switched to inches.');
     }
 
     _updateDistChipsLabels();
     calculate(false);
+    calcComparatorB();
 }
 
 /**
