@@ -1168,6 +1168,8 @@ label {
 }
 
 .comp-panel {
+    flex: 1 1 0;
+    min-width: 0;
     padding: 16px 14px;
     display: flex;
     flex-direction: column;
@@ -1177,6 +1179,7 @@ label {
 
 /* VS divider — horizontal when stacked */
 .comp-vs {
+    flex: 0 0 auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1247,22 +1250,23 @@ label {
 }
 
 .comp-metrics-mini { display: flex; gap: 12px; font-size: 0.75rem; color: var(--text-faint); }
-.comp-note         { font-size: 0.7rem; color: var(--text-faint); font-style: italic; }
+.comp-note         { font-size: 0.72rem; color: var(--text-faint); font-style: italic; margin-top: auto; }
 
-.comp-inputs-mini  { display: flex; flex-direction: column; gap: 6px; }
-.comp-input-row    { display: flex; align-items: center; gap: 6px; }
+.comp-inputs-mini  { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.comp-input-row    { display: flex; align-items: center; gap: 8px; width: 100%; }
 .comp-input-row label {
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     font-weight: 700;
     color: var(--text-faint);
-    width: 26px;
+    width: 32px;
     flex-shrink: 0;
     margin: 0;
 }
 .comp-input {
-    flex: 1;
+    flex: 1 1 0;
     min-width: 0;
-    padding: 7px 8px;
+    width: 100%;
+    padding: 7px 10px;
     background: var(--bg-alt);
     border: 1px solid var(--border);
     color: var(--text);
@@ -1291,14 +1295,22 @@ label {
 @media (min-width: 640px) {
     .section-compare { padding: 56px 0; }
     .comparator-wrap {
+        display: flex;
         flex-direction: row;
         align-items: stretch;
+        width: 100%;
         border-radius: var(--r-xl);
         margin-bottom: 20px;
     }
-    .comp-panel { padding: 24px; gap: 14px; }
+    .comp-panel {
+        flex: 1 1 0;
+        min-width: 0;
+        padding: 24px;
+        gap: 14px;
+    }
     .comp-vs {
-        padding: 0 16px;
+        flex: 0 0 auto;
+        padding: 0 20px;
         border-top: none;
         border-bottom: none;
         border-left: 1px solid var(--border);
