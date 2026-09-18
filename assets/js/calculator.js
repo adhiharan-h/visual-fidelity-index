@@ -67,18 +67,16 @@ export function calculate(animate = false) {
     _debouncedSyncUrl(w, h, size, dist, sc);
 
     // --- Formula ---
-    const ppi     = computePPI(w, h, size);
-    const effPPI  = ppi / sc;
+    const ppi = computePPI(w, h, size);
 
     // Horizontal / vertical PPD split
     const { ppiH, ppiV } = computePPIHV(w, h, size);
-    const ppdH = computePPD(dist, ppiH / sc);
-    const ppdV = computePPD(dist, ppiV / sc);
 
-    const activePPD = computeEffectivePPD(dist, effPPI, ppiH / sc, ppiV / sc, state.useCase);
+    // Modern OSes render vector UI and text at native panel PPI; sc parameter accounts for fractional scaling
+    const activePPD = computeEffectivePPD(dist, ppi, ppiH, ppiV, state.useCase, sc);
     const vfi       = computeVFI(activePPD);
-    const conf      = computeConfidence(effPPI);
-    const optDist   = computeOptimalDist(effPPI);
+    const conf      = computeConfidence(ppi);
+    const optDist   = computeOptimalDist(ppi);
 
     const tier = getTier(vfi);
 
@@ -117,28 +115,35 @@ export function calculate(animate = false) {
     // --- Update spectrum needle ---
     _updateSpectrum(vfi, tier);
 
+    // --- Update tier legend highlight ---
+    document.querySelectorAll('.tier-legend-item').forEach(item => {
+        const active = item.dataset.tierCls === tier.cls;
+        item.classList.toggle('active', active);
+    });
+
     // --- Update metric cards ---
+    const workspaceStr = `${Math.round(w / sc)}×${Math.round(h / sc)}`;
     if (animate) {
         animateNum('ppdVal', Math.round(activePPD));
         animateNum('ppiVal', Math.round(ppi));
-        animateNum('effPpiVal', Math.round(effPPI));
     } else {
         const ppdEl = document.getElementById('ppdVal');
         if (ppdEl) ppdEl.textContent = Math.round(activePPD);
         const ppiEl = document.getElementById('ppiVal');
         if (ppiEl) ppiEl.textContent = Math.round(ppi);
-        const effEl = document.getElementById('effPpiVal');
-        if (effEl) effEl.textContent = Math.round(effPPI);
     }
+    const effEl = document.getElementById('effWorkspaceVal') || document.getElementById('effPpiVal');
+    if (effEl) effEl.textContent = workspaceStr;
+
     document.getElementById('ppdVert').textContent = 'Pixels per degree';
-    document.getElementById('effPpiSub').textContent = sc !== 1 ? `After ${sc}× scaling` : 'Native (no scaling)';
+    document.getElementById('effPpiSub').textContent = sc !== 1 ? `${sc}× HiDPI (${Math.round(ppi)} PPI native)` : 'Native (1:1 pixel grid)';
     document.getElementById('optimalDist').textContent = optDistDisplay;
     document.getElementById('optimalHint').textContent = optDist <= dist
         ? "You're past Retina threshold!"
         : `Sit ≤${optDistDisplay} for Retina grade`;
 
     // --- Update math derivation panel ---
-    _updateMathPanel(w, h, size, dist, ppi, effPPI, sc, activePPD, vfi, conf);
+    _updateMathPanel(w, h, size, dist, ppi, sc, activePPD, vfi, conf);
 
     // --- Apply score tier theme ---
     _updateTheme(tier.cls);
@@ -211,7 +216,7 @@ function _updateTheme(cls) {
     panel.className = `calc-panel calc-results-panel ${cls}`;
 }
 
-function _updateMathPanel(w, h, size, dist, ppi, effPPI, sc, activePPD, vfi, conf) {
+function _updateMathPanel(w, h, size, dist, ppi, sc, activePPD, vfi, conf) {
     const mathPPI    = document.getElementById('mathPPI');
     const mathEffPPI = document.getElementById('mathEffPPI');
     const mathPPD    = document.getElementById('mathPPD');
@@ -219,12 +224,14 @@ function _updateMathPanel(w, h, size, dist, ppi, effPPI, sc, activePPD, vfi, con
     const mathConf   = document.getElementById('mathConf');
 
     if (mathPPI)    mathPPI.textContent    = `PPI = √(${w}² + ${h}²) / ${size} = ${ppi.toFixed(1)} px/in`;
-    if (mathEffPPI) mathEffPPI.textContent = `Eff.PPI = ${ppi.toFixed(1)} / ${sc} = ${effPPI.toFixed(1)} px/in`;
+    if (mathEffPPI) mathEffPPI.textContent = sc !== 1
+        ? `Workspace = ${Math.round(w / sc)}×${Math.round(h / sc)} @ ${sc}× HiDPI (Full ${ppi.toFixed(1)} PPI vector clarity)`
+        : `Workspace = ${w}×${h} Native (1:1 pixel grid, ${ppi.toFixed(1)} PPI)`;
     if (mathPPD)    mathPPD.textContent    = `PPD (${state.useCase}) = ${activePPD.toFixed(1)}`;
     if (mathVFI)    mathVFI.textContent    = `VFI = (${activePPD.toFixed(1)} / 60) × 100 = ${vfi.toFixed(1)}`;
 
-    const sigPPD = 2 * 3 * effPPI * Math.tan(0.5 * Math.PI / 180);
-    if (mathConf)   mathConf.textContent   = `σ_PPD = 2 × 3 × ${effPPI.toFixed(1)} × tan(0.5°) = ${sigPPD.toFixed(1)} → ±${conf.toFixed(0)} VFI`;
+    const sigPPD = 2 * 3 * ppi * Math.tan(0.5 * Math.PI / 180);
+    if (mathConf)   mathConf.textContent   = `σ_PPD = 2 × 3 × ${ppi.toFixed(1)} × tan(0.5°) = ${sigPPD.toFixed(1)} → ±${conf.toFixed(0)} VFI`;
 }
 
 // ---------------------------------------------------------------------------

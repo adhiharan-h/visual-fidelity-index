@@ -43,7 +43,7 @@
     </noscript>
 
     <!-- Single combined stylesheet (tokens → base → components) -->
-    <link rel="stylesheet" href="assets/css/styles.css?v=2.3.4">
+    <link rel="stylesheet" href="assets/css/styles.css?v=2.3.5">
 
     <!-- Structured Data (JSON-LD) for Search Engines -->
     <script type="application/ld+json">
@@ -189,6 +189,7 @@
                         <button class="preset-btn" data-preset="24&quot; 1080p" aria-pressed="false">24" 1080p</button>
                         <button class="preset-btn active" data-preset="27&quot; 1440p" aria-pressed="true">27" 1440p</button>
                         <button class="preset-btn" data-preset="27&quot; 4K" aria-pressed="false">27" 4K</button>
+                        <button class="preset-btn" data-preset="32&quot; 4K" aria-pressed="false">32" 4K</button>
                         <button class="preset-btn" data-preset="iPhone 15 Pro Max" aria-pressed="false">iPhone 15 Pro</button>
                         <button class="preset-btn" data-preset="MacBook Pro 14&quot;" aria-pressed="false">MacBook Pro 14"</button>
                         <button class="preset-btn" data-preset="65&quot; 4K TV" aria-pressed="false">65" 4K TV</button>
@@ -339,6 +340,40 @@
                     </div>
                 </div>
 
+                <!-- Tier scale reference legend -->
+                <div class="tier-legend" id="tierLegend" aria-label="VFI Tier Reference Scale">
+                    <div class="tier-legend-item" data-tier-cls="theme-pixelated">
+                        <span class="tier-legend-dot"></span>
+                        <span class="tier-legend-name">Pixelated</span>
+                        <span class="tier-legend-range">&lt;33</span>
+                    </div>
+                    <div class="tier-legend-item" data-tier-cls="theme-low">
+                        <span class="tier-legend-dot"></span>
+                        <span class="tier-legend-name">Low</span>
+                        <span class="tier-legend-range">33–54</span>
+                    </div>
+                    <div class="tier-legend-item" data-tier-cls="theme-standard">
+                        <span class="tier-legend-dot"></span>
+                        <span class="tier-legend-name">Standard</span>
+                        <span class="tier-legend-range">55–74</span>
+                    </div>
+                    <div class="tier-legend-item" data-tier-cls="theme-high">
+                        <span class="tier-legend-dot"></span>
+                        <span class="tier-legend-name">High</span>
+                        <span class="tier-legend-range">75–99</span>
+                    </div>
+                    <div class="tier-legend-item" data-tier-cls="theme-retina">
+                        <span class="tier-legend-dot"></span>
+                        <span class="tier-legend-name">Retina</span>
+                        <span class="tier-legend-range">100–132</span>
+                    </div>
+                    <div class="tier-legend-item" data-tier-cls="theme-overkill">
+                        <span class="tier-legend-dot"></span>
+                        <span class="tier-legend-name">Overkill</span>
+                        <span class="tier-legend-range">133+</span>
+                    </div>
+                </div>
+
                 <!-- Metric cards -->
                 <div class="metrics-grid" aria-label="Detailed metrics">
                     <div class="metric-card">
@@ -357,9 +392,9 @@
                         <div class="metric-sub"  id="optimalHint">Sit ≤31" for Retina grade</div>
                     </div>
                     <div class="metric-card">
-                        <div class="metric-value" id="effPpiVal">109</div>
-                        <div class="metric-name">Effective PPI</div>
-                        <div class="metric-sub"  id="effPpiSub">Native (no scaling)</div>
+                        <div class="metric-value" id="effWorkspaceVal">2560×1440</div>
+                        <div class="metric-name">UI Workspace</div>
+                        <div class="metric-sub"  id="effPpiSub">Native (1:1 pixel grid)</div>
                     </div>
                 </div>
 
@@ -746,7 +781,7 @@
 </div>
 
 <!-- Compiled bundle — serves via HTTP (file:// may fail due to CORS) -->
-<script defer src="assets/js/bundle.js?v=2.3.4"></script>
+<script defer src="assets/js/bundle.js?v=2.3.5"></script>
 
 </body>
 </html>

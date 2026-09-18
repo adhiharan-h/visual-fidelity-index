@@ -88,9 +88,8 @@ export function calcComparatorB() {
     // Apply the same scaling factor as the main calculator
     const sc   = state.scale;
     const ppi  = computePPI(w, h, size);
-    const effPPI = ppi / sc;
     const { ppiH, ppiV } = computePPIHV(w, h, size);
-    const activePPD = computeEffectivePPD(dist, effPPI, ppiH / sc, ppiV / sc, state.useCase);
+    const activePPD = computeEffectivePPD(dist, ppi, ppiH, ppiV, state.useCase, sc);
     const vfi  = computeVFI(activePPD);
     const tier = getTier(vfi);
 

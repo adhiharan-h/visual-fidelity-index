@@ -62,17 +62,36 @@ export function computePPD(dist, ppi) {
 }
 
 /**
- * Calculate effective PPD based on primary use case weighting.
+ * Scaling fidelity factor for OS display scaling.
+ * Modern OSes (DirectWrite, Quartz) render vector text and UI elements at the
+ * full native physical pixel grid. Integer scaling (1× native, 2× HiDPI) preserves
+ * 100% pixel-perfect vector rasterization. Non-integer fractional scaling (1.25×, 1.5×)
+ * introduces subtle subpixel grid interpolation (~3–4% micro-contrast reduction).
+ * @param {number} [sc=1] — Scale factor (1, 1.25, 1.5, 2)
+ * @returns {number} Fidelity multiplier (0.96 – 1.0)
+ */
+export function getScalingFidelityFactor(sc = 1) {
+    if (sc === 1.25) return 0.96;
+    if (sc === 1.5)  return 0.97;
+    return 1.0;
+}
+
+/**
+ * Calculate effective PPD based on primary use case weighting and scaling factor.
  * @param {number} dist    — Viewing distance (inches)
- * @param {number} ppi     — Diagonal effective PPI
- * @param {number} ppiH    — Horizontal effective PPI
- * @param {number} ppiV    — Vertical effective PPI
- * @param {string} useCase — 'balanced' | 'text' | 'gaming' | 'design' | 'video'
+ * @param {number} ppi     — Diagonal physical PPI
+ * @param {number} ppiH    — Horizontal physical PPI
+ * @param {number} ppiV    — Vertical physical PPI
+ * @param {string} [useCase='balanced'] — 'balanced' | 'text' | 'gaming' | 'design' | 'video'
+ * @param {number} [sc=1]  — Display scaling factor
  * @returns {number} Effective PPD for VFI scoring
  */
-export function computeEffectivePPD(dist, ppi, ppiH, ppiV, useCase = 'balanced') {
-    const ppd = computePPD(dist, ppi);
+export function computeEffectivePPD(dist, ppi, ppiH, ppiV, useCase = 'balanced', sc = 1) {
+    let ppd = computePPD(dist, ppi);
     if (!ppd) return 0;
+
+    // Apply fractional scaling fidelity factor
+    ppd *= getScalingFidelityFactor(sc);
 
     // Task-specific acuity calibration factors:
     // - text: fine subpixel glyphs & serifs demand higher acuity (~10% higher PPD requirement)

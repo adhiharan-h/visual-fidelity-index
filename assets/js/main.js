@@ -125,6 +125,7 @@ function setupListeners() {
             else if (presetName === '27" 1440p') setPreset(2560, 1440, 27, 24, 1, '27" 1440p');
             else if (presetName === '27" 1080p') setPreset(1920, 1080, 27, 24, 1, '27" 1080p');
             else if (presetName === '27" 4K') setPreset(3840, 2160, 27, 24, 1, '27" 4K');
+            else if (presetName === '32" 4K') setPreset(3840, 2160, 32, 26, 1, '32" 4K');
             else if (presetName === 'iPhone 15 Pro Max' || presetName === 'iPhone 15 Pro') setPreset(2796, 1290, 6.7, 14, 1, 'iPhone 15 Pro Max');
             else if (presetName.includes('MacBook')) setPreset(3024, 1964, 14.2, 18, 1, 'MacBook Pro 14"');
             else if (presetName.includes('65')) setPreset(3840, 2160, 65, 84, 1, '65" 4K TV');

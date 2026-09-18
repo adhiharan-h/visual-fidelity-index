@@ -56,12 +56,11 @@ export async function renderShareCard(canvas) {
     const useCase = state.useCase || 'balanced';
 
     const ppi = computePPI(w, h, size);
-    const effPPI = ppi / sc;
     const { ppiH, ppiV } = computePPIHV(w, h, size);
-    const activePPD = computeEffectivePPD(dist, effPPI, ppiH / sc, ppiV / sc, useCase);
+    const activePPD = computeEffectivePPD(dist, ppi, ppiH, ppiV, useCase, sc);
     const vfi = computeVFI(activePPD);
     const tier = getTier(vfi);
-    const optDist = computeOptimalDist(effPPI);
+    const optDist = computeOptimalDist(ppi);
     const tierColor = getTierColor(tier.cls);
 
     // 1. Deep space background
@@ -227,7 +226,8 @@ export async function renderShareCard(canvas) {
     _drawSpecBox(ctx, startX + cardW + gap, cardY, cardW, cardH, 'VIEWING DISTANCE', distText, `Retina threshold at ≤ ${optDistText}`);
 
     // Spec Box 3: Sharpness / Acuity
-    _drawSpecBox(ctx, startX + (cardW + gap) * 2, cardY, cardW, cardH, 'ANGULAR RESOLUTION', `${Math.round(activePPD)} PPD`, `${Math.round(ppi)} physical PPI • ${Math.round(effPPI)} eff.`);
+    const scalingLabel = sc !== 1 ? `${sc}× HiDPI` : 'Native 1:1';
+    _drawSpecBox(ctx, startX + (cardW + gap) * 2, cardY, cardW, cardH, 'ANGULAR RESOLUTION', `${Math.round(activePPD)} PPD`, `${Math.round(ppi)} physical PPI • ${scalingLabel}`);
 
     // 6. Bottom Footer
     ctx.fillStyle = '#64748b';
