@@ -197,7 +197,7 @@ function _updateSpectrum(vfi, tier) {
         if (tier) {
             const color = getTierColor(tier.cls);
             needle.style.borderColor = color;
-            needle.style.boxShadow = `0 0 0 2px white, 0 0 10px ${color}80`;
+            needle.style.boxShadow = '0 1px 4px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.8)';
         }
     }
     if (label) {

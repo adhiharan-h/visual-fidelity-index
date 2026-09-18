@@ -118,7 +118,7 @@ function _setPanel(id, vfi, tier, ppd, ppi) {
     if (scoreEl) {
         scoreEl.textContent = Math.round(vfi);
         scoreEl.style.color = color;
-        scoreEl.style.textShadow = `0 0 20px ${color}40`;
+        scoreEl.style.textShadow = 'none';
     }
     const tierEl = document.getElementById(`compTier${suffix}`);
     if (tierEl) {
@@ -130,7 +130,7 @@ function _setPanel(id, vfi, tier, ppd, ppi) {
     if (bar) {
         bar.style.setProperty('--bar-pct', Math.min(vfi / 150, 1));
         bar.style.background = color;
-        bar.style.boxShadow = `0 0 8px ${color}60`;
+        bar.style.boxShadow = 'none';
     }
 
     const ppdEl = document.getElementById(`compPPD${suffix}`);

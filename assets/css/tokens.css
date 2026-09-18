@@ -1,16 +1,15 @@
 /* ===========================================
-   VFI — Design Tokens
+   VFI — Design Tokens (Precision Dark Edition)
    Single source of truth for all CSS values.
-   Import this first in every stylesheet.
    =========================================== */
 
 :root {
-    /* Brand */
+    /* Brand Accent — understated, purposeful */
     --brand:       #6366f1;
     --brand-light: #818cf8;
     --brand-dark:  #4f46e5;
 
-    /* Tier Colors — match VFI score bands */
+    /* Tier Colors — scientific spectrum bands for semantic data */
     --tier-pixelated: #ef4444;
     --tier-low:       #f97316;
     --tier-standard:  #eab308;
@@ -18,33 +17,38 @@
     --tier-retina:    #6366f1;
     --tier-overkill:  #a855f7;
 
-    /* Dark Palette */
-    --bg:        #060b18;
-    --bg-alt:    #0d1422;
-    --surface:   #111827;
-    --surface-2: #1a2234;
-    --surface-3: #1e293b;
+    /* Precision Dark Canvas (Obsidian Neutral) */
+    --bg:            #090d14;
+    --bg-alt:        #0e131d;
+    --surface:       #121824;
+    --surface-2:     #172030;
+    --surface-3:     #1d273a;
+    --surface-hover: #222d42;
+
+    /* Hairline Crisp Borders */
     --border:        rgba(255, 255, 255, 0.08);
     --border-strong: rgba(255, 255, 255, 0.14);
+    --border-focus:  rgba(255, 255, 255, 0.28);
 
-    /* Text */
-    --text:       #f1f5f9;
+    /* Text Hierarchy */
+    --text:       #f8fafc;
     --text-muted: #94a3b8;
     --text-faint: #64748b;
 
-    /* Border Radii */
-    --r-sm:  8px;
-    --r-md:  12px;
-    --r-lg:  16px;
-    --r-xl:  24px;
-    --r-2xl: 32px;
+    /* Border Radii — refined, architectural */
+    --r-sm:  6px;
+    --r-md:  10px;
+    --r-lg:  14px;
+    --r-xl:  20px;
+    --r-2xl: 28px;
 
-    /* Shadows */
-    --shadow-card: 0 1px 2px rgba(0,0,0,.4), 0 8px 32px rgba(0,0,0,.3);
-    --shadow-glow: 0 0 40px rgba(99,102,241,.15);
+    /* Shadows — physical, shallow, zero-halo */
+    --shadow-card:   0 1px 3px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-subtle: 0 1px 2px rgba(0, 0, 0, 0.25);
+    --shadow-glow:   none;
 
     /* Easing & Timing */
-    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
     --fast: 0.15s;
-    --slow: 0.4s;
+    --slow: 0.35s;
 }

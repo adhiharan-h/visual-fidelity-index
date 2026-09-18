@@ -196,13 +196,14 @@
     white-space: nowrap;
 }
 .share-action-primary {
-    background: var(--brand);
-    border: 1px solid var(--brand);
-    color: #ffffff;
+    background: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    color: #090d14;
 }
 .share-action-primary:hover {
-    background: var(--brand-dark);
-    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+    background: #f1f5f9;
+    color: #000000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 .share-action-secondary {
     background: var(--surface-2);
@@ -211,7 +212,7 @@
 }
 .share-action-secondary:hover {
     background: var(--surface-3);
-    border-color: var(--brand);
+    border-color: rgba(255, 255, 255, 0.25);
     color: #ffffff;
 }
 .share-action-ghost {
