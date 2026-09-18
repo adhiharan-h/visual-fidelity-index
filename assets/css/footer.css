@@ -1,5 +1,5 @@
 /* ===========================================
-   VFI — Footer (Mobile-First)
+   VFI — Footer (Precision Minimalist)
    =========================================== */
 
 /* MOBILE BASE */
@@ -10,23 +10,23 @@
     gap: 24px;
     margin-bottom: 28px;
 }
-.footer-logo    { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 800; color: white; margin-bottom: 10px; }
+.footer-logo    { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 700; color: white; margin-bottom: 10px; }
 .footer-brand p { font-size: 0.825rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 14px; }
 .footer-badges  { display: flex; flex-wrap: wrap; gap: 6px; }
 .footer-badge   {
     display: inline-block;
     padding: 3px 10px;
-    background: rgba(99,102,241,.1);
-    border: 1px solid rgba(99,102,241,.2);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 100px;
     font-size: 0.68rem;
     font-weight: 600;
-    color: var(--brand-light);
+    color: var(--text-muted);
 }
-.footer-col h4      { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-faint); margin-bottom: 12px; }
+.footer-col h4      { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-faint); margin-bottom: 12px; }
 .footer-col ul      { list-style: none; display: flex; flex-direction: column; gap: 8px; }
 .footer-col a       { font-size: 0.825rem; color: var(--text-muted); text-decoration: none; transition: color var(--fast); }
-.footer-col a:hover { color: var(--text); }
+.footer-col a:hover { color: #ffffff; text-decoration: underline; }
 
 /* Two link columns sit side by side on mobile */
 .footer-cols-row {
